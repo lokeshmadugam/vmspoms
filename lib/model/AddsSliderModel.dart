@@ -7,10 +7,10 @@ class AddsSliderModel {
 
   AddsSliderModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   AddsSliderModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class AddsSliderModel {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -109,24 +109,24 @@ class AddItems {
 
   AddItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyIds,
-        this.country,
-        this.state,
-        this.city,
-        this.sliderImg,
-        this.sliderImgEmbededUrl,
-        this.sliderText,
-        this.dispFromDatetime,
-        this.dispToDatetime,
-        this.noAdsHideSlider,
-        this.iconUrl,
-        this.recStatus,
-        this.recStatusname,
-        this.countryName,
-        this.svgFlagUrl,
-        this.mobFlagUrl});
+      this.createdBy,
+      this.createdOn,
+      this.propertyIds,
+      this.country,
+      this.state,
+      this.city,
+      this.sliderImg,
+      this.sliderImgEmbededUrl,
+      this.sliderText,
+      this.dispFromDatetime,
+      this.dispToDatetime,
+      this.noAdsHideSlider,
+      this.iconUrl,
+      this.recStatus,
+      this.recStatusname,
+      this.countryName,
+      this.svgFlagUrl,
+      this.mobFlagUrl});
 
   AddItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -174,6 +174,3 @@ class AddItems {
     return data;
   }
 }
-
-
-

@@ -37,12 +37,12 @@ class _SecurityDetailsMapScreenState extends State<SecurityDetailsMapScreen> {
     super.initState();
     items = widget.data;
     for (int i = 0; i < items.mapView!.length; i++) {
-      if(items.mapView![i].checkinLatitude!=null && items.mapView![i].checkinLongitude!=null){
+      if (items.mapView![i].checkinLatitude != null &&
+          items.mapView![i].checkinLongitude != null) {
         pathPoints.add(LatLng(
             double.parse(items.mapView![i].checkinLatitude.toString()),
             double.parse(items.mapView![i].checkinLongitude.toString())));
       }
-
     }
   }
 
@@ -79,21 +79,17 @@ class _SecurityDetailsMapScreenState extends State<SecurityDetailsMapScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Map View',
-   style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title:
+            Text('Map View', style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
-        backgroundColor:  Color(0xFF036CB2),
+        backgroundColor: Color(0xFF036CB2),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

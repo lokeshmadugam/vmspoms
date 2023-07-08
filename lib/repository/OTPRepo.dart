@@ -7,12 +7,10 @@ class OTPRepo {
   BaseApiServices apiServices = NetworkApiService();
 
   Future<dynamic> verifyEmail(var data) async {
-
     try {
       var url = (AppUrl.verifyEmail);
 
-      dynamic response =
-      await apiServices.postApiResponse(url, data);
+      dynamic response = await apiServices.postApiResponse(url, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -20,5 +18,4 @@ class OTPRepo {
       rethrow;
     }
   }
-
 }

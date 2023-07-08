@@ -104,7 +104,6 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
               // for (int i = 0; i < (fieldsList?.length ?? 0); i++) {
               //   selectedRadioItem.add("");
               // }
-
             });
           } else {
             setState(() {
@@ -211,7 +210,7 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                       if (fieldType == 'Text') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyTextField(
                             controller: _controllers[index],
                             hintText: fieldName,
@@ -221,7 +220,7 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                       } else if (fieldType == 'Date') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyDateField(
                             labelText: fieldName.toString(),
                             controller: _controllers[index],
@@ -232,7 +231,7 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                       } else if (fieldType == 'Dropdown') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyDropDown(
                             value: _controllers[index].text,
                             hintText: fieldName,
@@ -240,11 +239,11 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                                 .propertyEformsDropdownFieldsRest
                                 ?.map((item) => item.fieldDispName)
                                 .map((displayName) => DropdownMenuItem<String>(
-                              value: displayName,
-                              child: Text(
-                                displayName!,
-                              ),
-                            ))
+                                      value: displayName,
+                                      child: Text(
+                                        displayName!,
+                                      ),
+                                    ))
                                 .toList(),
                             onchanged: (value) {
                               _controllers[index].text = value;
@@ -268,8 +267,8 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                               itemCount: data!.length,
                               shrinkWrap: true,
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3, childAspectRatio: 2),
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3, childAspectRatio: 2),
                               itemBuilder: (context, i) {
                                 return ListTile(
                                   title: Text(
@@ -278,7 +277,10 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                                   ),
                                   leading: Radio(
                                     value: data[i].fieldDispName,
-                                    groupValue: (fieldListWithData[index].fldValue ?? ""),  //selectedRadioItem[index],
+                                    groupValue:
+                                        (fieldListWithData[index].fldValue ??
+                                            ""),
+                                    //selectedRadioItem[index],
                                     onChanged: (value) {
                                       setState(() {
                                         setSelectedRadioItem(value!, index);
@@ -294,7 +296,7 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                       } else if (fieldType == 'CheckBox') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         var data =
                             fieldsList[index].propertyEformsDropdownFieldsRest;
                         return Column(
@@ -311,14 +313,14 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                               itemCount: data!.length,
                               shrinkWrap: true,
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 2.5),
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                      childAspectRatio: 2.5),
                               itemBuilder: (context, i) {
                                 List<String> words =
-                                _controllers[index].text.split(",");
+                                    _controllers[index].text.split(",");
 
                                 for (int j = 0; j < words.length; j++) {
                                   if (words[j] == data[i].fieldDispName) {
@@ -337,14 +339,16 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                                       data[i].checked = value;
                                       List<String> selectedItems = [];
                                       for (int i = 0; i < data.length; i++) {
-                                        if (data[i].checked != null && data[i].checked!) {
+                                        if (data[i].checked != null &&
+                                            data[i].checked!) {
                                           selectedItems.add(
                                               data[i].fieldDispName.toString());
                                         }
                                       }
                                       _controllers[index].text =
                                           selectedItems.join(',');
-                                      fieldListWithData[index].fldValue =  selectedItems.join(',');
+                                      fieldListWithData[index].fldValue =
+                                          selectedItems.join(',');
                                     });
                                   },
                                 );
@@ -355,7 +359,7 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                       } else if (fieldType == 'TextEditor') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyTextField(
                             controller: _controllers[index],
                             hintText: fieldName,
@@ -369,8 +373,8 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(
-                        //height: MediaQuery.of(context).size.height * 0.01,
-                      );
+                          //height: MediaQuery.of(context).size.height * 0.01,
+                          );
                     }),
                 MyDropDown(
                     value: null,
@@ -379,12 +383,12 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                     items: statusItems
                         .map((item) => item.keyValue)
                         .map((displayName) => DropdownMenuItem<String>(
-                      value: displayName,
-                      child: Text(
-                        displayName!,
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ))
+                              value: displayName,
+                              child: Text(
+                                displayName!,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ))
                         .toList(),
                     onchanged: (value) {
                       for (int i = 0; i < statusItems.length; i++) {
@@ -428,21 +432,22 @@ class _EditEFormScreenState extends State<EditEFormScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Text(
-                                      "${remarksList[index].userName} - ${DateFormat('yyyy-MM-dd hh:mm a').format(
-                                          DateTime.parse(remarksList[index]
-                                              .createdOn
-                                              .toString()))}",
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                      "${remarksList[index].userName} - ${DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(remarksList[index].createdOn.toString()))}",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.005,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.005,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Text(
                                       remarksList[index].comment.toString(),
-                                      style: TextStyle(fontSize: 12), textAlign: TextAlign.justify,
+                                      style: TextStyle(fontSize: 12),
+                                      textAlign: TextAlign.justify,
                                     ),
                                   )
                                 ],

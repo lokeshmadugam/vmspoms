@@ -1,5 +1,3 @@
-
-
 class VisitorDetailsModel {
   int? status;
   int? megCategory;
@@ -9,18 +7,19 @@ class VisitorDetailsModel {
 
   VisitorDetailsModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   VisitorDetailsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     megCategory = json['megCategory'];
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
-    result =
-    json['result'] != null ? new VisitorResult.fromJson(json['result']) : null;
+    result = json['result'] != null
+        ? new VisitorResult.fromJson(json['result'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -85,50 +84,50 @@ class VisitorResult {
 
   VisitorResult(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.userId,
-        this.userTypeId,
-        this.visitorName,
-        this.visitorMobileNo,
-        this.visitorTransportMode,
-        this.noOfVisitor,
-        this.vehiclePlateNo,
-        this.idDrivingLicenseNo,
-        this.blockName,
-        this.unitNumber,
-        this.unitDeviceCnt,
-        this.visitTypeId,
-        this.isPreregistered,
-        this.isParkingRequired,
-        this.visitReasonId,
-        this.visitorRegistrDate,
-        this.visitorArrivalDate,
-        this.visitorArrivalTime,
-        this.visitorStayStartdate,
-        this.visitorStayEnddate,
-        this.visitorStayDurationHours,
-        this.preregReqdateMgmtApproveStatus,
-        this.preregStartDate,
-        this.preregEndDate,
-        this.visitorRegistrstionStatusId,
-        this.registrationQrcode,
-        this.registrationQrcodeImg,
-        this.remarks,
-        this.recStatus,
-        this.parkingLotUsageRest,
-        this.userTypeName,
-        this.vehicleType,
-        this.recStatusname,
-        this.vistReason,
-        this.visitorRegistrstionStatus,
-        this.grayList,
-        this.name,
-        this.hostName,
-        this.visitorCheckInOutDate,
-        this.visitTypeName,
-        this.parkingRequired});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.userId,
+      this.userTypeId,
+      this.visitorName,
+      this.visitorMobileNo,
+      this.visitorTransportMode,
+      this.noOfVisitor,
+      this.vehiclePlateNo,
+      this.idDrivingLicenseNo,
+      this.blockName,
+      this.unitNumber,
+      this.unitDeviceCnt,
+      this.visitTypeId,
+      this.isPreregistered,
+      this.isParkingRequired,
+      this.visitReasonId,
+      this.visitorRegistrDate,
+      this.visitorArrivalDate,
+      this.visitorArrivalTime,
+      this.visitorStayStartdate,
+      this.visitorStayEnddate,
+      this.visitorStayDurationHours,
+      this.preregReqdateMgmtApproveStatus,
+      this.preregStartDate,
+      this.preregEndDate,
+      this.visitorRegistrstionStatusId,
+      this.registrationQrcode,
+      this.registrationQrcodeImg,
+      this.remarks,
+      this.recStatus,
+      this.parkingLotUsageRest,
+      this.userTypeName,
+      this.vehicleType,
+      this.recStatusname,
+      this.vistReason,
+      this.visitorRegistrstionStatus,
+      this.grayList,
+      this.name,
+      this.hostName,
+      this.visitorCheckInOutDate,
+      this.visitTypeName,
+      this.parkingRequired});
 
   VisitorResult.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -256,6 +255,3 @@ class VisitorCheckInOutDate {
     return data;
   }
 }
-
-
-

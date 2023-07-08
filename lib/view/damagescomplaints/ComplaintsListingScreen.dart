@@ -17,7 +17,8 @@ import '../../utils/Utils.dart';
 
 class ComplaintsListingScreen extends StatefulWidget {
   var data;
-  ComplaintsListingScreen({Key? key,required this.data}) : super(key: key);
+
+  ComplaintsListingScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<ComplaintsListingScreen> createState() =>
@@ -39,10 +40,11 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
   bool isupload = false;
   bool isprint = false;
   bool isdownload = false;
+
   @override
   void initState() {
     // TODO: implement initState
-    if(DeviceUtil.isTablet) {
+    if (DeviceUtil.isTablet) {
       SystemChrome.setPreferredOrientations([
         // DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
@@ -58,6 +60,7 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
     permissions = widget.data;
     actionPermissions();
   }
+
   @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
@@ -75,58 +78,45 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
 
     fetchComplaintsList(userDetails.propertyId, '');
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Complaints") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Complaints") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Print" || act.actionId == 5) {
+            } else if (act.actionName == "Print" || act.actionId == 5) {
               isprint = true;
               print("print = $isprint");
-
-            }
-            else if ( act.actionName == "Download files" || act.actionId == 6) {
+            } else if (act.actionName == "Download files" ||
+                act.actionId == 6) {
               isdownload = true;
               print("download = $isdownload");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   Future<void> fetchComplaintsList(var propertyId, var userId) async {
-    viewmodel
-        .fetchComplaintsList(propertyId, userId)
-        .then((response) {
+    viewmodel.fetchComplaintsList(propertyId, userId).then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
@@ -178,21 +168,18 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
             ],
           ),
-          title: Text(
-            'Damages & Complaints',
-            style: Theme.of(context).textTheme.headlineLarge
-            // TextStyle(
-            //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
-          ),
+          title: Text('Damages & Complaints',
+              style: Theme.of(context).textTheme.headlineLarge
+              // TextStyle(
+              //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
+              ),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2)),
       body: SafeArea(
@@ -206,19 +193,19 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
                     Expanded(
                       child: Container(
                           child: MyTextField(
-                            hintText: 'Search',
-                            controller: _searchController,
-                            onChanged: (value) {
-                              _runSearch(value);
-                            },
-                            textInputType: TextInputType.text,
-                            suffixIcon: Icons.search,
-                          )),
+                        hintText: 'Search',
+                        controller: _searchController,
+                        onChanged: (value) {
+                          _runSearch(value);
+                        },
+                        textInputType: TextInputType.text,
+                        suffixIcon: Icons.search,
+                      )),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.01,
                     ),
-                    if(iscreate)
+                    if (iscreate)
                       InkWell(
                         child: Container(
                           decoration: BoxDecoration(
@@ -234,11 +221,13 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
                           ),
                         ),
                         onTap: () {
-
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CreateComplaintFormScreen(upload: isupload,)));
+                                  builder: (context) =>
+                                      CreateComplaintFormScreen(
+                                        upload: isupload,
+                                      )));
                         },
                       ),
                     SizedBox(
@@ -246,81 +235,94 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
                     ),
                   ],
                 ),
-          ListView.separated(
-            physics: BouncingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: _complaintItemsList.length,
-            itemBuilder: (context, index) {
-              var item = _complaintItemsList[index];
+                ListView.separated(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _complaintItemsList.length,
+                  itemBuilder: (context, index) {
+                    var item = _complaintItemsList[index];
 
-                return Dismissible(
-                  key: Key(item.id.toString()),
-                  direction: DismissDirection.startToEnd,
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Icon(Icons.delete, color: Colors.white),
-                    ),
-                  ),
-                  onDismissed: (direction) async {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return Dialog(
-                              shape:
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius
-                                      .circular(
-                                      10)),
-                              elevation: 16,
-                              child: Popup(title: 'Complaints',
-                                message: ' Are you sure you want to delete this id?',
-                                negativeButtonText: "No",
-                                onNegativePressed: () {
-                                  Navigator.pop(context);
-                                },
-                                positiveButtonText: "Yes",
-                                onPositivePressed: () async {
-    if(isdelete) {
-      final response = await viewmodel
-          .deletetComplaintDetails(
-          item.id, context);
+                    return Dismissible(
+                        key: Key(item.id.toString()),
+                        direction: DismissDirection.startToEnd,
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: Icon(Icons.delete, color: Colors.white),
+                          ),
+                        ),
+                        onDismissed: (direction) async {
+                          setState(() {
+                            _complaintItemsList.removeAt(index);
+                          });
 
-      if (response.data!.status ==
-          200) {
-        // Update local state of widget
-        setState(() {
-          _complaintItemsList.removeAt(index);
-        });
-      } else if (response.data!.result ==
-          Status.error) {
-        // Show error message to user
-        Utils.flushBarErrorMessage(
-            response.message!, context);
-      }
+                          return showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    elevation: 16,
+                                    child: Popup(
+                                      title: 'Complaints',
+                                      message:
+                                      ' Are you sure you want to delete this id?',
+                                      negativeButtonText: "No",
+                                      onNegativePressed: () {
+                                        fetchComplaintsList(userDetails.propertyId, '');
+                                        Navigator.pop(context);
+                                      },
+                                      positiveButtonText: "Yes",
+                                      onPositivePressed: () async {
+                                        if (isdelete) {
+                                          final response = await viewmodel
+                                              .deletetComplaintDetails(
+                                              item.id, context);
 
-    }else{
-      Utils.flushBarErrorMessage("Unable to delete the  Details", context);
-    }
-                                },)
-                          );
-                        }
-                    );
+                                          if (response.data!.status ==
+                                              200) {
+                                            setState(() {
+                                              fetchComplaintsList(userDetails.propertyId, '');
+                                              Utils.toastMessage(response
+                                                  .data!.mobMessage
+                                                  .toString());
+
+                                              Navigator.pop(context);
+                                            });
+                                          } else if (response
+                                              .data!.result ==
+                                              Status.error) {
+                                            setState(() {
+                                              _complaintItemsList.insert(
+                                                  index, item);
+                                              Utils.flushBarErrorMessage(
+                                                  response.data!.mobMessage
+                                                      .toString(),
+                                                  context);
+                                            });
+                                          }
+                                        } else {
+                                          fetchComplaintsList(userDetails.propertyId, '');
+                                          Navigator.pop(context);
+                                          Utils.toastMessage(
+                                              'Do not have access to delete');
+                                        }
+                                      },
+                                    ));
+                              });
+                        },
+                        child: buildInkWell(context, item));
                   },
-                  child: buildInkWell(context, item),
-                );
-
-            },
-
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                // height: MediaQuery.of(context).size.height * 0.01,
-              );
-            },
-          ),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                        // height: MediaQuery.of(context).size.height * 0.01,
+                        );
+                  },
+                ),
               ],
             ),
           ),
@@ -331,47 +333,49 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
 
   InkWell buildInkWell(BuildContext context, ComplaintItems item) {
     return InkWell(
-              child: Card(
-                color: Colors.grey.shade100,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    ContainerValue(
-                      text: "Complaint Type",
-                      value: ": ${item.complaintTypeName ?? ""}",
-                    ),
-                    Divider(
-                      color: Colors.grey.shade400,
-                    ),
-                    ContainerValue(
-                      text: "Description",
-                      value: ": ${item.complaintDescription ?? ""}",
-                    ),
-                    Divider(
-                      color: Colors.grey.shade400,
-                    ),
-                    ContainerValue(
-                      text: "Complaint Status",
-                      value: ": ${item.complaintStatusName ?? ''}",
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                if(isview||isupdate)
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          EditComplaintFormScreen(data: item, update: isupdate,)),
-                );
-              },
-            );
+      child: Card(
+        color: Colors.grey.shade100,
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+            ContainerValue(
+              text: "Complaint Type",
+              value: ": ${item.complaintTypeName ?? ""}",
+            ),
+            Divider(
+              color: Colors.grey.shade400,
+            ),
+            ContainerValue(
+              text: "Description",
+              value: ": ${item.complaintDescription ?? ""}",
+            ),
+            Divider(
+              color: Colors.grey.shade400,
+            ),
+            ContainerValue(
+              text: "Complaint Status",
+              value: ": ${item.complaintStatusName ?? ''}",
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        if (isview || isupdate)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditComplaintFormScreen(
+                      data: item,
+                      update: isupdate,
+                    )),
+          );
+      },
+    );
   }
 
   void _runSearch(String searchTerm) {
@@ -390,6 +394,4 @@ class _ComplaintsListingScreenState extends State<ComplaintsListingScreen> {
       _complaintItemsList = results;
     });
   }
-
-
 }

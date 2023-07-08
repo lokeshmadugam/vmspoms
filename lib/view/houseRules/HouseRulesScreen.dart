@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:poms_app/view/houseRules/ReadFacilityRulesScreen.dart';
-import 'package:poms_app/viewmodel/facility/FacilityBookingViewModel.dart';
-import 'package:poms_app/viewmodel/houserules/HouseRulesViewModel.dart';
+import '/view/houseRules/ReadFacilityRulesScreen.dart';
+import '/viewmodel/facility/FacilityBookingViewModel.dart';
+import '/viewmodel/houserules/HouseRulesViewModel.dart';
 
 import '../../model/SignInModel.dart';
 import '../../model/facility/FacilityTypeModel.dart';

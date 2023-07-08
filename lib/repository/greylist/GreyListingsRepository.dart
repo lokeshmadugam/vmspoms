@@ -21,7 +21,7 @@ class GreyListingsRepository {
       var url = (AppUrl.greyListings);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters,'');
+          await apiServices.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = GreyList.fromJson(response);
       return jsonData;
@@ -29,5 +29,4 @@ class GreyListingsRepository {
       rethrow;
     }
   }
-
 }

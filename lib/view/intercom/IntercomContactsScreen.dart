@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:contacts_service/contacts_service.dart';
@@ -6,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
-
 import 'dart:io';
 
-import 'package:poms_app/view/intercom/IntercomFormScreen.dart';
+import '/view/intercom/IntercomFormScreen.dart';
 
 import '../../utils/MyTextField.dart';
+
 class IntercomContactsScreen extends StatefulWidget {
   @override
   _IntercomContactsScreenState createState() => _IntercomContactsScreenState();
@@ -22,11 +20,11 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
   List<Contact> _contacts = [];
   List<Contact> _contactsFiltered = [];
   TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _getContacts();
-
   }
 
   // Future<void> _getContacts() async {
@@ -38,10 +36,6 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
   //     )).toList();
   //   });
   // }
-
-
-
-
 
   Future<void> _getContacts() async {
     if (Platform.isAndroid) {
@@ -67,12 +61,13 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
       }).toList();
     });
   }
+
   String flattenPhoneNumber(String phoneStr) {
     return phoneStr.replaceAllMapped(RegExp(r'^(\+)|\D'), (Match m) {
       return m[0] == "+" ? "+" : "";
     });
   }
- 
+
   filterContacts() {
     String searchTerm = _searchController.text.toLowerCase();
     String searchTermFlatten = flattenPhoneNumber(searchTerm);
@@ -98,17 +93,8 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
     });
   }
 
-
-
-
   Contact? _selectedContact;
-    bool? select;
-
-
-
-
-
-
+  bool? select;
 
   void _selectContact(Contact contact, bool? value, String selectedPhone) {
     setState(() {
@@ -127,7 +113,7 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
             if (phone.value == selectedPhone) {
               contact.selectedPhone = selectedPhone;
               break;
-            }else{
+            } else {
               contact.selectedPhone = '';
             }
           }
@@ -139,15 +125,6 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
       }
     });
   }
-
-
-
-
-
-
-
-
-
 
   List<String> getDistinctPhones(Contact contact) {
     final phones = contact.phones?.map((phn) => phn.value).toList() ?? [];
@@ -170,37 +147,34 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
   void _selectPhone(Contact contact, String? phone) {
     setState(() {
       contact.selectedPhone = phone;
-
     });
   }
+
   bool isPhoneSelected(Contact contact, String phone) {
-    return contact.phones?.any((phn) => normalizePhoneNumber(phn.value ?? '') == normalizePhoneNumber(phone)) ?? false;
+    return contact.phones?.any((phn) =>
+            normalizePhoneNumber(phn.value ?? '') ==
+            normalizePhoneNumber(phone)) ??
+        false;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     bool isSearching = _searchController.text.isNotEmpty;
 
-    bool listItemsExist = (
-        (isSearching == true && _contactsFiltered.length > 0) ||
-            (isSearching != true && _contacts.length > 0)
-    );
+    bool listItemsExist =
+        ((isSearching == true && _contactsFiltered.length > 0) ||
+            (isSearching != true && _contacts.length > 0));
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 12;
-
-    }else {
+    } else {
       fontSize = 15;
-
     }
     return Scaffold(
-
       appBar: AppBar(
         leadingWidth: 90,
         leading: Row(
@@ -230,211 +204,227 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Phone Contacts',
-       style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Phone Contacts',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
-      body:
-      SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
             SizedBox(
               child: Container(
                   child: MyTextField(
-                    hintText: 'Search',
-                    controller: _searchController,
-                    onChanged: (value) {
-                   
-                    },
-                    textInputType: TextInputType.text,
-                    suffixIcon: Icons.search,
-                  )),
+                hintText: 'Search',
+                controller: _searchController,
+                onChanged: (value) {},
+                textInputType: TextInputType.text,
+                suffixIcon: Icons.search,
+              )),
             ),
-
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.01,
             ),
             Expanded(
-              child:
-
-              ListView.builder(
-                itemCount: isSearching == true ? _contactsFiltered.length : _contacts.length,
+              child: ListView.builder(
+                itemCount: isSearching == true
+                    ? _contactsFiltered.length
+                    : _contacts.length,
                 physics: BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final contact = isSearching == true ? _contactsFiltered[index] : _contacts[index];
-    final distinctPhones = getDistinctPhones(contact);
+                  final contact = isSearching == true
+                      ? _contactsFiltered[index]
+                      : _contacts[index];
+                  final distinctPhones = getDistinctPhones(contact);
                   return Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // Add a bottom border to separate contacts
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                              color: Colors.grey.shade300,
+                              width:
+                                  1.0), // Add a bottom border to separate contacts
+                        ),
                       ),
-                    ),
-                    child:
-                    CheckboxListTile(
-                      title: Text(contact.displayName,style:GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize), ) ),
-                      subtitle: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (distinctPhones.length == 1)
-                            Text(
-                              contact.phones?.isNotEmpty == true ? contact.phones!.first.value ?? '' : '',
-                            ),
-                          if (distinctPhones.length > 1)
-                            Column(
-                              children: distinctPhones.map((phone) {
-                                return ListTile(
-                                  title: Text(phone),
-                                  onTap: () {
-                                    if (contact.selectedPhone == phone) {
-                                      _selectPhone(contact, ''); // Deselect the phone
-                                    } else {
-                                      _selectPhone(contact, phone); // Select the phone
-                                    }
-                                  },
-                                  trailing: Visibility(
-                                    visible: contact.isSelected,
-                                    child:Checkbox(
-                                      value: (distinctPhones.indexOf(phone) == 0 && contact.selectedPhone?.isEmpty == true) ||
-                                          (contact.selectedPhone == phone),
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          if (value == true) {
-                                            // Deselect the first phone if it is selected
-                                            if (distinctPhones.indexOf(phone) != 0 &&
-                                                contact.selectedPhone == distinctPhones[0]) {
-                                              _selectPhone(contact, '');
-                                            }
-                                            // Select the current phone
-                                            _selectPhone(contact, phone);
-                                          } else {
-                                            // Deselect the phone
-                                            _selectPhone(contact, '');
-                                          }
-                                        });
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    )
+                      child: CheckboxListTile(
+                        title: Text(contact.displayName,
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(fontSize: fontSize),
+                            )),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (distinctPhones.length == 1)
+                              Text(
+                                contact.phones?.isNotEmpty == true
+                                    ? contact.phones!.first.value ?? ''
+                                    : '',
+                              ),
+                            if (distinctPhones.length > 1)
+                              Column(
+                                children: distinctPhones.map((phone) {
+                                  return ListTile(
+                                    title: Text(phone),
+                                    onTap: () {
+                                      if (contact.selectedPhone == phone) {
+                                        _selectPhone(
+                                            contact, ''); // Deselect the phone
+                                      } else {
+                                        _selectPhone(
+                                            contact, phone); // Select the phone
+                                      }
+                                    },
+                                    trailing: Visibility(
+                                        visible: contact.isSelected,
+                                        child: Checkbox(
+                                          value: (distinctPhones
+                                                          .indexOf(phone) ==
+                                                      0 &&
+                                                  contact.selectedPhone
+                                                          ?.isEmpty ==
+                                                      true) ||
+                                              (contact.selectedPhone == phone),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value == true) {
+                                                // Deselect the first phone if it is selected
+                                                if (distinctPhones
+                                                            .indexOf(phone) !=
+                                                        0 &&
+                                                    contact.selectedPhone ==
+                                                        distinctPhones[0]) {
+                                                  _selectPhone(contact, '');
+                                                }
+                                                // Select the current phone
+                                                _selectPhone(contact, phone);
+                                              } else {
+                                                // Deselect the phone
+                                                _selectPhone(contact, '');
+                                              }
+                                            });
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                        )
 
-                                    // Checkbox(
-                                    //   value: contact.isSelected && (contact.selectedPhone == phone || distinctPhones.indexOf(phone) == 0),
-                                    //   // onChanged: (bool? value) {
-                                    //   //   if (value == true) {
-                                    //   //     _selectPhone(contact, phone); // Select the phone
-                                    //   //   } else {
-                                    //   //     _selectPhone(contact, ''); // Deselect the phone
-                                    //   //   }
-                                    //   //   setState(() {
-                                    //   //     // Update the selectedPhone value for the contact
-                                    //   //     contact.selectedPhone = value == true ? phone : '';
-                                    //   //   });
-                                    //   // },
-                                    //   onChanged: (bool? value) {
-                                    //     setState(() {
-                                    //       if (value == true) {
-                                    //         contact.selectedPhone = phone; // Select the phone
-                                    //       } else {
-                                    //         if (contact.selectedPhone == phone && distinctPhones.indexOf(phone) == 0) {
-                                    //           contact.selectedPhone = ''; // Deselect the first phone
-                                    //         }
-                                    //       }
-                                    //       if (distinctPhones.indexOf(phone) == 0) {
-                                    //         contact.selectedPhone = ''; // Deselect the first phone
-                                    //       }
-                                    //     });
-                                    //   },
-                                    //
-                                    //
-                                    //
-                                    //   shape: RoundedRectangleBorder(
-                                    //     borderRadius: BorderRadius.circular(4),
-                                    //   ),
-                                    // ),
-                                  ),
-
-                                );
-                              }).toList(),
-                            )
-
-                        ],
-                      ),
-                      value: contact.isSelected,
-                      checkboxShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      onChanged: (bool? value) {
-                        if (value == true) {
-                          setState(() {
-                            contact.isSelected = true; // Select the contact
-                          });
-                          _selectContact(contact, true, contact.selectedPhone ?? '');
-                          // _selectPhone(contact, contact.selectedPhone ?? ''); // Select the distinct phone
-                        } else {
-                          setState(() {
-                            contact.isSelected = false; // Deselect the contact
-                          });
-                          _selectContact(contact, false, '');
-                          _selectPhone(contact, '');
-                        }
-                      },
-
-                      secondary: (contact.avatar != null && contact.avatar!.isNotEmpty)
-                          ? CircleAvatar(
-                        backgroundImage: MemoryImage(contact.avatar!),
-                        backgroundColor: Colors.white,
-                      )
-                          : CircleAvatar(
-                        child: Text(contact.displayName.isNotEmpty ? contact.displayName[0] : '',style: TextStyle(color: Colors.white),),
-                        backgroundColor: Color(0xFF036CB2),
-                      ),
-                    )
-
-
-
-                  );
+                                        // Checkbox(
+                                        //   value: contact.isSelected && (contact.selectedPhone == phone || distinctPhones.indexOf(phone) == 0),
+                                        //   // onChanged: (bool? value) {
+                                        //   //   if (value == true) {
+                                        //   //     _selectPhone(contact, phone); // Select the phone
+                                        //   //   } else {
+                                        //   //     _selectPhone(contact, ''); // Deselect the phone
+                                        //   //   }
+                                        //   //   setState(() {
+                                        //   //     // Update the selectedPhone value for the contact
+                                        //   //     contact.selectedPhone = value == true ? phone : '';
+                                        //   //   });
+                                        //   // },
+                                        //   onChanged: (bool? value) {
+                                        //     setState(() {
+                                        //       if (value == true) {
+                                        //         contact.selectedPhone = phone; // Select the phone
+                                        //       } else {
+                                        //         if (contact.selectedPhone == phone && distinctPhones.indexOf(phone) == 0) {
+                                        //           contact.selectedPhone = ''; // Deselect the first phone
+                                        //         }
+                                        //       }
+                                        //       if (distinctPhones.indexOf(phone) == 0) {
+                                        //         contact.selectedPhone = ''; // Deselect the first phone
+                                        //       }
+                                        //     });
+                                        //   },
+                                        //
+                                        //
+                                        //
+                                        //   shape: RoundedRectangleBorder(
+                                        //     borderRadius: BorderRadius.circular(4),
+                                        //   ),
+                                        // ),
+                                        ),
+                                  );
+                                }).toList(),
+                              )
+                          ],
+                        ),
+                        value: contact.isSelected,
+                        checkboxShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        onChanged: (bool? value) {
+                          if (value == true) {
+                            setState(() {
+                              contact.isSelected = true; // Select the contact
+                            });
+                            _selectContact(
+                                contact, true, contact.selectedPhone ?? '');
+                            // _selectPhone(contact, contact.selectedPhone ?? ''); // Select the distinct phone
+                          } else {
+                            setState(() {
+                              contact.isSelected =
+                                  false; // Deselect the contact
+                            });
+                            _selectContact(contact, false, '');
+                            _selectPhone(contact, '');
+                          }
+                        },
+                        secondary: (contact.avatar != null &&
+                                contact.avatar!.isNotEmpty)
+                            ? CircleAvatar(
+                                backgroundImage: MemoryImage(contact.avatar!),
+                                backgroundColor: Colors.white,
+                              )
+                            : CircleAvatar(
+                                child: Text(
+                                  contact.displayName.isNotEmpty
+                                      ? contact.displayName[0]
+                                      : '',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Color(0xFF036CB2),
+                              ),
+                      ));
                 },
               ),
             ),
             SizedBox(
               child: ElevatedButton(
-
-                    style: ElevatedButton.styleFrom(
-                        primary:Color(0xFF036CB2),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25))),
-
-
-                child: Text("Select",style: const TextStyle(
-                    fontWeight: FontWeight.w500, fontSize: 18,
-                    color: Colors.white),),
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF036CB2),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25))),
+                child: Text(
+                  "Select",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Colors.white),
+                ),
                 onPressed: _selectedContact != null
                     ? () {
-                  //
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => IntercomFormScreen( data: null,
-                      inetrcomcontact: _selectedContact!,)),
-                  );
-                }
+                        //
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => IntercomFormScreen(
+                                    data: null,
+                                    inetrcomcontact: _selectedContact!,
+                                  )),
+                        );
+                      }
                     : null,
               ),
             ),
-
           ],
         ),
       ),
@@ -464,11 +454,7 @@ class _IntercomContactsScreenState extends State<IntercomContactsScreen> {
       // ),
     );
   }
-
-
-
 }
-
 
 class Contact {
   String displayName;
@@ -481,11 +467,12 @@ class Contact {
 
   String? selectedPhone;
 
-  Contact({required this.displayName, required this.phones,this.givenName, this.avatar,this.emails,this.postalAddresses,this.selectedPhone});
+  Contact(
+      {required this.displayName,
+      required this.phones,
+      this.givenName,
+      this.avatar,
+      this.emails,
+      this.postalAddresses,
+      this.selectedPhone});
 }
-
-
-
-
-
-

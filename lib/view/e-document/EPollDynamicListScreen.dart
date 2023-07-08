@@ -17,7 +17,6 @@ import '../../utils/MyTextField.dart';
 import '../../utils/Utils.dart';
 
 class EPollDynamicListScreen extends StatefulWidget {
-
   EPollDynamicListScreen({Key? key}) : super(key: key);
 
   @override
@@ -94,9 +93,11 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
     });
   }
 
-  Future<void> fetchEPollDynamicFormsList(var categoryId, var propertyId,
-      var userId) async {
-    viewmodel.fetchEPollDynamicFormList(categoryId, propertyId, userId).then((response) {
+  Future<void> fetchEPollDynamicFormsList(
+      var categoryId, var propertyId, var userId) async {
+    viewmodel
+        .fetchEPollDynamicFormList(categoryId, propertyId, userId)
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.propertyEpollingRest;
@@ -112,7 +113,6 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
               for (int i = 0; i < (fieldsList?.length ?? 0); i++) {
                 selectedRadioItem.add("");
               }
-
             });
           } else {
             setState(() {
@@ -214,12 +214,12 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                     items: categoryItems
                         .map((item) => item.epollingCategoryName)
                         .map((displayName) => DropdownMenuItem<String>(
-                      value: displayName,
-                      child: Text(
-                        displayName!,
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ))
+                              value: displayName,
+                              child: Text(
+                                displayName!,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ))
                         .toList(),
                     onchanged: (value) {
                       for (int i = 0; i < categoryItems.length; i++) {
@@ -228,7 +228,8 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                           break;
                         }
                       }
-                      fetchEPollDynamicFormsList(categoryId, userDetails.propertyId, userDetails.id);
+                      fetchEPollDynamicFormsList(
+                          categoryId, userDetails.propertyId, userDetails.id);
                     }),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -269,11 +270,11 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                                   ?.map((item) => item.fieldDispName)
                                   .map(
                                       (displayName) => DropdownMenuItem<String>(
-                                    value: displayName,
-                                    child: Text(
-                                      displayName!,
-                                    ),
-                                  ))
+                                            value: displayName,
+                                            child: Text(
+                                              displayName!,
+                                            ),
+                                          ))
                                   .toList(),
                               onchanged: (value) {
                                 _controllers[index].text = value;
@@ -287,7 +288,7 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                             children: [
                               Padding(
                                 padding:
-                                const EdgeInsets.only(left: 10, top: 8),
+                                    const EdgeInsets.only(left: 10, top: 8),
                                 child: Text(
                                   "$fieldName ",
                                   style: TextStyle(fontSize: 16),
@@ -297,8 +298,8 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                                 itemCount: data!.length,
                                 shrinkWrap: true,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3, childAspectRatio: 2),
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3, childAspectRatio: 2),
                                 itemBuilder: (context, i) {
                                   return RadioListTile(
                                     title: Text(
@@ -313,7 +314,7 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                                         setSelectedRadioItem(value!, index);
                                       });
                                     },
-                                  );/*ListTile(
+                                  ); /*ListTile(
                                     title: Text(
                                       data[i].fieldDispName.toString(),
                                       style: TextStyle(fontSize: 14),
@@ -339,7 +340,7 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                             children: [
                               Padding(
                                 padding:
-                                const EdgeInsets.only(left: 10, top: 8),
+                                    const EdgeInsets.only(left: 10, top: 8),
                                 child: Text(
                                   "$fieldName :",
                                   style: TextStyle(fontSize: 16),
@@ -349,11 +350,11 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                                 itemCount: data!.length,
                                 shrinkWrap: true,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 2.5),
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio: 2.5),
                                 itemBuilder: (context, i) {
                                   return CheckboxListTile(
                                     title: Text(
@@ -372,8 +373,8 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                                                 .toString());
                                           }
                                         }
-                                        _controllers[index].text = selectedItems.join(',');
-
+                                        _controllers[index].text =
+                                            selectedItems.join(',');
                                       });
                                     },
                                   );
@@ -396,8 +397,8 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
                       },
                       separatorBuilder: (context, index) {
                         return SizedBox(
-                          //height: MediaQuery.of(context).size.height * 0.01,
-                        );
+                            //height: MediaQuery.of(context).size.height * 0.01,
+                            );
                       }),
                 if (fieldsList!.isNotEmpty)
                   Column(
@@ -457,13 +458,11 @@ class _EPollDynamicListScreenState extends State<EPollDynamicListScreen> {
   void submitData() {
     Map<String, dynamic> data = {
       "adm_module_id": fieldsList?[0].admModuleId,
-      "approved_by": 0,
-      "approved_on": "",
       "attachment_id": "",
       "created_by": userDetails.id,
-      "eformcat_group_id": fieldsList?[0].epollingcatGroupId,
-      "eforms_id": fieldsList?[0].epollingId,
-      "eforms_status": statusId,
+      "epollingcat_group_id": fieldsList?[0].epollingcatGroupId,
+      "epolling_id": fieldsList?[0].epollingId,
+      "epolling_status": statusId,
       "fied_data": jsonEncode(newFieldList),
       "hide_for_all": true,
       "property_id": userDetails.propertyId,

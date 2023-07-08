@@ -9,7 +9,6 @@ import '../../repository/packages/PackageReceivedRepository.dart';
 import '../../utils/Utils.dart';
 
 class PackageExpectedScreenViewModel extends ChangeNotifier {
-
   final _myRepo = PackageExpectedRepository();
 
   ApiResponse<PackageExpected> packageExpected = ApiResponse.loading();
@@ -27,10 +26,12 @@ class PackageExpectedScreenViewModel extends ChangeNotifier {
         .getPackageExpectedList(propertyId)
         .then((value) => _setPackageExpectList(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setPackageExpectList(ApiResponse.error(error.toString())));
+            _setPackageExpectList(ApiResponse.error(error.toString())));
   }
+
   // Delete Expected Data
-  Future<ApiResponse<DeleteResponse>> deleteExpectedDetails(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deleteExpectedDetails(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
 
@@ -38,9 +39,8 @@ class PackageExpectedScreenViewModel extends ChangeNotifier {
       DeleteResponse value = await _myRepo.deleteExpectedDetails(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);

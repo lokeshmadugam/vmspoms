@@ -6,22 +6,23 @@ import '../../model/AddsSliderModel.dart';
 
 class SliderFullText extends StatefulWidget {
   var data;
- SliderFullText({Key? key,required this.data}) : super(key: key);
+
+  SliderFullText({Key? key, required this.data}) : super(key: key);
 
   @override
   State<SliderFullText> createState() => _SliderFullTextState();
 }
 
 class _SliderFullTextState extends State<SliderFullText> {
-  List<AddItems> items =[];
+  List<AddItems> items = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 // items = widget.data;
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,8 +68,8 @@ class _SliderFullTextState extends State<SliderFullText> {
         title: Text(
           'Read',
           style: Theme.of(context).textTheme.headlineLarge,
-        //   TextStyle(
-        //       fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          //   TextStyle(
+          //       fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
@@ -81,8 +82,8 @@ class _SliderFullTextState extends State<SliderFullText> {
               children: [
                 HtmlWidget(
                   widget.data,
-                  textStyle: GoogleFonts.roboto(textStyle: TextStyle(color: Colors.black)),
-
+                  textStyle: GoogleFonts.roboto(
+                      textStyle: TextStyle(color: Colors.black)),
                 ),
               ],
             ),

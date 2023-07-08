@@ -9,26 +9,29 @@ import '../../utils/MyTextField.dart';
 class BookingDetails extends StatefulWidget {
   var data;
 
-   BookingDetails({Key? key,required this.data,}) : super(key: key);
+  BookingDetails({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
 }
 
 class _BookingDetailsState extends State<BookingDetails> {
-   final _facilityNameController = TextEditingController();
-   final _bookingIdController = TextEditingController();
-   final _numberofguestController = TextEditingController();
-   final _bookingHoursController = TextEditingController();
-   final _bookingStatusController = TextEditingController();
-   final _bookingStartDateController = TextEditingController();
-   final _bookingEndDateController = TextEditingController();
-   final _keyCollectionDateController = TextEditingController();
-   final _keyCollectionnameController = TextEditingController();
-   final _keyHandOverbyController = TextEditingController();
-   final _remarksController = TextEditingController();
-   final _keyHandoverdateController = TextEditingController();
-   final _usageController = TextEditingController();
+  final _facilityNameController = TextEditingController();
+  final _bookingIdController = TextEditingController();
+  final _numberofguestController = TextEditingController();
+  final _bookingHoursController = TextEditingController();
+  final _bookingStatusController = TextEditingController();
+  final _bookingStartDateController = TextEditingController();
+  final _bookingEndDateController = TextEditingController();
+  final _keyCollectionDateController = TextEditingController();
+  final _keyCollectionnameController = TextEditingController();
+  final _keyHandOverbyController = TextEditingController();
+  final _remarksController = TextEditingController();
+  final _keyHandoverdateController = TextEditingController();
+  final _usageController = TextEditingController();
   TextEditingController _keyHandoverTimeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   FacilityItems items = FacilityItems();
@@ -39,26 +42,43 @@ class _BookingDetailsState extends State<BookingDetails> {
 
     if (widget.data != null) {
       items = widget.data;
-       _facilityNameController.text =  items.facilityName.toString();
-     _bookingIdController.text = items.bookingId.toString();
+      _facilityNameController.text = items.facilityName.toString();
+      _bookingIdController.text = items.bookingId.toString();
       _numberofguestController.text = items.noOfUsrGuests.toString();
-      _bookingHoursController .text= items.bookingHrsDay.toString();
+      _bookingHoursController.text = items.bookingHrsDay.toString();
       _bookingStatusController.text = items.bookingStatusName.toString();
 
-      _usageController.text = items.usageDate != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.usageDate ?? '')) : ''.toString();
+      _usageController.text = items.usageDate != null
+          ? DateFormat('yyyy-MM-dd hh:mm a')
+              .format(DateTime.parse(items.usageDate ?? ''))
+          : ''.toString();
 
-    _bookingStartDateController.text = items.usageStarttime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.usageStarttime ?? '')) : ''.toString();
+      _bookingStartDateController.text = items.usageStarttime != null
+          ? DateFormat('yyyy-MM-dd hh:mm a')
+              .format(DateTime.parse(items.usageStarttime ?? ''))
+          : ''.toString();
 
-      _bookingEndDateController.text= items.usageEndtime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.usageEndtime ?? '')) : ''.toString();
-      _keyHandoverTimeController.text = items.facilityKeyCodeCollectionTime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.facilityKeyCodeCollectionTime ?? '')) : ''.toString();
-     _keyCollectionnameController.text = items.keyCollectedName.toString();
-     _keyHandOverbyController.text = items.facilityKeyCodeHandoverBy.toString();
-     _remarksController.text = items.remarks.toString();
-      _keyHandoverdateController.text =
-      items.facilityKeyCodeHandoverTime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.facilityKeyCodeHandoverTime ?? '')) : ''.toString();
-
+      _bookingEndDateController.text = items.usageEndtime != null
+          ? DateFormat('yyyy-MM-dd hh:mm a')
+              .format(DateTime.parse(items.usageEndtime ?? ''))
+          : ''.toString();
+      _keyHandoverTimeController.text = items.facilityKeyCodeCollectionTime !=
+              null
+          ? DateFormat('yyyy-MM-dd hh:mm a')
+              .format(DateTime.parse(items.facilityKeyCodeCollectionTime ?? ''))
+          : ''.toString();
+      _keyCollectionnameController.text = items.keyCollectedName.toString();
+      _keyHandOverbyController.text =
+          items.facilityKeyCodeHandoverBy.toString();
+      _remarksController.text = items.remarks.toString();
+      _keyHandoverdateController.text = items.facilityKeyCodeHandoverTime !=
+              null
+          ? DateFormat('yyyy-MM-dd hh:mm a')
+              .format(DateTime.parse(items.facilityKeyCodeHandoverTime ?? ''))
+          : ''.toString();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,10 +112,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
@@ -106,8 +124,7 @@ class _BookingDetailsState extends State<BookingDetails> {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
           centerTitle: true,
-          backgroundColor: Color(0xFF036CB2)
-      ),
+          backgroundColor: Color(0xFF036CB2)),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -116,7 +133,7 @@ class _BookingDetailsState extends State<BookingDetails> {
             child: Column(
               children: [
                 MyTextField(
-                  enabled: false,
+                    enabled: false,
                     preffixIcon: Icons.library_books_outlined,
                     controller: _facilityNameController,
                     labelText: 'Facility Name',
@@ -131,10 +148,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                   enabled: false,
                   preffixIcon: Icons.timer_sharp,
                   labelText: 'Hours',
-                  controller: _bookingHoursController, textInputType: TextInputType.text,
-
+                  controller: _bookingHoursController,
+                  textInputType: TextInputType.text,
                 ),
-
                 MyTextField(
                     enabled: false,
                     preffixIcon: Icons.person_3,
@@ -171,7 +187,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                     controller: _keyHandoverTimeController,
                     labelText: 'Key Collection Date',
                     textInputType: TextInputType.text),
-
                 MyTextField(
                     enabled: false,
                     preffixIcon: Icons.person,
@@ -199,7 +214,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-
               ],
             ),
           ),

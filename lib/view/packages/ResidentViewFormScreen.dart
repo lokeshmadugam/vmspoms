@@ -14,8 +14,7 @@ class ResidentViewFormScreen extends StatefulWidget {
   ResidentViewFormScreen({super.key, required this.data});
 
   @override
-  State<ResidentViewFormScreen> createState() =>
-      _ResidentViewFormScreenState();
+  State<ResidentViewFormScreen> createState() => _ResidentViewFormScreenState();
 }
 
 class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
@@ -77,7 +76,6 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
       _packageCollectedByController.text = items.packageCollectedBy.toString();
       _packageCollectedOnController.text = items.packageCollectedOn.toString();
     }
-
   }
 
   @override
@@ -87,12 +85,10 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 16;
-
-    }else {
+    } else {
       fontSize = 18;
-
     }
     return Scaffold(
       appBar: AppBar(
@@ -125,23 +121,18 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Received Details',
-     style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Received Details',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
-
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -164,12 +155,13 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                     child: Row(
                       children: [
                         Container(
-                          child: Text(
-                            "Package Receipt Details",
-                            style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
-                              // fontWeight: FontWeight.bold,
-                            ), )
-                          ),
+                          child: Text("Package Receipt Details",
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize, color: Colors.white
+                                    // fontWeight: FontWeight.bold,
+                                    ),
+                              )),
                         ),
                         Spacer(),
                         Icon(
@@ -209,20 +201,21 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: Container(
-                                        width: MediaQuery.of(context)
-                                            .size
-                                            .width /
-                                            2,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
                                         decoration: BoxDecoration(
                                           border:
-                                          Border.all(color: Colors.grey),
+                                              Border.all(color: Colors.grey),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10)),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Text(
-                                            blockName.toString(),style: TextStyle(color: Colors.grey),
+                                            blockName.toString(),
+                                            style:
+                                                TextStyle(color: Colors.grey),
                                           ),
                                         ),
                                       ),
@@ -238,25 +231,24 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                                 children: [
                                   Padding(
                                     padding:
-                                    const EdgeInsets.only(left: 8, top: 4),
+                                        const EdgeInsets.only(left: 8, top: 4),
                                     child: Text('Unit No :'),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Container(
                                       width:
-                                      MediaQuery.of(context).size.width /
-                                          2,
+                                          MediaQuery.of(context).size.width / 2,
                                       decoration: BoxDecoration(
-                                        border:
-                                        Border.all(color: Colors.grey),
+                                        border: Border.all(color: Colors.grey),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(12.0),
                                         child: Text(
-                                          unitNo.toString(), style: TextStyle(color: Colors.grey),
+                                          unitNo.toString(),
+                                          style: TextStyle(color: Colors.grey),
                                         ),
                                       ),
                                     ),
@@ -276,13 +268,13 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                           },
                         ),
                         MyTextField(
-                          preffixIcon: FontAwesomeIcons.boxesPacking,
+                            preffixIcon: FontAwesomeIcons.boxesPacking,
                             enabled: false,
                             controller: _packageTypeController,
                             labelText: 'Package Type',
                             textInputType: TextInputType.text),
                         MyTextField(
-                          preffixIcon: Icons.sticky_note_2_sharp,
+                            preffixIcon: Icons.sticky_note_2_sharp,
                             enabled: false,
                             controller: _remarksController,
                             labelText: 'Remarks',
@@ -308,7 +300,8 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                                 border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(5)),
                             child: Center(
-                              child: Image.network(items.packageImg.toString().trim()),
+                              child: Image.network(
+                                  items.packageImg.toString().trim()),
                             ),
                           ),
                         ),
@@ -325,7 +318,7 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                     onTap: () {
                       setState(() {
                         _isPackageCollectionExpanded =
-                        !_isPackageCollectionExpanded;
+                            !_isPackageCollectionExpanded;
                       });
                     },
                     child: Container(
@@ -337,12 +330,13 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                       child: Row(
                         children: [
                           Container(
-                            child: Text(
-                              "Package Collection Details",
-                                style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
-                                  // fontWeight: FontWeight.bold,
-                                ), )
-                            ),
+                            child: Text("Package Collection Details",
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                      fontSize: fontSize, color: Colors.white
+                                      // fontWeight: FontWeight.bold,
+                                      ),
+                                )),
                           ),
                           Spacer(),
                           Icon(
@@ -364,8 +358,8 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                     child: Column(
                       children: [
                         MyTextField(
-                          preffixIcon: Icons.person,
-                          enabled: false,
+                            preffixIcon: Icons.person,
+                            enabled: false,
                             controller: _packageCollectedByController,
                             suffixIcon: Icons.qr_code_2_outlined,
                             labelText: 'Package Collected by',
@@ -386,12 +380,13 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                           padding: const EdgeInsets.all(12.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Sign Here :',
-                        style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15, color: Colors.black
-                              // fontWeight: FontWeight.bold,
-                            ), )
-                            ),
+                            child: Text('Sign Here :',
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                      fontSize: 15, color: Colors.black
+                                      // fontWeight: FontWeight.bold,
+                                      ),
+                                )),
                           ),
                         ),
                         Padding(
@@ -402,7 +397,9 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
-                              child: Image.network(items.packageCollectionAckImg.toString().trim()),
+                              child: Image.network(items.packageCollectionAckImg
+                                  .toString()
+                                  .trim()),
                             ),
                           ),
                         ),
@@ -420,5 +417,4 @@ class _ResidentViewFormScreenState extends State<ResidentViewFormScreen> {
       ),
     );
   }
-
 }

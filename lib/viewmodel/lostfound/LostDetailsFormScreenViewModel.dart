@@ -27,9 +27,10 @@ class LostDetailsFormScreenViewModel extends ChangeNotifier {
     _setMediaUpload(ApiResponse.loading(), data, context);
     _myRepo
         .mediaUpload(imagePath)
-        .then((value) => _setMediaUpload(ApiResponse.success(value), data, context))
-        .onError((error, stackTrace) =>
-            _setMediaUpload(ApiResponse.error(error.toString()), data, context));
+        .then((value) =>
+            _setMediaUpload(ApiResponse.success(value), data, context))
+        .onError((error, stackTrace) => _setMediaUpload(
+            ApiResponse.error(error.toString()), data, context));
   }
 
   void _setSubmitLostFoundDetails(

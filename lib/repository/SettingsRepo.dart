@@ -21,7 +21,7 @@ class SettingsRepo {
       var url = AppUrl.companyPolicy;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = CompanyPolicies.fromJson(response);
       return jsonData;
@@ -29,5 +29,4 @@ class SettingsRepo {
       rethrow;
     }
   }
-
 }

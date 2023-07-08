@@ -38,14 +38,14 @@ class ProfileViewModel extends ChangeNotifier {
   //
   //   return response;
   // }
-  Future<ApiResponse<PostApiResponse>> updateProfileDetails(int id,var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> updateProfileDetails(
+      int id, var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     // PostApiResponse postListResult;
     try {
-      PostApiResponse value = await _myRepo.updateProfileDetails(id,data);
+      PostApiResponse value = await _myRepo.updateProfileDetails(id, data);
       response = ApiResponse.success(value);
-
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
       response = ApiResponse.error(error.toString());
@@ -57,7 +57,9 @@ class ProfileViewModel extends ChangeNotifier {
 
     return response;
   }
-  Future<ApiResponse<MediaUpload>> mediaUpload(var imagePath, BuildContext context) async {
+
+  Future<ApiResponse<MediaUpload>> mediaUpload(
+      var imagePath, BuildContext context) async {
     ApiResponse<MediaUpload> response = ApiResponse.loading();
     notifyListeners();
     try {
@@ -74,5 +76,4 @@ class ProfileViewModel extends ChangeNotifier {
 
     return response;
   }
-
 }

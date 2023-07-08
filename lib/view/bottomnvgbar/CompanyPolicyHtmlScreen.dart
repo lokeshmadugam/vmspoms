@@ -18,7 +18,6 @@ class CompanyPolicyHtmlScreen extends StatefulWidget {
 }
 
 class _CompanyPolicyHtmlScreenState extends State<CompanyPolicyHtmlScreen> {
-
   PolicyItems data = PolicyItems();
   String? generatedPdfFilePath;
 
@@ -26,7 +25,7 @@ class _CompanyPolicyHtmlScreenState extends State<CompanyPolicyHtmlScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.data!=null){
+    if (widget.data != null) {
       data = widget.data;
     }
   }
@@ -35,53 +34,50 @@ class _CompanyPolicyHtmlScreenState extends State<CompanyPolicyHtmlScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 90,
-        elevation: 0.0,
-        leading: Row(
-          children: [
-            SizedBox(
-              width: 20,
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-                iconSize: 20, // reduce the size of the icon
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 1.0),
-              child: SizedBox(
-                width: 60, // set a wider width for the text
-                child: TextButton(
+          leadingWidth: 90,
+          elevation: 0.0,
+          leading: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                child: IconButton(
                   onPressed: () {
                     setState(() {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
+                  iconSize: 20, // reduce the size of the icon
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        title: Text(
-          data.dispName.toString(),
-          style: Theme.of(context).textTheme.headlineLarge,
-          // TextStyle(
-          //     fontSize: 16, color: Colors.white, fontWeight: FontWeight.normal),
-        ),
-        centerTitle: true,
-          backgroundColor: Color(0xFF036CB2)
-      ),
+              Padding(
+                padding: EdgeInsets.only(left: 1.0),
+                child: SizedBox(
+                  width: 60, // set a wider width for the text
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          title: Text(
+            data.dispName.toString(),
+            style: Theme.of(context).textTheme.headlineLarge,
+            // TextStyle(
+            //     fontSize: 16, color: Colors.white, fontWeight: FontWeight.normal),
+          ),
+          centerTitle: true,
+          backgroundColor: Color(0xFF036CB2)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -93,8 +89,8 @@ class _CompanyPolicyHtmlScreenState extends State<CompanyPolicyHtmlScreen> {
                 ),
                 HtmlWidget(
                   data.policyDescription.toString(),
-                  textStyle:GoogleFonts.roboto(textStyle: TextStyle(color: Colors.black,fontSize: 13)) ,
-
+                  textStyle: GoogleFonts.roboto(
+                      textStyle: TextStyle(color: Colors.black, fontSize: 13)),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -105,12 +101,13 @@ class _CompanyPolicyHtmlScreenState extends State<CompanyPolicyHtmlScreen> {
                     onPressed: () {
                       generateDocument(data.policyDescription);
                     },
-                    child: Text(
-                      'View PDF',
-                      style: GoogleFonts.roboto(textStyle: TextStyle(
-                          fontWeight: FontWeight.normal,fontSize: 16,
-                          color: Colors.white), )
-                    ),
+                    child: Text('View PDF',
+                        style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                              color: Colors.white),
+                        )),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF036CB2),
                         shape: RoundedRectangleBorder(
@@ -134,16 +131,16 @@ class _CompanyPolicyHtmlScreenState extends State<CompanyPolicyHtmlScreen> {
     final targetPath = appDocDir.path;
     final targetFileName = "notification-pdf";
 
-    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(htmlContent, targetPath, targetFileName);
+    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
+        htmlContent, targetPath, targetFileName);
     generatedPdfFilePath = generatedPdfFile.path;
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PDFScreen(pdfPath: generatedPdfFilePath.toString()),
+        builder: (context) =>
+            PDFScreen(pdfPath: generatedPdfFilePath.toString()),
       ),
     );
-
   }
-
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/respose/Status.dart';
 import '../../utils/Popup.dart';
 import '../../utils/PositiveButton.dart';
 import '../../view/e-document/EFormDynamicListScreen.dart';
@@ -13,7 +14,8 @@ import '../../utils/Utils.dart';
 
 class EFormsListingScreen extends StatefulWidget {
   var permisssions;
- EFormsListingScreen({Key? key,required this.permisssions}) : super(key: key);
+
+  EFormsListingScreen({Key? key, required this.permisssions}) : super(key: key);
 
   @override
   State<EFormsListingScreen> createState() => _EFormsListingScreenState();
@@ -28,46 +30,42 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
   bool isdelete = false;
   bool isview = false;
   List<ParentSubMenu> subMenuPermissions = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getUserDetails();
     subMenuPermissions = widget.permisssions;
-    actionPermissions ();
+    actionPermissions();
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-
-
-        for (var item in subMenuPermissions) {
-          if ((item.moduleDisplayNameMobile == "EForms") &&
-              (item.action != null && item.action!.isNotEmpty)) {
-            var actions = item.action ?? [];
-            for (var act in actions) {
-              if (act.actionName == "Add" || act.actionId == 1) {
-                iscreate = true;
-                print("addbutton = $iscreate");
-              }
-              else if (act.actionName == "Edit" || act.actionId == 2) {
-                isupdate = true;
-                print("edit = $isupdate");
-              }
-              else if (act.actionName == "Delete" || act.actionId == 3) {
-                isdelete = true;
-                print("delete = $isdelete");
-              }
-              else if (act.actionName == "View" || act.actionId == 4) {
-                isview = true;
-                print("view = $isview");
-              }
+      for (var item in subMenuPermissions) {
+        if ((item.moduleDisplayNameMobile == "EForms") &&
+            (item.action != null && item.action!.isNotEmpty)) {
+          var actions = item.action ?? [];
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
+              iscreate = true;
+              print("addbutton = $iscreate");
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
+              isupdate = true;
+              print("edit = $isupdate");
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
+              isdelete = true;
+              print("delete = $isdelete");
+            } else if (act.actionName == "View" || act.actionId == 4) {
+              isview = true;
+              print("view = $isview");
             }
           }
         }
-
+      }
     });
   }
+
   void _getUserDetails() async {
     final prefs = await SharedPreferences.getInstance();
     String? details = prefs.getString('userDetails');
@@ -106,19 +104,19 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                if(iscreate)
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: PositiveButton(
-                      text: 'Add New E-Form Request',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EFormDynamicListScreen()),
-                        );
-                      }),
-                ),
+                if (iscreate)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: PositiveButton(
+                        text: 'Add New E-Form Request',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EFormDynamicListScreen()),
+                          );
+                        }),
+                  ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -127,7 +125,26 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
                     shrinkWrap: true,
                     itemCount: _userDataList.length,
                     itemBuilder: (context, index) {
-                      return  Dismissible(key: Key(1.toString()),
+                      var item = _userDataList[index];
+                      if (item == null) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: 5,
+                            right: 5,
+                            bottom: 5,
+                          ),
+                          child: Text(
+                            "No data found",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Dismissible(
+                          key: Key(item.id.toString()),
                           direction: DismissDirection.startToEnd,
                           background: Container(
                             color: Colors.red,
@@ -138,46 +155,65 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
                             ),
                           ),
                           onDismissed: (direction) async {
+                            setState(() {
+                              _userDataList.removeAt(index);
+                            });
                             showDialog(
                                 context: context,
                                 barrierDismissible: true,
                                 builder: (context) {
                                   return Dialog(
-                                      shape:
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius
-                                              .circular(
-                                              10)),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(10)),
                                       elevation: 16,
-                                      child: Popup(title: 'EForm',
-                                        message: ' Are you sure you want to delete this id?',
+                                      child: Popup(
+                                        title: 'E Form',
+                                        message:
+                                        ' Are you sure you want to delete this id?',
                                         negativeButtonText: "No",
                                         onNegativePressed: () {
+                                          fetchEFormsUserDataList(userDetails.id, userDetails.propertyId);
                                           Navigator.pop(context);
                                         },
                                         positiveButtonText: "Yes",
                                         onPositivePressed: () async {
-                                          // final response = await viewModel
-                                          //     .deletetVisitorDetails(
-                                          //     item.id, context);
-                                          //
-                                          // if (response.data!.status ==
-                                          //     200) {
-                                          //   // Update local state of widget
-                                          //   setState(() {
-                                          //     items.removeAt(index);
-                                          //   });
-                                          // } else
-                                          // if (response.data!.result ==
-                                          //     Status.error) {
-                                          //   // Show error message to user
-                                          //   Utils.flushBarErrorMessage(
-                                          //       response.message!, context);
-                                          // }
-                                        },)
-                                  );
-                                }
-                            );
+                                          if (isdelete) {
+                                            final response = await viewmodel
+                                                .deleteEForm(
+                                                item.id, context);
+
+                                            if (response.data!.status ==
+                                                200) {
+                                              setState(() {
+                                                fetchEFormsUserDataList(userDetails.id, userDetails.propertyId);
+                                                Utils.toastMessage(response
+                                                    .data!.mobMessage
+                                                    .toString());
+
+                                                Navigator.pop(context);
+                                              });
+                                            } else if (response
+                                                .data!.result ==
+                                                Status.error) {
+                                              setState(() {
+                                                _userDataList.insert(
+                                                    index, item);
+                                                Utils.flushBarErrorMessage(
+                                                    response.data!.mobMessage
+                                                        .toString(),
+                                                    context);
+                                              });
+                                            }
+                                          } else {
+                                            fetchEFormsUserDataList(userDetails.id, userDetails.propertyId);
+                                            Navigator.pop(context);
+                                            Utils.toastMessage(
+                                                'Do not have access to delete');
+                                          }
+                                        },
+                                      ));
+                                });
                           },
                           child: InkWell(
                             child: Card(
@@ -186,14 +222,16 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
                               child: Column(
                                 children: [
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.01,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
                                   ),
                                   containerValue(
                                       icon: Icons.calendar_month_sharp,
-                                      value: DateFormat('yyyy-MM-dd hh:mm a').format(
-                                          DateTime.parse(_userDataList[index]
-                                              .createdOn
-                                              .toString()))),
+                                      value: DateFormat('yyyy-MM-dd hh:mm a')
+                                          .format(DateTime.parse(
+                                              _userDataList[index]
+                                                  .createdOn
+                                                  .toString()))),
                                   if (userDetails.appUsageTypeName?.trim() ==
                                       'VMS Management modules')
                                     Divider(
@@ -214,8 +252,9 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
                                   ),
                                   containerValue(
                                       icon: Icons.nest_cam_wired_stand,
-                                      value:
-                                      _userDataList[index].eformName.toString()),
+                                      value: _userDataList[index]
+                                          .eformName
+                                          .toString()),
                                   Divider(
                                     color: Colors.grey,
                                   ),
@@ -225,24 +264,24 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
                                           .eformsStatus
                                           .toString()),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.01,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
                                   ),
                                 ],
                               ),
                             ),
                             onTap: () {
-                              if(isupdate == true || isview == true) {
+                              if (isupdate == true || isview == true) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditEFormScreen(
-                                            data: _userDataList[index],)),
+                                      builder: (context) => EditEFormScreen(
+                                            data: _userDataList[index],
+                                          )),
                                 );
                               }
                             },
                           ));
-
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return SizedBox(
@@ -286,4 +325,3 @@ class _EFormsListingScreenState extends State<EFormsListingScreen> {
     );
   }
 }
-

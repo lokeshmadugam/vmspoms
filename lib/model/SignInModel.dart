@@ -1,4 +1,3 @@
-
 class SignInModel {
   int? status;
   int? megCategory;
@@ -9,11 +8,11 @@ class SignInModel {
 
   SignInModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.accessToken,
-        this.userDetails});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.accessToken,
+      this.userDetails});
 
   SignInModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -95,56 +94,56 @@ class UserDetails {
 
   UserDetails(
       {this.id,
-        this.admPropertyId,
-        this.propertyId,
-        this.appUserTypeId,
-        this.appUsageTypeId,
-        this.userType,
-        this.firstName,
-        this.lastName,
-        this.phoneNo,
-        this.emailAddress,
-        this.employeeId,
-        this.username,
-        this.roleId,
-        this.mobileNo,
-        this.blockName,
-        this.unitDeviceCnt,
-        this.otpCommId,
-        this.otpValidationStatus,
-        this.remarks,
-        this.lastLoginDatetime,
-        this.isOnline,
-        this.recStatus,
-        this.userQrcodeImg,
-        this.userQrcode,
-        this.unitNumber,
-        this.signupRequestDate,
-        this.recStatusname,
-        this.appUserTypeName,
-        this.appUsageTypeName,
-        this.roleName,
-        this.userTypeName,
-        this.propertyDispName,
-        this.logoImgUrl,
-        this.propertyImg,
-        this.profileImg,
-        this.propertyAddressLine1,
-        this.propertyAddressLine2,
-        this.propertyCity,
-        this.propertyPostalCode,
-        this.propertyCountryCode,
-        this.propertyCountryName,
-        this.propertyState,
-        this.countryCode,
-        this.countryName,
-        this.callingCode,
-        this.timezone,
-        this.propertyTimezoneName,
-        this.dispDateFormat,
-        this.isShowStreetName,
-        this.isShowBlockName,
-        this.permissions});
+      this.admPropertyId,
+      this.propertyId,
+      this.appUserTypeId,
+      this.appUsageTypeId,
+      this.userType,
+      this.firstName,
+      this.lastName,
+      this.phoneNo,
+      this.emailAddress,
+      this.employeeId,
+      this.username,
+      this.roleId,
+      this.mobileNo,
+      this.blockName,
+      this.unitDeviceCnt,
+      this.otpCommId,
+      this.otpValidationStatus,
+      this.remarks,
+      this.lastLoginDatetime,
+      this.isOnline,
+      this.recStatus,
+      this.userQrcodeImg,
+      this.userQrcode,
+      this.unitNumber,
+      this.signupRequestDate,
+      this.recStatusname,
+      this.appUserTypeName,
+      this.appUsageTypeName,
+      this.roleName,
+      this.userTypeName,
+      this.propertyDispName,
+      this.logoImgUrl,
+      this.propertyImg,
+      this.profileImg,
+      this.propertyAddressLine1,
+      this.propertyAddressLine2,
+      this.propertyCity,
+      this.propertyPostalCode,
+      this.propertyCountryCode,
+      this.propertyCountryName,
+      this.propertyState,
+      this.countryCode,
+      this.countryName,
+      this.callingCode,
+      this.timezone,
+      this.propertyTimezoneName,
+      this.dispDateFormat,
+      this.isShowStreetName,
+      this.isShowBlockName,
+      this.permissions});
 
   UserDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -282,19 +281,19 @@ class Permissions {
 
   Permissions(
       {this.moduleId,
-        this.moduleAssignId,
-        this.menuDisplayNameWeb,
-        this.menuDisplayNameMobile,
-        this.moduleDisplayNameWeb,
-        this.moduleDisplayNameMobile,
-        this.parentMenuId,
-        this.menuIconWeb,
-        this.menuIconMobile,
-        this.modulePath,
-        this.roleId,
-        this.action,
-        this.functionName,
-        this.parentSubMenu});
+      this.moduleAssignId,
+      this.menuDisplayNameWeb,
+      this.menuDisplayNameMobile,
+      this.moduleDisplayNameWeb,
+      this.moduleDisplayNameMobile,
+      this.parentMenuId,
+      this.menuIconWeb,
+      this.menuIconMobile,
+      this.modulePath,
+      this.roleId,
+      this.action,
+      this.functionName,
+      this.parentSubMenu});
 
   Permissions.fromJson(Map<String, dynamic> json) {
     moduleId = json['module_id'];
@@ -388,15 +387,15 @@ class FunctionName {
 
   FunctionName(
       {this.menuDisplayNameWeb,
-        this.menuDisplayNameMobile,
-        this.moduleDisplayNameWeb,
-        this.moduleDisplayNameMobile,
-        this.functionDisplayNameWeb,
-        this.functionDisplayNameMobile,
-        this.functionDescription,
-        this.moduleDescription,
-        this.modulePath,
-        this.functionPath});
+      this.menuDisplayNameMobile,
+      this.moduleDisplayNameWeb,
+      this.moduleDisplayNameMobile,
+      this.functionDisplayNameWeb,
+      this.functionDisplayNameMobile,
+      this.functionDescription,
+      this.moduleDescription,
+      this.modulePath,
+      this.functionPath});
 
   FunctionName.fromJson(Map<String, dynamic> json) {
     menuDisplayNameWeb = json['menu_display_name_web'];
@@ -445,19 +444,19 @@ class ParentSubMenu {
 
   ParentSubMenu(
       {this.moduleId,
-        this.moduleAssignId,
-        this.menuDisplayNameWeb,
-        this.menuDisplayNameMobile,
-        this.moduleDisplayNameWeb,
-        this.moduleDisplayNameMobile,
-        this.modulePath,
-        this.parentMenuId,
-        this.menuIconWeb,
-        this.menuIconMobile,
-        this.roleId,
-        this.action,
-        this.functionName,
-        this.parentChildSubMenu});
+      this.moduleAssignId,
+      this.menuDisplayNameWeb,
+      this.menuDisplayNameMobile,
+      this.moduleDisplayNameWeb,
+      this.moduleDisplayNameMobile,
+      this.modulePath,
+      this.parentMenuId,
+      this.menuIconWeb,
+      this.menuIconMobile,
+      this.roleId,
+      this.action,
+      this.functionName,
+      this.parentChildSubMenu});
 
   ParentSubMenu.fromJson(Map<String, dynamic> json) {
     moduleId = json['module_id'];

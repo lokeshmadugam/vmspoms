@@ -15,7 +15,6 @@ import '../../utils/MyTextField.dart';
 import '../../utils/Utils.dart';
 
 class EFormDynamicListScreen extends StatefulWidget {
-
   EFormDynamicListScreen({Key? key}) : super(key: key);
 
   @override
@@ -346,8 +345,8 @@ class _EFormDynamicListScreenState extends State<EFormDynamicListScreen> {
                                                 .toString());
                                           }
                                         }
-                                        _controllers[index].text = selectedItems.join(',');
-
+                                        _controllers[index].text =
+                                            selectedItems.join(',');
                                       });
                                     },
                                   );

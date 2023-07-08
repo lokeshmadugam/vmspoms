@@ -12,10 +12,12 @@ class ManagementSecurityViewModel with ChangeNotifier {
 
   Future<ApiResponse<ManagementSecurity>> fetchManagementContactList(
       var managementInHouseId, var propertyId) async {
-    ApiResponse<ManagementSecurity> managementSecurityListResponse = ApiResponse.loading();
+    ApiResponse<ManagementSecurity> managementSecurityListResponse =
+        ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getManagementContactList(managementInHouseId, propertyId);
+      final value = await _myRepo.getManagementContactList(
+          managementInHouseId, propertyId);
       managementSecurityListResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -27,7 +29,6 @@ class ManagementSecurityViewModel with ChangeNotifier {
 
     return managementSecurityListResponse;
   }
-
 
   Future<ApiResponse<ServiceType>> fetchServiceType(var serviceType) async {
     ApiResponse<ServiceType> serviceListResponse = ApiResponse.loading();
@@ -45,6 +46,4 @@ class ManagementSecurityViewModel with ChangeNotifier {
 
     return serviceListResponse;
   }
-
-
 }

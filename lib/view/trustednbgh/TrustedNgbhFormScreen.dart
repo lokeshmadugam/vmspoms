@@ -67,6 +67,7 @@ class _TrustedNeighbourFormScreenState
   void dispose() {
     super.dispose();
   }
+
   @override
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
@@ -110,6 +111,7 @@ class _TrustedNeighbourFormScreenState
       _fetchNeighbours(_searchTerm);
     });
   }
+
   @override
   Future<void> getDeviceId() async {
     try {
@@ -119,6 +121,7 @@ class _TrustedNeighbourFormScreenState
       print('Error getting device ID: $e');
     }
   }
+
   @override
   void submitTrustedNeighboursForm() async {
     if (nameController.text.isEmpty) {
@@ -131,13 +134,13 @@ class _TrustedNeighbourFormScreenState
       Utils.flushBarErrorMessage('Contact Number can\'t be empty', context);
     } else {
       Map<String, dynamic> data = {
-
         "created_by": userId,
         "property_id": propertyId,
         "rec_status": 8,
         "trneigb_added_device_id": deviceId,
         "trneigb_added_property_userid": userId,
-        "trneigbour_added_datetime":  DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
+        "trneigbour_added_datetime":
+            DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
         "trneigbour_property_user_id": selectedNeighbour,
         "unit_number": unitNumber
       };
@@ -158,6 +161,7 @@ class _TrustedNeighbourFormScreenState
       });
     }
   }
+
   @override
   Future<DateTime?> selectDateTime(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -185,9 +189,11 @@ class _TrustedNeighbourFormScreenState
   }
 
   void updateDateTime(DateTime pickedDateTime) {
-    String formattedDateTime = DateFormat('yyyy-MM-dd hh:mm a').format(pickedDateTime);
+    String formattedDateTime =
+        DateFormat('yyyy-MM-dd hh:mm a').format(pickedDateTime);
     dateController.text = formattedDateTime;
-    String isoFormattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(pickedDateTime);
+    String isoFormattedDateTime =
+        DateFormat('yyyy-MM-ddTHH:mm:ss').format(pickedDateTime);
     // now you can send the isoFormattedDateTime in the put method
   }
 
@@ -229,7 +235,6 @@ class _TrustedNeighbourFormScreenState
 // });
 //   }
   @override
-
   Future<void> _fetchNeighbours(String searchTerm) async {
     var response = await tnViewModel.fetchAllTrustedNeighbours(
       "ASC",
@@ -284,10 +289,8 @@ class _TrustedNeighbourFormScreenState
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style:  Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
@@ -295,7 +298,7 @@ class _TrustedNeighbourFormScreenState
         ),
         title: Text(
           'Trusted Neighbours',
-          style:  Theme.of(context).textTheme.headlineLarge,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
@@ -329,61 +332,68 @@ class _TrustedNeighbourFormScreenState
             ),
             _showList && !_itemSelected
                 ? Card(
-              elevation: 4.0,
-              margin: EdgeInsets.all(10.0),
-              child: Container(
-                height: _getNeighbours.length * 30.0,
-                child: ListView.builder(
-                  itemExtent: 30.0,
-                  itemCount: _getNeighbours
-                      .where((neighbour) =>
-                  (neighbour.firstName!.toLowerCase().contains(_searchTerm.toLowerCase()) ||
-                      neighbour.unitNumber!.toLowerCase().contains(_searchTerm.toLowerCase())))
-                      .toList()
-                      .length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final filteredNeighbours = _getNeighbours
-                        .where((neighbour) =>
-                    (neighbour.firstName!.toLowerCase().contains(_searchTerm.toLowerCase()) ||
-                        neighbour.unitNumber!.toLowerCase().contains(_searchTerm.toLowerCase())))
-                        .toList();
-                    final neighbour = filteredNeighbours[index];
-                    if (neighbour == null) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                        child: Text(
-                          "No data found",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }
-                    return InkWell(
-                      onTap: () {
-                        final name = neighbour.firstName ?? '';
-                        final unitNumber = neighbour.unitNumber ?? '';
-                        final blockname = neighbour.blockName ?? '';
-                        final contact = neighbour.mobileNo ?? '';
-                        nameController.text = name;
-                        unitNumberController.text = unitNumber;
-                        blockNameController.text = blockname;
-                        contactNumberController.text = contact;
-                        setState(() {
-                          _itemSelected = true;
-                        });
-                        selectedNeighbour = neighbour.id ?? 0;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "${neighbour.firstName}-${neighbour.lastName}-${neighbour.unitNumber}-${neighbour.blockName}",
-                        ),
+                    elevation: 4.0,
+                    margin: EdgeInsets.all(10.0),
+                    child: Container(
+                      height: _getNeighbours.length * 30.0,
+                      child: ListView.builder(
+                        itemExtent: 30.0,
+                        itemCount: _getNeighbours
+                            .where((neighbour) => (neighbour.firstName!
+                                    .toLowerCase()
+                                    .contains(_searchTerm.toLowerCase()) ||
+                                neighbour.unitNumber!
+                                    .toLowerCase()
+                                    .contains(_searchTerm.toLowerCase())))
+                            .toList()
+                            .length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final filteredNeighbours = _getNeighbours
+                              .where((neighbour) => (neighbour.firstName!
+                                      .toLowerCase()
+                                      .contains(_searchTerm.toLowerCase()) ||
+                                  neighbour.unitNumber!
+                                      .toLowerCase()
+                                      .contains(_searchTerm.toLowerCase())))
+                              .toList();
+                          final neighbour = filteredNeighbours[index];
+                          if (neighbour == null) {
+                            return Padding(
+                              padding:
+                                  EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                              child: Text(
+                                "No data found",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            );
+                          }
+                          return InkWell(
+                            onTap: () {
+                              final name = neighbour.firstName ?? '';
+                              final unitNumber = neighbour.unitNumber ?? '';
+                              final blockname = neighbour.blockName ?? '';
+                              final contact = neighbour.mobileNo ?? '';
+                              nameController.text = name;
+                              unitNumberController.text = unitNumber;
+                              blockNameController.text = blockname;
+                              contactNumberController.text = contact;
+                              setState(() {
+                                _itemSelected = true;
+                              });
+                              selectedNeighbour = neighbour.id ?? 0;
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "${neighbour.firstName}-${neighbour.lastName}-${neighbour.unitNumber}-${neighbour.blockName}",
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
-            )
-
+                    ),
+                  )
                 : SizedBox.shrink(),
             _itemSelected
                 ? Column(
@@ -436,9 +446,7 @@ class _TrustedNeighbourFormScreenState
                                 contactNumberController.clear();
                                 blockNameController.clear();
                                 unitNumberController.clear();
-
                               },
-
                             )),
                       )
                     ],
@@ -453,14 +461,13 @@ class _TrustedNeighbourFormScreenState
   SingleChildScrollView editbuildSingleChildScrollView(BuildContext context) {
     final nameController = TextEditingController(
         text: widget.trustedNbgh.trustedNegihbourName ?? '');
-   var nameParts = nameController.text.split(' ');
+    var nameParts = nameController.text.split(' ');
     String inputDateString = widget.trustedNbgh.trneigbourAddedDatetime ?? '';
     DateTime inputDate = DateTime.parse(inputDateString);
-    String outputDateString = DateFormat('yyyy-MM-dd hh:mm a').format(inputDate);
+    String outputDateString =
+        DateFormat('yyyy-MM-dd hh:mm a').format(inputDate);
 
     dateController = TextEditingController(text: outputDateString);
-
-
 
     return SingleChildScrollView(
       child: Column(
@@ -479,78 +486,78 @@ class _TrustedNeighbourFormScreenState
           ),
           _showList && !_itemSelected
               ? Card(
-            elevation: 4.0,
-            margin: EdgeInsets.all(10.0),
-            child: Container(
-              height: _getNeighbours.length * 30.0,
-              child: ListView.builder(
-                itemExtent: 30.0,
-                itemCount: _getNeighbours
-                    .where((neighbour) => neighbour.firstName!
-                    .toLowerCase()
-                    .contains(_searchTerm.toLowerCase()))
-                    .toList()
-                    .length,
-                itemBuilder: (BuildContext context, int index) {
-                  final filteredNeighbours = _getNeighbours
-                      .where((neighbour) => neighbour.firstName!
-                      .toLowerCase()
-                      .contains(_searchTerm.toLowerCase()))
-                      .toList();
-                  final neighbour = filteredNeighbours[index];
-                  if (neighbour == null) {
-                    return Padding(
-                      padding:
-                      EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                      child: Text(
-                        "No data found",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }
-                  return InkWell(
-                    onTap: () {
-                      final name = neighbour.firstName ?? '';
-                      final unitNumber = neighbour.unitNumber ?? '';
-                      final blockname = neighbour.blockName ?? '';
-                      final contact = neighbour.mobileNo ?? '';
-                      nameController.text = name;
-                      unitNumberController.text = unitNumber;
-                      blockNameController.text = blockname;
-                      contactNumberController.text = contact;
-                      setState(() {
-                        _itemSelected = true;
-                      });
-                      selectedNeighbour = neighbour.id ?? 0;
+                  elevation: 4.0,
+                  margin: EdgeInsets.all(10.0),
+                  child: Container(
+                    height: _getNeighbours.length * 30.0,
+                    child: ListView.builder(
+                      itemExtent: 30.0,
+                      itemCount: _getNeighbours
+                          .where((neighbour) => neighbour.firstName!
+                              .toLowerCase()
+                              .contains(_searchTerm.toLowerCase()))
+                          .toList()
+                          .length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final filteredNeighbours = _getNeighbours
+                            .where((neighbour) => neighbour.firstName!
+                                .toLowerCase()
+                                .contains(_searchTerm.toLowerCase()))
+                            .toList();
+                        final neighbour = filteredNeighbours[index];
+                        if (neighbour == null) {
+                          return Padding(
+                            padding:
+                                EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                            child: Text(
+                              "No data found",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        }
+                        return InkWell(
+                          onTap: () {
+                            final name = neighbour.firstName ?? '';
+                            final unitNumber = neighbour.unitNumber ?? '';
+                            final blockname = neighbour.blockName ?? '';
+                            final contact = neighbour.mobileNo ?? '';
+                            nameController.text = name;
+                            unitNumberController.text = unitNumber;
+                            blockNameController.text = blockname;
+                            contactNumberController.text = contact;
+                            setState(() {
+                              _itemSelected = true;
+                            });
+                            selectedNeighbour = neighbour.id ?? 0;
 
-                      // Update nameParts and trustedNbgh.trustedNegihbourName
-                      final newParts = [
-                        neighbour.firstName ?? '',
-                        neighbour.lastName ?? '',
-                        nameParts.length > 2 ? nameParts[2] : '',
-                        neighbour.mobileNo ?? '',
-                        nameParts.length > 4 ? nameParts[4] : '',
-                        neighbour.unitNumber ?? '',
-                        nameParts.length > 6 ? nameParts[6] : '',
-                        neighbour.blockName ?? '',
-                      ];
-                      setState(() {
-                        nameParts = newParts;
-                        widget.trustedNbgh.trustedNegihbourName = newParts.join(' ');
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          "${neighbour.firstName}-${neighbour.lastName}-${neighbour.unitNumber}-${neighbour.blockName}"),
+                            // Update nameParts and trustedNbgh.trustedNegihbourName
+                            final newParts = [
+                              neighbour.firstName ?? '',
+                              neighbour.lastName ?? '',
+                              nameParts.length > 2 ? nameParts[2] : '',
+                              neighbour.mobileNo ?? '',
+                              nameParts.length > 4 ? nameParts[4] : '',
+                              neighbour.unitNumber ?? '',
+                              nameParts.length > 6 ? nameParts[6] : '',
+                              neighbour.blockName ?? '',
+                            ];
+                            setState(() {
+                              nameParts = newParts;
+                              widget.trustedNbgh.trustedNegihbourName =
+                                  newParts.join(' ');
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                "${neighbour.firstName}-${neighbour.lastName}-${neighbour.unitNumber}-${neighbour.blockName}"),
+                          ),
+                        );
+                      },
                     ),
-                  );
-
-                },
-              ),
-            ),
-          )
+                  ),
+                )
               : SizedBox.shrink(),
           MyTextField(
             controller: TextEditingController(
@@ -618,86 +625,81 @@ class _TrustedNeighbourFormScreenState
             },
           ),
 
-    Padding(
-      padding: const EdgeInsets.all(10.0),
-      child:
-      // TextFormField(
-      //   controller: dateController,
-      //   decoration: InputDecoration(
-      //     // ...
-      //     suffixIcon: IconButton(
-      //       onPressed: () async {
-      //         DateTime? pickedDateTime = await selectDateTime(context);
-      //         if (pickedDateTime != null) {
-      //           updateDateTime(pickedDateTime);
-      //         }
-      //       },
-      //       icon: Icon(Icons.calendar_month),
-      //     ),
-      //   ),
-      //   keyboardType: TextInputType.datetime,
-      // ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child:
+                // TextFormField(
+                //   controller: dateController,
+                //   decoration: InputDecoration(
+                //     // ...
+                //     suffixIcon: IconButton(
+                //       onPressed: () async {
+                //         DateTime? pickedDateTime = await selectDateTime(context);
+                //         if (pickedDateTime != null) {
+                //           updateDateTime(pickedDateTime);
+                //         }
+                //       },
+                //       icon: Icon(Icons.calendar_month),
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.datetime,
+                // ),
 
-      TextFormField(
-      controller: dateController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+                TextFormField(
+              controller: dateController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 20.0),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 2.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                hintText: 'Date',
+                labelText: 'Date',
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+                    if (pickedDate != null) {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (pickedTime != null) {
+                        DateTime pickedDateTime = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          pickedTime.hour,
+                          pickedTime.minute,
+                        );
+                        String formattedDateTime =
+                            DateFormat('yyyy-MM-dd hh:mm a')
+                                .format(pickedDateTime);
+                        dateController.text = formattedDateTime;
+                        // widget.trustedNbgh.trneigbourAddedDatetime = formattedDateTime;
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.calendar_month),
+                ),
+              ),
+              keyboardType: TextInputType.datetime,
+            ),
           ),
-          contentPadding: const EdgeInsets.symmetric(
-              vertical: 10.0, horizontal: 20.0),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Colors.grey, width: 1.0),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Colors.grey, width: 2.0),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
 
-            hintText: 'Date',
-          labelText: 'Date',
-          suffixIcon: IconButton(
-            onPressed: () async {
-              DateTime? pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2100),
-              );
-              if (pickedDate != null) {
-                TimeOfDay? pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                if (pickedTime != null) {
-                  DateTime pickedDateTime = DateTime(
-                    pickedDate.year,
-                    pickedDate.month,
-                    pickedDate.day,
-                    pickedTime.hour,
-                    pickedTime.minute,
-                  );
-                  String formattedDateTime =
-                  DateFormat('yyyy-MM-dd hh:mm a').format(pickedDateTime);
-                  dateController.text = formattedDateTime;
-                  // widget.trustedNbgh.trneigbourAddedDatetime = formattedDateTime;
-                }
-              }
-            },
-            icon: Icon(Icons.calendar_month),
-          ),
-        ),
-
-
-      keyboardType: TextInputType.datetime,
-
-      ),
-    ),
-
-    SizedBox(
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
           SizedBox(
@@ -705,7 +707,7 @@ class _TrustedNeighbourFormScreenState
               child: PositiveButton(
                 text: 'Submit',
                 onPressed: () {
-                 // updateTrustedNeighbourData();
+                  // updateTrustedNeighbourData();
                 },
               ))
         ],

@@ -1,8 +1,6 @@
-
-
 import 'dart:convert';
 
-import 'package:poms_app/model/intercom/IntercomListingModel.dart';
+import '/model/intercom/IntercomListingModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Model/PostApiResponse.dart';
@@ -10,29 +8,27 @@ import '../../data/network/BaseApiServices.dart';
 import '../../data/network/NetworkApiServices.dart';
 import '../../model/DeleteResponse.dart';
 import '../../resources/AppUrl.dart';
-class IntercomRepository {
 
+class IntercomRepository {
   final BaseApiServices _apiService = NetworkApiService();
+
   // Intercom List
-  Future<dynamic> getIntercomList(String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,
-      int propertyId,String unitNo) async {
+  Future<dynamic> getIntercomList(String orderBy, String orderByPropertyName,
+      int pageNumber, int pageSize, int propertyId, String unitNo) async {
     String orderby = orderBy;
     String orderByPN = orderByPropertyName;
     String pagenumber = pageNumber.toString();
     String pagesize = pageSize.toString();
     String propertyid = propertyId.toString();
-String unitno = unitNo;
+    String unitno = unitNo;
     try {
       Map<String, String> queryParameters = {
-
         'orderBy': orderby,
         'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
         'property_id': propertyid,
-        'unit_no':unitno,
-
+        'unit_no': unitno,
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -41,13 +37,12 @@ String unitno = unitNo;
 
       var url = AppUrl.intercomListUrl;
 
-      dynamic response = await _apiService.getQueryResponse(
-          url, token, queryParameters, '');
+      dynamic response =
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = IntercomListModel.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -59,7 +54,7 @@ String unitno = unitNo;
     String token = jsonDecode(bearerToken!);
     var url = AppUrl.intercomListUrl;
     dynamic response =
-    await _apiService.postApiResponsewithtoken(url, token, data);
+        await _apiService.postApiResponsewithtoken(url, token, data);
     try {
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -69,28 +64,26 @@ String unitno = unitNo;
   }
 
   // Update Visitor Details
-  Future<dynamic> updateIntercomDetails(dynamic data,int id) async {
-
+  Future<dynamic> updateIntercomDetails(dynamic data, int id) async {
     String intercomId = id.toString();
 
     String query = "/$intercomId";
     try {
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
       String token = jsonDecode(bearerToken!);
-      var url =   AppUrl.intercomListUrl;
+      var url = AppUrl.intercomListUrl;
       // var url =   "https://ap-04.eezapps.com/vms/api/Intercom/$id";
-      dynamic response = await _apiService.putApiResponsewithtoken(
-          url, token,data,query);
+      dynamic response =
+          await _apiService.putApiResponsewithtoken(url, token, data, query);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
+
   // Delete Visitor Data
   Future<DeleteResponse> deleteIntecomDetails(dynamic data) async {
     // String vistorId = id.toString();
@@ -107,7 +100,7 @@ String unitno = unitNo;
     // var url = "https://ap-04.eezapps.com/vms/api/Itercom/$id";
     var url = AppUrl.intercomListUrl;
     dynamic response =
-    await _apiService.deleteApiResponsewithtoken(url,token, query);
+        await _apiService.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;

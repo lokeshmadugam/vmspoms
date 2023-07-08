@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../viewmodel/FileStorage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +21,7 @@ import '../../viewmodel/lostfound/EditLostDetailsFormScreenViewModel.dart';
 
 class EditUnclaimedItemsFormScreen extends StatefulWidget {
   var data;
-bool upload;
+  bool upload;
   EditUnclaimedItemsFormScreen({super.key, required this.data,required this.upload});
 
   @override
@@ -47,7 +46,7 @@ class _EditUnclaimedItemsFormScreenState
   UserDetails userDetails = UserDetails();
   File? _image;
   var token;
-var fileStgVM = FileStorageViewModel();
+  var fileStgVM = FileStorageViewModel();
   bool _isFoundDetailsExpanded = true;
   bool _isCollectionDetailsExpanded = false;
   bool _isCollectionDetailsHeaderVisible = false;
@@ -63,11 +62,14 @@ var fileStgVM = FileStorageViewModel();
 
   List<String> pickedImagePaths = [];
   String? signatureUrl;
-  List<String>? pickedImageUrls = [];
-var image;
+  List<String>? pickedImageUrls;
 
-  List<dynamic>? decodedList;
-  List<String>? imageUrls;
+  QRViewController? qrViewController;
+  late String qrCode;
+  GlobalKey qrKey = GlobalKey();
+  Map<String, String>? qrData;
+
+
   @override
   void initState() {
     super.initState();
@@ -89,25 +91,6 @@ var image;
         _collectedDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.collectedDateTime.toString() ?? ''));
         _remarksController.text = items.collectedRemarks.toString();
       }
-      if (items.foundByItemPic!.isNotEmpty ){
-        decodedList = jsonDecode(items.foundByItemPic ?? "[]");
-
-        imageUrls = decodedList?.map((item) => item.toString()).toList();
-      } else {
-        image = items.foundByItemPic;
-      }
-      // if (items.foundByItemPic != null &&
-      //     items.foundByItemPic!.isNotEmpty &&
-      //     items.foundByItemPic is List<String>) {
-      //   // Remove backslashes from the JSON string
-      //   final jsonString = items.foundByItemPic!.replaceAll(r'\\', '');
-      //
-      //   // Parse the JSON string
-      //   decodedList = jsonDecode(jsonString);
-      //
-      //   // Extract the image URLs from the decoded list
-      //   imageUrls = decodedList?.map<String>((item) => item.toString()).toList();
-      // }
     }
 
     _getUserDetails();
@@ -122,33 +105,35 @@ var image;
     token = SignInModel.fromJson(jsonData).accessToken!;
   }
 
-  Future<void> _createFile(List<String> imagePaths, BuildContext context) async {
+  Future<void> _createFile(BuildContext context, List<String> imagePaths) async {
     if (_signatureImagePath.isNotEmpty && pickedImagePaths.isEmpty) {
       imagePaths.add(_signatureImagePath);
-    } else if (_signatureImagePath.isEmpty && pickedImagePaths.isNotEmpty) {
+    }  else if (_signatureImagePath.isEmpty && pickedImagePaths.isNotEmpty) {
       imagePaths.addAll(pickedImagePaths);
+
     } else if (_signatureImagePath.isNotEmpty && pickedImagePaths.isNotEmpty) {
       imagePaths.add(_signatureImagePath);
       imagePaths.addAll(pickedImagePaths);
+      // .map((file) => file.path)
     } else {
       return;
     }
 
-    if (imagePaths.isNotEmpty) {
-      fileStgVM.getMediaUpload(imagePaths, context).then((response) {
-        print(" resp = $response");
-        if (response!.isNotEmpty) {
-          List<String> _pickedImageUrls = [];
+    try {
+      if (imagePaths.isNotEmpty) {
+        final qrcode = await fileStgVM.getMediaUpload(imagePaths, context);
+        if (qrcode!.isNotEmpty) {
+          List<String> _pickedImageUrls = []; // Initialize the list here
           String? _signatureUrl;
 
-          for (int i = 0; i < response.length; i += 2) {
-            String originalName = response[i].trim();
-            String url = response[i + 1].trim();
+          for (int i = 0; i < qrcode!.length; i += 2) {
+            String originalName = qrcode![i].trim();
+            String url = qrcode![i + 1].trim();
             String originalNameWithUrl = '$originalName:$url';
 
             if (originalName == 'signature.png') {
               _signatureUrl = originalNameWithUrl;
-              signatureUrl = _signatureUrl.toString();
+              signatureUrl = _signatureUrl;
             } else {
               _pickedImageUrls.add(url);
               pickedImageUrls = _pickedImageUrls;
@@ -159,34 +144,29 @@ var image;
           print('Picked Image URLs: $_pickedImageUrls');
           print('Signature URL: $signatureUrl');
           print('Picked Image URLs: $pickedImageUrls');
-
-          if (_signatureUrl != null || _pickedImageUrls.isNotEmpty) {
+          if ((_signatureUrl != null || _pickedImageUrls != null ) ||(_signatureUrl != null && _pickedImageUrls != null)) {
             createUnclaimedItems();
-          } else {
-            print('Error: No signature URL or picked image URLs');
+          }else{
+            'error';
           }
-        }
-        else {
+        } else {
           throw Exception('Invalid QR code response');
         }
-      });
+
+
+
+      }
+
+    }catch (e) {
+      print('Error occurred: $e');
+      throw Exception('Failed to generate QR code');
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    print("Wid = $width");
-    print("hei = $height");
-    double? fontSize;
-    if(width < 411 || height < 707){
-      fontSize = 14;
-
-    }else {
-      fontSize = 16;
-
-    }
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 90,
@@ -220,7 +200,11 @@ var image;
                   },
                   child: Text(
                     'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
+                    style: TextStyle(
+                      fontSize: 16, // reduce the font size
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -229,7 +213,8 @@ var image;
         ),
         title: Text(
           'Unclaimed Form',
-          style: Theme.of(context).textTheme.headlineMedium
+          style: TextStyle(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor:  Color(0xFF036CB2),
@@ -262,9 +247,9 @@ var image;
                         Container(
                           child: Text(
                             "Found Details",
-                         style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
-                      // fontWeight: FontWeight.bold,
-                    ), )
+                            style: TextStyle(fontSize: 18, color: Colors.white
+                              // fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -289,7 +274,9 @@ var image;
                             preffixIcon: Icons.find_replace,
                             controller: _foundByController,
                             suffixIcon: Icons.qr_code_2_outlined,
-                            onPressed: _scanQRCode,
+                            onPressed: (){
+                              _scanQRCode(1);
+                            },
                             labelText: 'Found by',
                             textInputType: TextInputType.number),
                         MyDateField(
@@ -316,24 +303,23 @@ var image;
                             controller: _foundLostLocationController,
                             labelText: 'Found Location',
                             textInputType: TextInputType.text),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.007,),
                         if(widget.upload)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Upload image :',
-                                    style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15, color: Colors.black
-                                      // fontWeight: FontWeight.bold,
-                                    ), )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Upload image :',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.normal),
+                                  ),
                                 ),
                               ),
-                            ),
-                            InkWell(
+                              InkWell(
                                 child: Container(
                                   margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                   decoration: BoxDecoration(
@@ -343,109 +329,56 @@ var image;
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Icon(Icons.upload,color: Colors.white,size: 18,),
+                                        Icon(Icons.upload,color: Colors.white,),
                                         Text(
                                           'Gallery',
-                                          style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15, color: Colors.white
-                                            // fontWeight: FontWeight.bold,
-                                          ), ),
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              onTap: () {
-                                getImage();
-                              },
-                            )
-                          ],
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child:
-                          Column(
-                            children: [
-                              if (imageUrls!= null && imageUrls!.isNotEmpty
-                                  )
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: decodedList!.length,
-                                      itemBuilder: (context, index) {
-
-                                        if (index < imageUrls!.length) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Image.network(
-                                              imageUrls![index],
-                                              fit: BoxFit.cover,
-                                              // Add any additional properties for the image widget
-                                            ),
-                                          );
-                                        }
-                                        return Container(); // Return an empty container if index is out of range
-                                      },
-                                      separatorBuilder: (BuildContext context, int index) {
-                                        return SizedBox(width: 10); // Adjust the spacing between images
-                                      },
-                                    ),
-                                  ),
-                                ),
-
-                         if (image != null && image.isNotEmpty)
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.network(
-                                          image,
-                                          fit: BoxFit.cover,
-                                          // Add any additional properties for the image widget
-                                        ),
-                                      )
-
-
-
-                                  ),
-                                ),
-                              if (items.foundByItemPic == null || items.foundByItemPic!.isEmpty)
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: pickedImagePaths.isEmpty
-                                        ? Text('No Image Selected')
-                                        : ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: pickedImagePaths.length,
-                                      itemBuilder: (context, index) {
-                                        return Image.file(File(pickedImagePaths[index]));
-                                      },
-                                    ),
-                                  ),
-                                ),
+                                onTap: () {
+                                  getImage();
+                                },
+                              )
                             ],
                           ),
+                        Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child:
+                            // Container(
+                            //   //width: MediaQuery.of(context).size.width,
+                            //   height: MediaQuery.of(context).size.height * 0.20,
+                            //   decoration: BoxDecoration(
+                            //       border: Border.all(color: Colors.grey),
+                            //       borderRadius: BorderRadius.circular(5)),
+                            //   child: Center(
+                            //     child: _image == null
+                            //         ? Text('No Image Selected')
+                            //         : Image.file(_image!),
+                            //   ),
+                            // ),
 
 
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.20,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Center(
+                                child: pickedImagePaths.isEmpty
+                                    ? Text('No Image Selected')
+                                    : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: pickedImagePaths.length,
+                                  itemBuilder: (context, index) {
+                                    return Image.file(File(pickedImagePaths[index]));
+                                  },
+                                ),
+                              ),
+                            )
 
 
 
@@ -467,7 +400,7 @@ var image;
                     onTap: () {
                       setState(() {
                         _isCollectionDetailsExpanded =
-                            !_isCollectionDetailsExpanded;
+                        !_isCollectionDetailsExpanded;
                       });
                     },
                     child: Container(
@@ -481,9 +414,9 @@ var image;
                           Container(
                             child: Text(
                               "Collection Details",
-                                style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
-                                  // fontWeight: FontWeight.bold,
-                                ), )
+                              style: TextStyle(fontSize: 18, color: Colors.white
+                                // fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -509,7 +442,9 @@ var image;
                             preffixIcon: Icons.collections,
                             controller: _collectedByController,
                             suffixIcon: Icons.qr_code_2_outlined,
-                            onPressed: _scanQRCode,
+                            onPressed: () {
+                              _scanQRCode(2);
+                            },
                             labelText: 'Collected by',
                             textInputType: TextInputType.number),
                         MyDateField(
@@ -534,9 +469,9 @@ var image;
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Sign Here :',
-                          style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15, color: Colors.black
-                              // fontWeight: FontWeight.bold,
-                            ), )
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.normal),
                             ),
                           ),
                         ),
@@ -568,9 +503,9 @@ var image;
                   child: PositiveButton(
                       text: 'Submit',
                       onPressed: () async {
-                        await _createFile( imagePaths,context);
+                        // await _createFile(context, imagePaths);
                         // _uploadImage(_image!.path, _signatureImagePath);
-                        // createUnclaimedItems();
+                        createUnclaimedItems();
                       }),
                 )
               ],
@@ -584,9 +519,9 @@ var image;
   Future<void> _saveSignatureImage() async {
     try {
       final signatureData =
-          await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
+      await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
       final data =
-          await signatureData.toByteData(format: ui.ImageByteFormat.png);
+      await signatureData.toByteData(format: ui.ImageByteFormat.png);
       final Directory directory = await getApplicationDocumentsDirectory();
       final String filePath = '${directory.path}/signature.png';
       final File file = File(filePath);
@@ -600,35 +535,97 @@ var image;
     }
   }
 
-  Future<void> _scanQRCode() async {
+  Map<String, String> _parseQRCodeData(String qrCode) {
+    Map<String, String> data = {};
+
+    // Split the QR code data by newlines to separate the lines
+    List<String> lines = qrCode.split('\n');
+
+    // Extract the key-value pairs from each line
+    for (String line in lines) {
+      List<String> keyValue = line.split(':');
+      if (keyValue.length == 2) {
+        String key = keyValue[0].trim();
+        String value = keyValue[1].trim();
+        data[key] = value;
+      }
+    }
+
+    return data;
+  }
+
+  Future<void> _scanQRCode(int i) async {
     try {
-      final String qrCode = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', // Scanner color
-        'Cancel', // Cancel button text
-        true, // Show flash icon
-        ScanMode.QR, // Scan mode
-      );
-      setState(() {
-        _scanResult = qrCode;
-        _collectedByController.text = _scanResult;
-      });
-    } on Exception catch (e) {
-      print('Error: $e');
+      qrViewController?.resumeCamera();
+      if(i==1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                height: 250,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: (controller) {
+                    _onQRViewCreated(controller);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      } else if(i==2) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                height: 250,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: (controller) {
+                    _onQRViewCreated1(controller);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
-//   Future getImage() async {
-//     final pickedFile =
-//         await ImagePicker().pickImage(source: ImageSource.gallery);
-// if(pickedFile != null){
-//
-//   setState(() {
-//     final imageFile =  File(pickedFile!.path);
-//     pickedImagePaths = [imageFile.path];
-//     _image = imageFile;
-//   });
-// }
-//   }
+  void _onQRViewCreated(QRViewController controller) {
+    qrViewController = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrCode = scanData.code!;
+        qrData = _parseQRCodeData(qrCode);
+        qrViewController?.pauseCamera();
+
+        Navigator.pop(context);
+
+        _foundByController.text = qrData!['User Id']!;
+      });
+    });
+  }
+
+  void _onQRViewCreated1(QRViewController controller) {
+    qrViewController = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrCode = scanData.code!;
+        qrData = _parseQRCodeData(qrCode);
+        qrViewController?.pauseCamera();
+
+        Navigator.pop(context);
+
+        _collectedByController.text = qrData!['User Id']!;
+      });
+    });
+  }
 
 
 
@@ -636,8 +633,8 @@ var image;
   Future<void> getImage() async {
     final pickedFiles = await ImagePicker().pickMultiImage(
       imageQuality: 100,
-      maxHeight: 150,
-      maxWidth: 150,
+      maxHeight: 100,
+      maxWidth: 100,
     );
 
     if (pickedFiles != null) {
@@ -682,14 +679,67 @@ var image;
     }
   }
 
-  void createUnclaimedItems() async{
+  void _uploadImage(var imagePath, String signatureImagePath) {
     String? formattedDateFound;
     String? formattedDateCollected;
 
-    // String jsonString = jsonEncode(pickedImageUrls?.join(','));
-    // print(jsonString);
-    String jsonString = jsonEncode(pickedImageUrls);
-    print(jsonString);
+    if (_dateFoundController.text.isNotEmpty) {
+      DateTime dateTime1 = DateFormat('yyyy-MM-dd hh:mm a')
+          .parse(_dateFoundController.text.toString());
+      formattedDateFound = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime1);
+    }
+
+    if (_collectedDateController.text.isNotEmpty) {
+      DateTime dateTime2 = DateFormat('yyyy-MM-dd hh:mm a')
+          .parse(_collectedDateController.text.toString());
+      formattedDateCollected =
+          DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime2);
+    }
+
+    if (widget.data == null) {
+      Map<String, dynamic> data = {
+        "found_by": userDetails.id,
+        "found_by_item_pic": "",
+        "found_date_time": formattedDateFound,
+        "found_description": _foundDescriptionController.text.toString(),
+        "found_item_name": _foundItemNameController.text.toString(),
+        "found_location": _foundLostLocationController.text.toString(),
+        "found_unit_no": userDetails.unitNumber,
+        "property_id": userDetails.propertyId,
+        "rec_status": userDetails.recStatus,
+        "updated_by": userDetails.id
+      };
+
+      Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
+          .getMediaUpload(imagePath, data, context, items.id);
+    } else {
+
+      Map<String, dynamic> data = {
+        "found_by": userDetails.id,
+        "found_by_item_pic": "",
+        "found_date_time": formattedDateFound,
+        "found_description": _foundDescriptionController.text.toString(),
+        "found_item_name": _foundItemNameController.text.toString(),
+        "found_location": _foundLostLocationController.text.toString(),
+        "found_unit_no": userDetails.unitNumber,
+        "property_id": userDetails.propertyId,
+        "rec_status": userDetails.recStatus,
+        "updated_by": userDetails.id,
+        "collected_by": _collectedByController.text.toString(),
+        "collected_date_time": formattedDateCollected,
+        "collected_remarks": _remarksController.text.toString(),
+        "received_by_sign": "",
+      };
+
+      Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
+          .getMediaUpload(imagePath, data, context, items.id);
+
+    }
+  }
+  void createUnclaimedItems() async{
+    String? formattedDateFound;
+    String? formattedDateCollected;
+    // String pickedImageUrlsString = pickedImageUrls!.join(',');
     if (_dateFoundController.text.isNotEmpty) {
       DateTime dateTime1 = DateFormat('yyyy-MM-dd hh:mm a')
           .parse(_dateFoundController.text.toString());
@@ -703,11 +753,28 @@ var image;
       formattedDateCollected =
           DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime2);
     }
+    // String? formattedDateFound;
+    // String? formattedDateCollected;
+    // String pickedImageUrlsString = pickedImageUrls!.join(',');
+    //
+    // if (_dateFoundController.text.isNotEmpty) {
+    //   DateTime dateTime1 = DateFormat('dd-MM-yyyy hh:mm a').parse(_dateFoundController.text);
+    //
+    //   String formattedDateFound = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime1);
+    //
+    // }
 
+
+
+    //
+    // if (_collectedDateController.text.isNotEmpty) {
+    //   DateTime dateTime2 = DateFormat('MM/dd/yyyy hh:mm a').parse(_collectedDateController.text);
+    //   formattedDateCollected = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime2);
+    // }
     if (widget.data == null) {
       Map<String, dynamic> data = {
         "found_by": userDetails.id,
-        "found_by_item_pic": jsonString,
+        "found_by_item_pic": 'pickedImageUrlsString',
         "found_date_time": formattedDateFound,
         "found_description": _foundDescriptionController.text.toString(),
         "found_item_name": _foundItemNameController.text.toString(),
@@ -724,7 +791,7 @@ var image;
 
       Map<String, dynamic> data = {
         "found_by": userDetails.id,
-        "found_by_item_pic": jsonString,
+        "found_by_item_pic": 'pickedImageUrlsString',
         "found_date_time": formattedDateFound,
         "found_description": _foundDescriptionController.text.toString(),
         "found_item_name": _foundItemNameController.text.toString(),

@@ -38,11 +38,13 @@ class _SignupScreenState extends State<SignupScreen> {
   List<ServiceItems> identificationItems = [];
   int genderId = 0;
   int identificationTypeId = 0;
-String country = '';
+  String country = '';
   bool isAgree = false;
+
   // KeyValueModel selectedValue;
   // String hello;
   TextEditingController v = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -100,8 +102,9 @@ String country = '';
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   Future<void> fetchCountry() async {
-    viewmodel.fetchCountry("ASC","id",1, 500).then((response) {
+    viewmodel.fetchCountry("ASC", "id", 1, 500).then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
@@ -116,6 +119,7 @@ String country = '';
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,15 +154,14 @@ String country = '';
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                      // TextStyle(
-                      //   fontSize: 16, // reduce the font size
-                      //   color: Colors.white,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium
+                        // TextStyle(
+                        //   fontSize: 16, // reduce the font size
+                        //   color: Colors.white,
+                        //   fontWeight: FontWeight.bold,
+                        // ),
+                        ),
                   ),
                 ),
               ),
@@ -189,10 +192,11 @@ String country = '';
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   buildContainer(
-                      controller: propertyIdController,
-                      textInputType: TextInputType.text,
-                      icon: Icons.ac_unit_outlined,
-                      hinttext: 'Property ID',),
+                    controller: propertyIdController,
+                    textInputType: TextInputType.text,
+                    icon: Icons.ac_unit_outlined,
+                    hinttext: 'Property ID',
+                  ),
                   buildContainer(
                       controller: unitNumberController,
                       textInputType: TextInputType.text,
@@ -227,21 +231,19 @@ String country = '';
                       hintText: 'Gender',
                       items: items
                           .map((item) => item.keyValue)
-                          .map((gender) =>
-                          DropdownMenuItem<String>(
-                            value: gender,
-                            child: Text(gender!),
-                          ))
+                          .map((gender) => DropdownMenuItem<String>(
+                                value: gender,
+                                child: Text(gender!),
+                              ))
                           .toList(),
                       onchanged: (value) {
-                        for(int i=0;i<items.length;i++){
-                          if(value==items[i].keyValue){
+                        for (int i = 0; i < items.length; i++) {
+                          if (value == items[i].keyValue) {
                             genderId = items[i].id!;
                             break;
                           }
                         }
-                      }
-                  ),
+                      }),
                   buildContainer(
                       controller: phoneNumberController,
                       textInputType: TextInputType.number,
@@ -257,86 +259,76 @@ String country = '';
                       textInputType: TextInputType.text,
                       icon: Icons.supervisor_account,
                       hinttext: 'Race'),
-
-
-
-
-
-
-
-
-
-
-
-              Padding(
+                  Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: ButtonTheme(
                       alignedDropdown: true,
                       child: DropdownSearch<CountryItems>(
-
-                        selectedItem:null,
+                        selectedItem: null,
                         items: countryItems,
                         itemAsString: (CountryItems item) => item.name ?? " ",
+                        dropdownDecoratorProps: DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            // labelText: "Nationality",
+                            hintText: "Nationality",
 
-
-                          dropdownDecoratorProps: DropDownDecoratorProps(
-
-                            dropdownSearchDecoration: InputDecoration(
-                              // labelText: "Nationality",
-                              hintText: "Nationality",
-
-                              hintStyle: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13), ) ,
-
-
-                              // contentPadding: EdgeInsets.symmetric(horizontal: 30), // Adjust padding for size
-
-                              contentPadding:
-                              const EdgeInsets.fromLTRB(10,0,0,0),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
-
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.grey, width: 0.5),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-
-
+                            hintStyle: GoogleFonts.roboto(
+                              textStyle:
+                                  TextStyle(color: Colors.grey, fontSize: 13),
                             ),
 
+                            // contentPadding: EdgeInsets.symmetric(horizontal: 30), // Adjust padding for size
 
-                            baseStyle: const TextStyle(color: Colors.black),
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.5),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.5),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.grey, width: 0.5),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
-                        dropdownButtonProps: DropdownButtonProps(
-                          padding: EdgeInsets.fromLTRB(30,0,4,0),
-                          iconSize: 24,
-                          icon: Icon(Icons.arrow_drop_down_outlined,color: Colors.black54,),
-                          constraints: BoxConstraints(
-                            minHeight: 5,
-                            minWidth: 5
-                          )
-
+                          baseStyle: const TextStyle(color: Colors.black),
                         ),
-                        dropdownBuilder: (BuildContext context, CountryItems? item)  {
+                        dropdownButtonProps: DropdownButtonProps(
+                            padding: EdgeInsets.fromLTRB(30, 0, 4, 0),
+                            iconSize: 24,
+                            icon: Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.black54,
+                            ),
+                            constraints:
+                                BoxConstraints(minHeight: 5, minWidth: 5)),
+                        dropdownBuilder:
+                            (BuildContext context, CountryItems? item) {
                           if (item == null) {
                             return Padding(
                               padding: const EdgeInsets.only(left: 15.0),
-                              child: Text("Nationality",style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13), )),
+                              child: Text("Nationality",
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        color: Colors.grey, fontSize: 13),
+                                  )),
                             ); // Replace "Nationality" with your desired hint text
-                          }else {
+                          } else {
                             return Row(
                               children: [
-                                if (item != null && item.mobFlagUrl != null &&
+                                if (item != null &&
+                                    item.mobFlagUrl != null &&
                                     item.mobFlagUrl != "Select")
-                                  Image.network(
-                                      item.mobFlagUrl ?? '', fit: BoxFit.fill,
-                                      width: 24,
-                                      height: 24),
+                                  Image.network(item.mobFlagUrl ?? '',
+                                      fit: BoxFit.fill, width: 24, height: 24),
                                 const SizedBox(width: 8),
                                 Text(item?.name ?? ''),
                                 // Icon(Icons.arrow_drop_down),
@@ -344,15 +336,15 @@ String country = '';
                             );
                           }
                         },
-                        onChanged: (value) async{
-
+                        onChanged: (value) async {
                           v.text = value!.name.toString();
                           print(value.name);
                         },
-
                         filterFn: (instance, filter) {
                           final lowercaseFilter = filter.toLowerCase();
-                          if (instance.name!.toLowerCase().contains(lowercaseFilter)) {
+                          if (instance.name!
+                              .toLowerCase()
+                              .contains(lowercaseFilter)) {
                             print(filter);
                             country = filter;
                             return true;
@@ -360,28 +352,28 @@ String country = '';
                             return false;
                           }
                         },
-
-
                         popupProps: PopupProps.menu(
                           showSearchBox: true,
                           showSelectedItems: false,
                           // disabledItemFn: (String s) => s.startsWith('I'),
                           searchFieldProps: TextFieldProps(
                               controller: v,
-
                               decoration: InputDecoration(
-
                                 enabledBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.0),
                                 ),
                                 border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
-
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                                  borderSide: const BorderSide(
+                                      color: Colors.grey, width: 1.0),
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 suffixIcon: IconButton(
@@ -390,56 +382,47 @@ String country = '';
                                     v.clear();
                                   },
                                 ),
-                              )
-                          ),
-                          itemBuilder: (BuildContext context, CountryItems? item, bool isSelected)  {
+                              )),
+                          itemBuilder: (BuildContext context,
+                              CountryItems? item, bool isSelected) {
                             return ListTile(
                               selected: isSelected,
-                              leading: item != null && item.mobFlagUrl != null && item.mobFlagUrl != "Select"
-                                  ? Image.network(item.mobFlagUrl ?? '', fit: BoxFit.fill, width: 24, height: 24)
+                              leading: item != null &&
+                                      item.mobFlagUrl != null &&
+                                      item.mobFlagUrl != "Select"
+                                  ? Image.network(item.mobFlagUrl ?? '',
+                                      fit: BoxFit.fill, width: 24, height: 24)
                                   : null,
                               title: Text(item?.name ?? ''),
                             );
-
                           },
                         ),
-
-
                       ),
                     ),
                   ),
-
-
-
-
-
-
                   MyDropDown(
                       value: null,
                       hintText: 'Select Identification Type',
                       items: identificationItems
                           .map((item) => item.keyValue)
-                          .map((identityType) =>
-                          DropdownMenuItem<String>(
-                            value: identityType,
-                            child: Text(identityType!),
-                          ))
+                          .map((identityType) => DropdownMenuItem<String>(
+                                value: identityType,
+                                child: Text(identityType!),
+                              ))
                           .toList(),
                       onchanged: (value) {
-                        for(int i=0;i<identificationItems.length;i++){
-                          if(value==identificationItems[i].keyValue){
+                        for (int i = 0; i < identificationItems.length; i++) {
+                          if (value == identificationItems[i].keyValue) {
                             identificationTypeId = identificationItems[i].id!;
                             break;
                           }
                         }
-                      }
-                  ),
+                      }),
                   buildContainer(
                       controller: identityIdController,
                       textInputType: TextInputType.number,
                       icon: Icons.account_balance,
                       hinttext: 'Identity ID'),
-
                   buildContainer(
                       controller: addressController,
                       textInputType: TextInputType.streetAddress,
@@ -453,7 +436,6 @@ String country = '';
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -463,7 +445,8 @@ String country = '';
                                 activeColor: Colors.white,
                                 checkColor: Colors.grey.shade700,
                                 side: MaterialStateBorderSide.resolveWith(
-                                      (states) => BorderSide(width: 1.0, color: Colors.grey.shade700),
+                                  (states) => BorderSide(
+                                      width: 1.0, color: Colors.grey.shade700),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(3.0),
@@ -473,32 +456,38 @@ String country = '';
                                   setState(() {
                                     isAgree = value!;
                                   });
-                                }
-                            ),
+                                }),
                           ),
                           Text(
                             'By proceeding I also agree',
                             textAlign: TextAlign.center,
-                           style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal),
+                            ),
                           ),
                         ],
                       ),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-
-
                           TextButton(
                             child: Text(
                               'Terms of Service',
                               textAlign: TextAlign.center,
-                              style:GoogleFonts.roboto(textStyle:TextStyle(color: Color(0xFF036CB2),fontSize: 15,fontWeight: FontWeight.normal), ),
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    color: Color(0xFF036CB2),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal),
+                              ),
 
                               // style: TextStyle(fontSize: 15,color: ),
                             ),
-                            onPressed: (){
-                              if( isAgree == true) {
+                            onPressed: () {
+                              if (isAgree == true) {
                                 _launchWebsite();
                               }
                             },
@@ -506,15 +495,23 @@ String country = '';
                           Text(
                             'and',
                             textAlign: TextAlign.center,
-                            style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
-
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal),
+                            ),
                           ),
                           Text(
                             ' Privacy Policy ',
                             textAlign: TextAlign.center,
                             // style: TextStyle(fontSize: 15,color: Color(0xFF036CB2)),
-                            style:GoogleFonts.roboto(textStyle:TextStyle(color: Color(0xFF036CB2),fontSize: 15,fontWeight: FontWeight.normal), ),
-
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                  color: Color(0xFF036CB2),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal),
+                            ),
                           ),
                         ],
                       ),
@@ -529,27 +526,36 @@ String country = '';
                         text: 'Submit',
                         onPressed: () {
                           submitSignUpDetails();
-                        }
-                    ),
+                        }),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          'Do you have an account? ',
-                        style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
+                        'Do you have an account? ',
+                        style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal),
+                        ),
 
                         // style: TextStyle(
-                          //   fontSize: 15,
-                          // )
+                        //   fontSize: 15,
+                        // )
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       TextButton(
-                        child:  Text(
+                        child: Text(
                           'Sign In',
-                          style:GoogleFonts.roboto(textStyle:TextStyle(color:  Color(0xFF036CB2),fontSize: 15,fontWeight: FontWeight.normal), ),
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                color: Color(0xFF036CB2),
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal),
+                          ),
 
                           // style:
                           //     TextStyle(fontSize: 15, color: Color(0xFF036CB2)),
@@ -588,7 +594,6 @@ String country = '';
   }
 
   void submitSignUpDetails() async {
-
     Map<String, dynamic> data = {
       "created_by": 31,
       "current_address": addressController.text.toString(),
@@ -615,8 +620,7 @@ String country = '';
         print('msg = ${value.data!.mobMessage}');
         Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
       } else {
-        Utils.flushBarErrorMessage(
-            " Update failed".toString(), context);
+        Utils.flushBarErrorMessage(" Update failed".toString(), context);
       }
     }).onError((error, stackTrace) {
       if (kDebugMode) {
@@ -625,8 +629,10 @@ String country = '';
       }
     });
   }
+
   void _launchWebsite() async {
-    const url = 'https://www.Halcyonss.com'; // Replace with your desired website URL
+    const url =
+        'https://www.Halcyonss.com'; // Replace with your desired website URL
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -634,8 +640,10 @@ String country = '';
       throw 'Could not launch $url';
     }
   }
+
   void _launchWebsite1() async {
-    const url = 'https://www.GaliniosInfotech.com'; // Replace with your desired website URL
+    const url =
+        'https://www.GaliniosInfotech.com'; // Replace with your desired website URL
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -643,9 +651,4 @@ String country = '';
       throw 'Could not launch $url';
     }
   }
-
 }
-
-
-
-

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/model/intercom/IntercomListingModel.dart';
-import 'package:poms_app/utils/CardData.dart';
-import 'package:poms_app/view/intercom/IntercomFormScreen.dart';
+import '/model/intercom/IntercomListingModel.dart';
+import '/utils/CardData.dart';
+import '/view/intercom/IntercomFormScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/MyTextField.dart';
@@ -20,23 +20,23 @@ class CalltoVisitorScreen extends StatefulWidget {
 }
 
 class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
-
   var userVM = UserViewModel();
   var intercomViewModel = IntercomViewModel();
   String firstName = "";
   String lastName = "";
   int propertyId = 0;
-  int userId = 0 ;
+  int userId = 0;
+
   String unitNumber = " ";
   List<IntercomItems> _intercomList = [];
   List<IntercomItems> _filteredintercomList = [];
   final _searchController = TextEditingController();
   final contact = Contact(displayName: " ", phones: []);
-  var priorityCounter ;
+  var priorityCounter;
+
   void initState() {
     super.initState();
     getUserDetails();
-
   }
 
   void dispose() {
@@ -46,7 +46,7 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final userid = value.userDetails?.id;
-      userId =userid ?? 0;
+      userId = userid ?? 0;
       final firstname = value.userDetails?.firstName;
 
       firstName = firstname ?? '';
@@ -64,7 +64,7 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
 
   Future<void> fetchIntercomList() async {
     intercomViewModel
-        .getIntercomList( "ASC", "id", 1, 500, propertyId,unitNumber)
+        .getIntercomList("ASC", "id", 1, 500, propertyId, unitNumber)
         .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
@@ -86,6 +86,7 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   @override
   // void _launchPhoneDialer(String phoneNumber) async {
   //   final Uri phoneUri = Uri(
@@ -106,9 +107,10 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
     );
     await launchUrl(launchUri);
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         leadingWidth: 90,
         elevation: 0.0,
@@ -139,23 +141,20 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                 style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Call to Visitors',
-     style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Call to Visitors',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
-        backgroundColor:Color(0xFF036CB2),
+        backgroundColor: Color(0xFF036CB2),
       ),
-      body: SafeArea(child: SingleChildScrollView(
+      body: SafeArea(
+          child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -165,47 +164,45 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                   Expanded(
                     child: Container(
                         child: MyTextField(
-                          hintText: 'Search',
-                          controller: _searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value.isEmpty) {
-                                _filteredintercomList = _intercomList;
-                              }
-
-                              else {
-                                var searchWords = value.toLowerCase().split(' ');
-                                _filteredintercomList = _intercomList.where((item) {
-                                  var nameWords = (item.firstName ?? '').toLowerCase().split(' ');
-                                  // Search based on first position or second position
-                                  return searchWords.any((searchWord) =>
+                      hintText: 'Search',
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isEmpty) {
+                            _filteredintercomList = _intercomList;
+                          } else {
+                            var searchWords = value.toLowerCase().split(' ');
+                            _filteredintercomList = _intercomList.where((item) {
+                              var nameWords = (item.firstName ?? '')
+                                  .toLowerCase()
+                                  .split(' ');
+                              // Search based on first position or second position
+                              return searchWords.any((searchWord) =>
                                   nameWords[0].contains(searchWord) ||
-                                      (nameWords.length > 1 && nameWords[1].contains(searchWord)));
-                                }).toList();
-                              }
-
-
-                            });
-                          },
-                          textInputType: TextInputType.text,
-                          suffixIcon: Icons.search,
-                        )),
+                                  (nameWords.length > 1 &&
+                                      nameWords[1].contains(searchWord)));
+                            }).toList();
+                          }
+                        });
+                      },
+                      textInputType: TextInputType.text,
+                      suffixIcon: Icons.search,
+                    )),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-
                 ],
               ),
-
               Padding(
-                padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: ListView.builder(
                   itemCount: _filteredintercomList.length,
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    _filteredintercomList.sort((a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0));
+                    _filteredintercomList.sort(
+                        (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0));
 
                     var item = _filteredintercomList[index];
 
@@ -221,7 +218,6 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                         ),
                       );
                     }
-
 
                     return Dismissible(
                       key: Key(item.id.toString()),
@@ -241,7 +237,10 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                             Expanded(
                               child: Column(
                                 children: [
-                                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01),
                                   ContainerValue(
                                     text: "First Name",
                                     value: ": ${item.firstName ?? ""}",
@@ -261,7 +260,10 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                                     text: "Priority",
                                     value: ": ${item.priority.toString()}",
                                   ),
-                                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01),
                                 ],
                               ),
                             ),
@@ -272,9 +274,11 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      _launchPhoneDialer(item.phoneNumber ?? '');
+                                      _launchPhoneDialer(
+                                          item.phoneNumber ?? '');
                                     },
-                                    icon: Icon(Icons.phone_forwarded, color: Color(0xFF036CB2)),
+                                    icon: Icon(Icons.phone_forwarded,
+                                        color: Color(0xFF036CB2)),
                                   ),
                                 ],
                               ),
@@ -284,7 +288,6 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
                       ),
                     );
                   },
-
                 ),
               ),
             ],
@@ -294,41 +297,37 @@ class _CalltoVisitorScreenState extends State<CalltoVisitorScreen> {
     );
   }
 
-
-
-  // Container containerValue({required var text, required String value,}) {
-  //   return Container(
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(2.0),
-  //       child: Row(
-  //         children: [
-  //           SizedBox(
-  //             width: MediaQuery.of(context).size.width / 3,
-  //             child: Text(
-  //               text,
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //                 fontSize: 14,
-  //               ),
-  //             ),
-  //           ),
-  //           //VerticalDivider(width: 1,),
-  //           Expanded(
-  //             child: Text(
-  //               value,
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //                 fontSize: 14,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
+// Container containerValue({required var text, required String value,}) {
+//   return Container(
+//     child: Padding(
+//       padding: const EdgeInsets.all(2.0),
+//       child: Row(
+//         children: [
+//           SizedBox(
+//             width: MediaQuery.of(context).size.width / 3,
+//             child: Text(
+//               text,
+//               style: TextStyle(
+//                 color: Colors.black,
+//                 fontSize: 14,
+//               ),
+//             ),
+//           ),
+//           //VerticalDivider(width: 1,),
+//           Expanded(
+//             child: Text(
+//               value,
+//               style: TextStyle(
+//                 color: Colors.black,
+//                 fontSize: 14,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }
 }
 /*
  void popUp() {

@@ -12,15 +12,16 @@ import '../../utils/MyTextField.dart';
 import '../../utils/Utils.dart';
 import '../../viewmodel/EmergencyServiceViewModel.dart';
 
-
 class EmergencyPhoneNumbersScreen extends StatefulWidget {
   const EmergencyPhoneNumbersScreen({Key? key}) : super(key: key);
 
   @override
-  State<EmergencyPhoneNumbersScreen> createState() => _EmergencyPhoneNumbersScreenState();
+  State<EmergencyPhoneNumbersScreen> createState() =>
+      _EmergencyPhoneNumbersScreenState();
 }
 
-class _EmergencyPhoneNumbersScreenState extends State<EmergencyPhoneNumbersScreen> {
+class _EmergencyPhoneNumbersScreenState
+    extends State<EmergencyPhoneNumbersScreen> {
   UserDetails userDetails = UserDetails();
   var viewmodel = EmergencyServcieViewModel();
 
@@ -135,7 +136,6 @@ class _EmergencyPhoneNumbersScreenState extends State<EmergencyPhoneNumbersScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -160,9 +160,9 @@ class _EmergencyPhoneNumbersScreenState extends State<EmergencyPhoneNumbersScree
                     items: _subServiceItems!
                         .map((item) => item.displayName)
                         .map((displayName) => DropdownMenuItem<String>(
-                      value: displayName,
-                      child: Text(displayName!),
-                    ))
+                              value: displayName,
+                              child: Text(displayName!),
+                            ))
                         .toList(),
                     onchanged: (value) {
                       for (int i = 0; i < _subServiceItems!.length; i++) {
@@ -184,7 +184,7 @@ class _EmergencyPhoneNumbersScreenState extends State<EmergencyPhoneNumbersScree
                     itemBuilder: (context, index) {
                       var item = _emergencyItemsList[index];
                       List<String> separatedNumbers =
-                      separateMobileNumbers(item.dialNumber.toString());
+                          separateMobileNumbers(item.dialNumber.toString());
 
                       return Card(
                         color: Colors.grey.shade100,
@@ -290,14 +290,12 @@ class _EmergencyPhoneNumbersScreenState extends State<EmergencyPhoneNumbersScree
               width: MediaQuery.of(context).size.width * 0.03,
             ),
             Expanded(
-              child: Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodySmall
-                // TextStyle(
-                //   color: Colors.black,
-                //   fontSize: 14,
-                // ),
-              ),
+              child: Text(value, style: Theme.of(context).textTheme.bodySmall
+                  // TextStyle(
+                  //   color: Colors.black,
+                  //   fontSize: 14,
+                  // ),
+                  ),
             ),
           ],
         ),

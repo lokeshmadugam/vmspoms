@@ -19,7 +19,8 @@ import '../../viewmodel/damagescomplaints/ComplaintsViewModel.dart';
 
 class CreateComplaintFormScreen extends StatefulWidget {
   bool upload;
-  CreateComplaintFormScreen({super.key,required this.upload});
+
+  CreateComplaintFormScreen({super.key, required this.upload});
 
   @override
   State<CreateComplaintFormScreen> createState() =>
@@ -120,8 +121,8 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
           var data = response.data!.result!.items;
           if (data != null) {
             setState(() {
-              for(int i=0;i<data.length;i++){
-                if(data[i].keyValue == 'Open'){
+              for (int i = 0; i < data.length; i++) {
+                if (data[i].keyValue == 'Open') {
                   complaintStatusId = data[i].id!;
                   break;
                 }
@@ -168,21 +169,18 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Create Complaint',
-          style:Theme.of(context).textTheme.headlineLarge
-          // TextStyle(
-          //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
-        ),
+        title: Text('Create Complaint',
+            style: Theme.of(context).textTheme.headlineLarge
+            // TextStyle(
+            //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
+            ),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
@@ -210,14 +208,13 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
                             ))
                         .toList(),
                     onchanged: (value) {
-                      for(int i=0;i<_complaintTypeList.length;i++){
-                        if(value == _complaintTypeList[i].keyValue){
+                      for (int i = 0; i < _complaintTypeList.length; i++) {
+                        if (value == _complaintTypeList[i].keyValue) {
                           complaintTypeId = _complaintTypeList[i].id!;
                           break;
                         }
                       }
                     }),
-
                 MyDropDown(
                     hintText: 'Inform To', // package from
                     value: null,
@@ -229,8 +226,8 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
                             ))
                         .toList(),
                     onchanged: (value) {
-                      for(int i=0;i<_informToList.length;i++){
-                        if(value == _informToList[i].displayName){
+                      for (int i = 0; i < _informToList.length; i++) {
+                        if (value == _informToList[i].displayName) {
                           complaintAppUserTypeId = _informToList[i].id!;
                           break;
                         }
@@ -245,85 +242,93 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                if(widget.upload)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Upload Image :',
-                          style: GoogleFonts.roboto(textStyle: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.normal),)
+                if (widget.upload)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Upload Image :',
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.normal),
+                              )),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 2, 10, 0),
-                        decoration: BoxDecoration(
-                            color: Color(0xFF036CB2),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: Text(
-                                  'Photo',
-                                  style: GoogleFonts.roboto(textStyle: TextStyle(
-                                     color: Colors.white, fontWeight: FontWeight.normal),),
+                      InkWell(
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 2, 10, 0),
+                          decoration: BoxDecoration(
+                              color: Color(0xFF036CB2),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  size: 18,
+                                  color: Colors.white,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6.0),
+                                  child: Text(
+                                    'Photo',
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        onTap: () {
+                          _pickImage(ImageSource.camera);
+                        },
                       ),
-                      onTap: () {
-                        _pickImage(ImageSource.camera);
-                      },
-                    ),
-                    InkWell(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 2, 10, 0),
-                        decoration: BoxDecoration(
-                            color: Color(0xFF036CB2),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.photo,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: Text(
-                                  'Gallery',
-                                  style: GoogleFonts.roboto(textStyle: TextStyle(
-                                      fontSize: 16.0, fontWeight: FontWeight.normal,color: Colors.white),),
+                      InkWell(
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 2, 10, 0),
+                          decoration: BoxDecoration(
+                              color: Color(0xFF036CB2),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.photo,
+                                  size: 18,
+                                  color: Colors.white,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6.0),
+                                  child: Text(
+                                    'Gallery',
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      onTap: () {
-                        _pickImage(ImageSource.gallery);
-                      },
-                    )
-                  ],
-                ),
+                        onTap: () {
+                          _pickImage(ImageSource.gallery);
+                        },
+                      )
+                    ],
+                  ),
                 if (_images.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -387,7 +392,8 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
         if (response!.isNotEmpty) {
           for (int i = 0; i < response.length; i++) {
             if (i.isOdd) {
-              convertedImagesPath.add(jsonEncode(response[i].toString().trim()));
+              convertedImagesPath
+                  .add(jsonEncode(response[i].toString().trim()));
             }
           }
           print(convertedImagesPath.toString());
@@ -409,8 +415,8 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
   }
 
   void submitData() {
-
-    String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
+    String formattedDateTime =
+        DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
 
     Map<String, dynamic> data = {
       "complaint_assigned_to_user_id": null,
@@ -445,6 +451,5 @@ class _CreateComplaintFormScreenState extends State<CreateComplaintFormScreen> {
         print(error.toString());
       }
     });
-
   }
 }

@@ -27,14 +27,16 @@ class EditLostDetailsFormScreenViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> getMediaUpload(var imagePath, var data, BuildContext context, var lostId) async {
-   lostID = lostId;
+  Future<void> getMediaUpload(
+      var imagePath, var data, BuildContext context, var lostId) async {
+    lostID = lostId;
     _setMediaUpload(ApiResponse.loading(), data, context);
     _myRepo
         .mediaUpload(imagePath)
-        .then((value) => _setMediaUpload(ApiResponse.success(value), data, context))
-        .onError((error, stackTrace) =>
-        _setMediaUpload(ApiResponse.error(error.toString()), data, context));
+        .then((value) =>
+            _setMediaUpload(ApiResponse.success(value), data, context))
+        .onError((error, stackTrace) => _setMediaUpload(
+            ApiResponse.error(error.toString()), data, context));
   }
 
   void _setUpdateLostFoundDetails(
@@ -47,16 +49,19 @@ class EditLostDetailsFormScreenViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> updateEditLostFoundDetails(var id,var data, BuildContext context) async {
+  Future<void> updateEditLostFoundDetails(
+      var id, var data, BuildContext context) async {
     _setUpdateLostFoundDetails(ApiResponse.loading(), context);
     _myRepo
         .updateLostDetailsForm(id, data)
         .then((value) =>
-        _setUpdateLostFoundDetails(ApiResponse.success(value), context))
+            _setUpdateLostFoundDetails(ApiResponse.success(value), context))
         .onError((error, stackTrace) => _setUpdateLostFoundDetails(
-        ApiResponse.error(error.toString()), context));
+            ApiResponse.error(error.toString()), context));
   }
-  Future<ApiResponse<PostApiResponse>> createUnclaimedData(var data, BuildContext context) async {
+
+  Future<ApiResponse<PostApiResponse>> createUnclaimedData(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -64,12 +69,10 @@ class EditLostDetailsFormScreenViewModel extends ChangeNotifier {
       PostApiResponse value = await _lostDeRepo.submitLostDetailsForm(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 201){
-      print('response = ${value.mobMessage}');
-      Utils.flushBarErrorMessage("${value.mobMessage}", context);
-      final result = value.result;
-
-
+      if (value.status == 201) {
+        print('response = ${value.mobMessage}');
+        Utils.flushBarErrorMessage("${value.mobMessage}", context);
+        final result = value.result;
       } else {
         Utils.flushBarErrorMessage(" Registration Failed".toString(), context);
       }

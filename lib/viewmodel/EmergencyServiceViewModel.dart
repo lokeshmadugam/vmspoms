@@ -13,7 +13,8 @@ class EmergencyServcieViewModel with ChangeNotifier {
     ApiResponse<EmergencyService> emergencyListResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getEmergencyServices(countryCode, serviceTypeId, subServiceTypeId);
+      final value = await _myRepo.getEmergencyServices(
+          countryCode, serviceTypeId, subServiceTypeId);
       emergencyListResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -42,6 +43,4 @@ class EmergencyServcieViewModel with ChangeNotifier {
 
     return serviceListResponse;
   }
-
-
 }

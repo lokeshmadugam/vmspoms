@@ -7,10 +7,10 @@ class NewsBulletinModel {
 
   NewsBulletinModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   NewsBulletinModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class NewsBulletinModel {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -111,26 +111,26 @@ class NewsBulletinItems {
 
   NewsBulletinItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyIds,
-        this.country,
-        this.state,
-        this.city,
-        this.newsBulletinName,
-        this.announcementNewbulletinId,
-        this.announcementDate,
-        this.isNotifyUser,
-        this.picDocument,
-        this.imgUrl,
-        this.notifyUserCommModeId,
-        this.newsbulletinArchiveStatus,
-        this.recStatus,
-        this.recStatusname,
-        this.newsbulletinArchiveStatusName,
-        this.commModeName,
-        this.announcementNewbulletinName,
-        this.propertyName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyIds,
+      this.country,
+      this.state,
+      this.city,
+      this.newsBulletinName,
+      this.announcementNewbulletinId,
+      this.announcementDate,
+      this.isNotifyUser,
+      this.picDocument,
+      this.imgUrl,
+      this.notifyUserCommModeId,
+      this.newsbulletinArchiveStatus,
+      this.recStatus,
+      this.recStatusname,
+      this.newsbulletinArchiveStatusName,
+      this.commModeName,
+      this.announcementNewbulletinName,
+      this.propertyName});
 
   NewsBulletinItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -205,4 +205,3 @@ class PropertyName {
     return data;
   }
 }
-

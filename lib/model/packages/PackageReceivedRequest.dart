@@ -21,24 +21,24 @@ class PackageReceivedRequest {
 
   PackageReceivedRequest(
       {this.blockName,
-        this.collectionDate,
-        this.packageCollectedBy,
-        this.packageCollectedOn,
-        this.packageCollectionAckImg,
-        this.packageFrom,
-        this.packageImg,
-        this.packageReceiptNotification,
-        this.packageReceiptsStatus,
-        this.packageReceivedBy,
-        this.packageReceivedDate,
-        this.packageTypeId,
-        this.propertyId,
-        this.recStatus,
-        this.remarks,
-        this.unitNumber,
-        this.createdBy,
-        this.id,
-        this.updatedBy});
+      this.collectionDate,
+      this.packageCollectedBy,
+      this.packageCollectedOn,
+      this.packageCollectionAckImg,
+      this.packageFrom,
+      this.packageImg,
+      this.packageReceiptNotification,
+      this.packageReceiptsStatus,
+      this.packageReceivedBy,
+      this.packageReceivedDate,
+      this.packageTypeId,
+      this.propertyId,
+      this.recStatus,
+      this.remarks,
+      this.unitNumber,
+      this.createdBy,
+      this.id,
+      this.updatedBy});
 
   PackageReceivedRequest.fromJson(Map<String, dynamic> json) {
     blockName = json['block_name'];

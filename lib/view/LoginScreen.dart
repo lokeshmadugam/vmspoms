@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../utils/MyTextField.dart';
+
 // import '../../view/BottomNavigationBarScreen.dart';
 import '../../view/OTPScreen.dart';
 import '../data/respose/Status.dart';
@@ -41,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isRememberMe = false;
   bool isAgree = false;
   SplashServices splashServices = SplashServices();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> rememberMe() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isRememberMe = prefs.getBool('rememberMe')!;
-    if(isRememberMe){
+    if (isRememberMe) {
       setState(() {
         emailController.text = prefs.getString('email')!;
         passwordController.text = prefs.getString('password')!;
@@ -88,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Center(
                       child: Text(
                         'Alert',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                     ),
                   ),
@@ -96,8 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                Text('Do you want to enable Biometrics?',
-                    style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
+                Text(
+                  'Do you want to enable Biometrics?',
+                  style: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.normal),
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
@@ -108,7 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     PositiveButton(
                         text: 'No',
                         onPressed: () async {
-                          if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
+                          if (emailController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty) {
                             createLoginDetails(context);
                           }
 
@@ -176,8 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (authenticated) {
         Map<String, dynamic> data = {
-
-          "email":  emailController.text.toString(),
+          "email": emailController.text.toString(),
           "login_type": 1,
           "mob_user_signup": 1,
           "password": passwordController.text.toString(),
@@ -203,8 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Utils.flushBarErrorMessage('Email can\'t be empty', context);
     } else if (passwordController.text.isEmpty) {
       Utils.flushBarErrorMessage('Password can\'t be empty', context);
-    }
-    else {
+    } else {
       Map<String, dynamic> data = {
         //
         "email": emailController.text.toString(),
@@ -221,6 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
       viewModel.fetchUserDetails(data, context);
     }
   }
+
   Future createLoginDetails1(BuildContext context) async {
     final viewModel = Provider.of<LoginViewModel>(context, listen: false);
 
@@ -228,15 +236,13 @@ class _LoginScreenState extends State<LoginScreen> {
       Utils.flushBarErrorMessage('Email can\'t be empty', context);
     } else if (passwordController.text.isEmpty) {
       Utils.flushBarErrorMessage('Password can\'t be empty', context);
-    }
-    else {
+    } else {
       Map<String, dynamic> data = {
-        "email":  emailController.text.toString(),
+        "email": emailController.text.toString(),
         "login_type": 1,
         "mob_user_signup": 1,
         "password": passwordController.text.toString(),
         "user_type": 4
-
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -247,33 +253,26 @@ class _LoginScreenState extends State<LoginScreen> {
       viewModel.fetchUserDetails1(data, context).then((value) {
         print("resp = $value");
         if (value.data!.status == 201) {
-
-            print('msg = ${value.data!.mobMessage}');
-            Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BottomNavigationBarScreen( )));
-
+          print('msg = ${value.data!.mobMessage}');
+          Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BottomNavigationBarScreen()));
         } else {
           if (value.data!.mobMessage != null) {
             Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
           }
         }
-
-
-      })
-          .onError((error, stackTrace) {
+      }).onError((error, stackTrace) {
         if (kDebugMode) {
           Utils.flushBarErrorMessage(error.toString(), context);
           print(error.toString());
-
         }
       });
-
-
     }
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -341,9 +340,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       left: 30, right: 30),
                                   child: Text(
                                     'Email',
-                                    style:GoogleFonts.roboto(textStyle:TextStyle(  color: isSelected[0]
-                                        ? Colors.white
-                                        : Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          color: isSelected[0]
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal),
+                                    ),
 
                                     // style: TextStyle(
                                     //   color: isSelected[0]
@@ -357,10 +361,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       left: 30, right: 30),
                                   child: Text(
                                     'Mobile Number',
-                                    style:GoogleFonts.roboto(textStyle:TextStyle(  color: isSelected[1]
-                                        ? Colors.white
-                                        : Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
-
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          color: isSelected[1]
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -399,8 +407,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                               vertical: 10.0, horizontal: 20.0),
                                       prefixText: ' ',
                                       hintText: "Email",
-
-                                      hintStyle: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.normal) ) ,
+                                      hintStyle: GoogleFonts.roboto(
+                                          textStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.normal)),
                                       prefixIcon: Icon(Icons.email_rounded)),
                                 ),
                               )
@@ -420,8 +431,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                           const EdgeInsets.symmetric(
                                               vertical: 10.0, horizontal: 20.0),
                                       prefixText: ' ',
-                                      hintStyle: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.normal) ) ,
-
+                                      hintStyle: GoogleFonts.roboto(
+                                          textStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.normal)),
                                       hintText: "Mobile Number",
                                       prefixIcon: Icon(Icons.dialpad)),
                                 ),
@@ -450,8 +464,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         vertical: 10.0, horizontal: 20.0),
                                     prefixText: ' ',
                                     hintText: "Password",
-                                    hintStyle: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.normal) ) ,
-
+                                    hintStyle: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.normal)),
                                     prefixIcon: Icon(Icons.password_rounded),
                                     suffixIcon: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -491,10 +508,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: Checkbox(
-                                activeColor: Colors.white,
+                                  activeColor: Colors.white,
                                   checkColor: Colors.grey.shade700,
                                   side: MaterialStateBorderSide.resolveWith(
-                                        (states) => BorderSide(width: 1.0, color: Colors.grey.shade700),
+                                    (states) => BorderSide(
+                                        width: 1.0,
+                                        color: Colors.grey.shade700),
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(3.0),
@@ -504,11 +523,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     setState(() {
                                       isRememberMe = value!;
                                     });
-                                  }
-                              ),
+                                  }),
                             ),
                             Text('Remember Me',
-                              style: Theme.of(context).textTheme.bodySmall),
+                                style: Theme.of(context).textTheme.bodySmall),
                             Spacer(),
                             Padding(
                               padding: const EdgeInsets.only(right: 15),
@@ -523,10 +541,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: PositiveButton(
                               text: 'Sign In',
                               onPressed: () {
-
                                 createLoginDetails1(context);
-                              }
-                          ),
+                              }),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.01,
@@ -535,7 +551,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.055,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.055,
                               width: MediaQuery.of(context).size.width * 0.30,
                               child: PositiveButton(
                                   text: 'Sign Up',
@@ -545,39 +562,37 @@ class _LoginScreenState extends State<LoginScreen> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 SignupScreen()));
-                                  }
-                              ),
+                                  }),
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.1,
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.055,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.055,
                               width: MediaQuery.of(context).size.width * 0.30,
                               child: PositiveButton(
                                   text: 'First Time Activation',
                                   onPressed: () {
                                     popUp();
-                                  }
-                              ),
+                                  }),
                             ),
                           ],
                         ),
                         TextButton(
-                          child:  Text(
-                            'Forgot Password?',
-                            style: GoogleFonts.roboto(textStyle:TextStyle(
-                                fontSize: 15,
-                                color: Color.fromRGBO(3, 5, 68, 1.0),
-                                fontWeight: FontWeight.normal), )
-                          ),
+                          child: Text('Forgot Password?',
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Color.fromRGBO(3, 5, 68, 1.0),
+                                    fontWeight: FontWeight.normal),
+                              )),
                           onPressed: () {},
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -587,53 +602,72 @@ class _LoginScreenState extends State<LoginScreen> {
                                       activeColor: Colors.white,
                                       checkColor: Colors.grey.shade700,
                                       side: MaterialStateBorderSide.resolveWith(
-                                            (states) => BorderSide(width: 1.0, color: Colors.grey.shade700),
+                                        (states) => BorderSide(
+                                            width: 1.0,
+                                            color: Colors.grey.shade700),
                                       ),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3.0),
+                                        borderRadius:
+                                            BorderRadius.circular(3.0),
                                       ),
                                       value: isAgree,
                                       onChanged: (value) {
                                         setState(() {
                                           isAgree = value!;
                                         });
-                                      }
-                                  ),
+                                      }),
                                 ),
                                 Text(
                                   'By proceeding I also agree to',
                                   textAlign: TextAlign.center,
-                                  style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal),
+                                  ),
                                 ),
                               ],
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-
-
                                 TextButton(
                                   child: Text(
                                     'Terms of Service',
                                     textAlign: TextAlign.center,
-                                    style:GoogleFonts.roboto(textStyle:TextStyle(color: Color(0xFF036CB2),fontSize: 15,fontWeight: FontWeight.normal), ),
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          color: Color(0xFF036CB2),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal),
+                                    ),
                                   ),
-                                  onPressed: (){
-                                   if( isAgree == true) {
-                                     _launchWebsite();
-                                   }
+                                  onPressed: () {
+                                    if (isAgree == true) {
+                                      _launchWebsite();
+                                    }
                                   },
                                 ),
                                 Text(
                                   'and',
                                   textAlign: TextAlign.center,
-                                  style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.normal), ),
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal),
+                                  ),
                                 ),
                                 Text(
                                   ' Privacy Policy ',
                                   textAlign: TextAlign.center,
-                                  style:GoogleFonts.roboto(textStyle:TextStyle(color: Color(0xFF036CB2),fontSize: 15,fontWeight: FontWeight.normal), ),
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        color: Color(0xFF036CB2),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal),
+                                  ),
                                 ),
                               ],
                             ),
@@ -661,8 +695,10 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
           );
   }
+
   void _launchWebsite() async {
-    const url = 'https://www.Halcyonss.com'; // Replace with your desired website URL
+    const url =
+        'https://www.Halcyonss.com'; // Replace with your desired website URL
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -670,8 +706,10 @@ class _LoginScreenState extends State<LoginScreen> {
       throw 'Could not launch $url';
     }
   }
+
   void _launchWebsite1() async {
-    const url = 'https://www.GaliniosInfotech.com'; // Replace with your desired website URL
+    const url =
+        'https://www.GaliniosInfotech.com'; // Replace with your desired website URL
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -679,6 +717,7 @@ class _LoginScreenState extends State<LoginScreen> {
       throw 'Could not launch $url';
     }
   }
+
   void popUp() {
     showDialog(
       context: context,
@@ -730,25 +769,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 30, right: 30),
-                            child: Text(
-                              'Email',
-
-                              style: GoogleFonts.roboto(textStyle:TextStyle(
-                                color: isSelectedPopup[0]
-                                    ? Colors.white
-                                    : Colors.black,
-                              ), )
-                            ),
+                            child: Text('Email',
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                    color: isSelectedPopup[0]
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                )),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 30, right: 30),
                             child: Text(
                               'Mobile Number',
-                              style: GoogleFonts.roboto(textStyle:TextStyle(
-                                color: isSelectedPopup[1]
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  color: isSelectedPopup[1]
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                               ),
                             ),
                           ),
@@ -769,23 +808,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   isSelectedPopup[0]
                       ? MyTextField(
-                      controller: emailPopupController,
-                      labelText: 'Enter Email',
-                      preffixIcon: Icons.email,
-                      textInputType: TextInputType.emailAddress
-                  )
+                          controller: emailPopupController,
+                          labelText: 'Enter Email',
+                          preffixIcon: Icons.email,
+                          textInputType: TextInputType.emailAddress)
                       : MyTextField(
-                      controller: mobileNumberPopupController,
-                      labelText: 'Enter Mobile Number',
-                      preffixIcon: Icons.numbers,
-                      textInputType: TextInputType.number
-                  ),
+                          controller: mobileNumberPopupController,
+                          labelText: 'Enter Mobile Number',
+                          preffixIcon: Icons.numbers,
+                          textInputType: TextInputType.number),
                   MyTextField(
                       controller: unitNumberPopupController,
                       labelText: 'Unit No',
                       preffixIcon: Icons.confirmation_number,
-                      textInputType: TextInputType.text
-                  ),
+                      textInputType: TextInputType.text),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
@@ -798,8 +834,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: 'Submit',
                             onPressed: () {
                               submitEmail();
-                            }
-                        ),
+                            }),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.05,
@@ -810,10 +845,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: 'Cancel',
                             onPressed: () {
                               Navigator.pop(context);
-                            }
-                        ),
+                            }),
                       ),
-
                     ],
                   ),
                   SizedBox(
@@ -843,8 +876,9 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    OTPScreen(data: emailPopupController.text.toString(),)));
+                builder: (context) => OTPScreen(
+                      data: emailPopupController.text.toString(),
+                    )));
       } else {
         Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
       }
@@ -855,8 +889,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     });
   }
-
-
 }
 /*
 viewModel.fetchUserDetails1(data, context).then((value) {

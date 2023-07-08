@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:poms_app/utils/CardData.dart';
+import '/utils/CardData.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +12,6 @@ import '../../utils/MyTextField.dart';
 import '../../utils/NegativeButton.dart';
 import '../../utils/PositiveButton.dart';
 import '../../viewmodel/greylist/GreyListingsScreenViewModel.dart';
-
 
 class GreyListingScreen extends StatefulWidget {
   const GreyListingScreen({Key? key}) : super(key: key);
@@ -79,19 +78,15 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Grey List',
-   style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title:
+            Text('Grey List', style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
@@ -105,20 +100,18 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
                   Expanded(
                     child: Container(
                         child: MyTextField(
-
-                          hintText: 'Search',
-                          controller: _searchController,
-                          onChanged: (value) {
-                            _runSearch(value);
-                          },
-                          textInputType: TextInputType.text,
-                          suffixIcon: Icons.search,
-                        )),
+                      hintText: 'Search',
+                      controller: _searchController,
+                      onChanged: (value) {
+                        _runSearch(value);
+                      },
+                      textInputType: TextInputType.text,
+                      suffixIcon: Icons.search,
+                    )),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
@@ -129,107 +122,105 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
               ),
               Consumer<GreyListingsScreenViewModel>(
                   builder: (context, model, child) {
-                    if (model.greyList.data != null) {
-                      //var data = model.packageReceipt.data!.result!.items;
+                if (model.greyList.data != null) {
+                  //var data = model.packageReceipt.data!.result!.items;
 
-                      _items = model.greyList.data!.result!.items;
+                  _items = model.greyList.data!.result!.items;
 
-                      if (_searchController.text.toString().isEmpty) {
-                        _searchResults = model.greyList.data!.result!.items;
-                      }
+                  if (_searchController.text.toString().isEmpty) {
+                    _searchResults = model.greyList.data!.result!.items;
+                  }
 
-                      return ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: _searchResults!.length,
-                        itemBuilder: (context, index) {
-                          var item = _searchResults![index];
+                  return ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _searchResults!.length,
+                    itemBuilder: (context, index) {
+                      var item = _searchResults![index];
 
-                          return Card(
-                            color: Colors.grey.shade100,
-                            elevation: 4.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height:
-                                        MediaQuery.of(context).size.height *
-                                            0.01,
-                                      ),
-                                      ContainerValue(
-                                        text: 'Name',
-                                        value: ": ${item.visitorName}",
-                                      ),
-                                      Divider(
-                                        color: Colors.grey,
-                                      ),
-                                      ContainerValue(
-                                        text: 'Vehicle Plate',
-                                        value: ": ${item.vehiclePlateNo}",
-                                      ),
-                                      Divider(
-                                        color: Colors.grey,
-                                      ),
-                                      ContainerValue(
-                                        text: 'Vehicle Type',
-                                        value: ": ${item.vehicleType}",
-                                      ),
-                                      Divider(
-                                        color: Colors.grey,
-                                      ),
-                                      ContainerValue(
-                                        text: 'Block Reason',
-                                        value: ": ${item.blockReason}",
-                                      ),
-                                      SizedBox(
-                                        height:
-                                        MediaQuery.of(context).size.height *
-                                            0.01,
-                                      ),
-                                    ],
+                      return Card(
+                        color: Colors.grey.shade100,
+                        elevation: 4.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
+                                  ),
+                                  ContainerValue(
+                                    text: 'Name',
+                                    value: ": ${item.visitorName}",
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  ContainerValue(
+                                    text: 'Vehicle Plate',
+                                    value: ": ${item.vehiclePlateNo}",
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  ContainerValue(
+                                    text: 'Vehicle Type',
+                                    value: ": ${item.vehicleType}",
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  ContainerValue(
+                                    text: 'Block Reason',
+                                    value: ": ${item.blockReason}",
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (item.createdBy == userDetails.id)
+                              InkWell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Center(
+                                    child: Image.asset(
+                                      'assets/images/ban-user.png',
+                                      // color: Colors.white,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.04,
+                                    ),
                                   ),
                                 ),
-                                if(item.createdBy == userDetails.id)
-                                  InkWell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Center(
-                                          child: Image.asset(
-                                            'assets/images/ban-user.png',
-                                            // color: Colors.white,
-                                            height: MediaQuery.of(context).size.height * 0.04,
-                                          ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      popUp(index);
-                                    },
-                                  ),
-                              ],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
-                            // height: MediaQuery.of(context).size.height * 0.01,
-                          );
-                        },
+                                onTap: () {
+                                  popUp(index);
+                                },
+                              ),
+                          ],
+                        ),
                       );
-                    }
-                    return Container();
-                  }),
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                          // height: MediaQuery.of(context).size.height * 0.01,
+                          );
+                    },
+                  );
+                }
+                return Container();
+              }),
             ],
           ),
         ),
       ),
     );
   }
-
-
 
   void _runSearch(String searchTerm) {
     List<Items> results = [];
@@ -253,7 +244,7 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
       builder: (context) {
         return Dialog(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 16,
           child: SingleChildScrollView(
             child: Column(
@@ -285,7 +276,8 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Are you sure you want to whitelist this user?', softWrap: true,
+                    'Are you sure you want to whitelist this user?',
+                    softWrap: true,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ),
@@ -293,7 +285,7 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0,right: 20.0),
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -301,14 +293,12 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
                           text: 'Cancel',
                           onPressed: () {
                             Navigator.pop(context);
-                          }
-                      ),
+                          }),
                       PositiveButton(
                           text: 'Submit',
                           onPressed: () {
                             Navigator.pop(context);
-                          }
-                      ),
+                          }),
                     ],
                   ),
                 ),
@@ -322,6 +312,4 @@ class _GreyListingScreenState extends State<GreyListingScreen> {
       },
     );
   }
-
-
 }

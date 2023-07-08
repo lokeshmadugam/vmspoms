@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../model/packages/PackageReceived.dart';
 import '../../data/respose/ApiResponse.dart';
 import '../../model/packages/PackageStatus.dart';
@@ -54,7 +53,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
   var token;
   String? _qrData;
   PackageReceivedFormScreenViewModel viewModel =
-      PackageReceivedFormScreenViewModel();
+  PackageReceivedFormScreenViewModel();
 
   List<String> _blockSuggestions = [];
   List<String> _unitSuggestions = [];
@@ -79,6 +78,11 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
 
   final GlobalKey<SfSignaturePadState> _signaturePadKey = GlobalKey();
   String _signatureImagePath = "";
+
+  QRViewController? qrViewController;
+  late String qrCode;
+  GlobalKey qrKey = GlobalKey();
+  Map<String, String>? qrData;
 
 
   @override
@@ -105,7 +109,6 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
     } else {
       items = widget.data;
       print(items.id);
-
       _isPackageReceiptExpanded = false;
       _isPackageCollectionExpanded = true;
       _isPackageCollectionHeaderVisible = true;
@@ -140,22 +143,11 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
     });
 
 
-   // _generateQRData();
+    // _generateQRData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    double? fontSize;
-    if(width < 411 || height < 707){
-      fontSize = 16;
-
-    }else {
-      fontSize = 18;
-
-    }
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 90,
@@ -189,7 +181,11 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                   },
                   child: Text(
                     'Back',
-                  style: Theme.of(context).textTheme.headlineMedium
+                    style: TextStyle(
+                      fontSize: 16, // reduce the font size
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -198,7 +194,8 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
         ),
         title: Text(
           'Package Receipt',
-        style: Theme.of(context).textTheme.headlineLarge
+          style: TextStyle(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
@@ -208,7 +205,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: Column(
               children: [
                 InkWell(
@@ -220,7 +217,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color:  Color(0xFF3F9AE5)),
+                        color:  Color(0xFF036CB2)),
                     //color: Colors.indigo[300],
                     padding: EdgeInsets.all(10),
                     child: Row(
@@ -228,9 +225,9 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                         Container(
                           child: Text(
                             "Package Receipt Details",
-                            style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 18, color: Colors.white
+                            style: TextStyle(fontSize: 18, color: Colors.white
                               // fontWeight: FontWeight.bold,
-                            ), ),
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -257,7 +254,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                               child: SizedBox(
 
                                 child: MyTextField(controller: _blockNameController, textInputType: TextInputType.text,
-                                  suffixIcon: Icons.arrow_drop_down_outlined,
+                                  suffixIcon: Icons.arrow_drop_down_circle_rounded,
                                   onPressed: popUpBlockList,
                                   labelText: 'Block Name',
                                 ),
@@ -266,7 +263,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 2,
                               child:  MyTextField(controller: _unitNoController, textInputType: TextInputType.text,
-                                suffixIcon: Icons.arrow_drop_down_outlined,
+                                suffixIcon: Icons.arrow_drop_down_circle,
                                 onPressed: popUpUnitList,
                                 labelText: 'Unit No.',
                               ),
@@ -284,72 +281,71 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                         ),
                         Consumer<PackageReceivedFormScreenViewModel>(
                             builder: (context, model, child) {
-                          if (model.packageType.data != null) {
-                            var data = model.packageType.data!.result!.items!;
+                              if (model.packageType.data != null) {
+                                var data = model.packageType.data!.result!.items!;
 
-                            return MyDropDown(
-                                hintText: 'Package Type',
-                                value: null,
-                                items: data
-                                    .map((item) => item.packageType)
-                                    .map((packageType) =>
+                                return MyDropDown(
+                                    hintText: 'Package Type',
+                                    value: null,
+                                    items: data
+                                        .map((item) => item.packageType)
+                                        .map((packageType) =>
                                         DropdownMenuItem<String>(
                                           value: packageType,
                                           child: Text(packageType!),
                                         ))
-                                    .toList(),
-                                onchanged: (value) {
-                                  for (int i = 0; i < data.length; i++) {
-                                    if (value == data[i].packageType) {
-                                      packageTypeId = data[i].id;
-                                      break;
-                                    }
-                                  }
-                                });
-                          }
-                          return Container();
-                        }),
+                                        .toList(),
+                                    onchanged: (value) {
+                                      for (int i = 0; i < data.length; i++) {
+                                        if (value == data[i].packageType) {
+                                          packageTypeId = data[i].id;
+                                          break;
+                                        }
+                                      }
+                                    });
+                              }
+                              return Container();
+                            }),
                         Consumer<PackageReceivedFormScreenViewModel>(
                             builder: (context, model, child) {
-                          if (model.deliveryService.data != null) {
-                            var data =
+                              if (model.deliveryService.data != null) {
+                                var data =
                                 model.deliveryService.data!.result!.items!;
 
-                            return MyDropDown(
-                                hintText: 'Courier Services',
-                                // package from
-                                value: null,
-                                items: data
-                                    .map((item) => item.deliveryServName)
-                                    .map((deliveryServName) =>
+                                return MyDropDown(
+                                    hintText: 'Courier Services',
+                                    // package from
+                                    value: null,
+                                    items: data
+                                        .map((item) => item.deliveryServName)
+                                        .map((deliveryServName) =>
                                         DropdownMenuItem<String>(
                                           value: deliveryServName,
                                           child: Text(deliveryServName!),
                                         ))
-                                    .toList(),
-                                onchanged: (value) {
-                                  packageFrom = value.toString();
-                                });
-                          }
-                          return Container();
-                        }),
+                                        .toList(),
+                                    onchanged: (value) {
+                                      packageFrom = value.toString();
+                                    });
+                              }
+                              return Container();
+                            }),
                         MyTextField(
-                          preffixIcon: Icons.sticky_note_2_sharp,
+                            preffixIcon: Icons.sticky_note_2_sharp,
                             controller: _remarksController,
                             labelText: 'Remarks',
                             textInputType: TextInputType.text),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.007,),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(12.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Package Image :',
                                   style: TextStyle(
-                                      fontSize: fontSize,
+                                      fontSize: 16.0,
                                       fontWeight: FontWeight.normal),
                                 ),
                               ),
@@ -358,21 +354,19 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 decoration: BoxDecoration(
-                                    color: Color(0xFF036CB2),
+                                    color: Colors.indigo.shade500,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
                                       Icon(Icons
-                                      .camera_alt,size: 18,color: Colors.white,),
+                                          .camera_alt,size: 18,color: Colors.white,),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 6.0),
                                         child: Text(
                                           'Take Photo',
-                                          style:  GoogleFonts.roboto(textStyle:TextStyle(fontSize: 16, color: Colors.white
-                                              // fontWeight: FontWeight.bold,
-                                            ), ),
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                     ],
@@ -385,24 +379,6 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                             )
                           ],
                         ),
-                        if(items.packageImg == null)
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Container(
-                            //width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.20,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey,width: 0.5),
-                                borderRadius: BorderRadius.circular(5),
-                           ),
-                            child: Center(
-                              child: _image == null
-                                  ? Text('No Image Selected')
-                                  : Image.file(_image!),
-                            ),
-                          ),
-                        ),
-                        if(items.packageImg != null)
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Container(
@@ -414,9 +390,8 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                             ),
                             child: Center(
                               child: _image == null
-                                ? Image.network((items.packageImg ?? " ").trim())
+                                  ? Text('No Image Selected')
                                   : Image.file(_image!),
-
                             ),
                           ),
                         ),
@@ -433,13 +408,13 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                     onTap: () {
                       setState(() {
                         _isPackageCollectionExpanded =
-                            !_isPackageCollectionExpanded;
+                        !_isPackageCollectionExpanded;
                       });
                     },
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color:  Color(0xFF386DB6)),
+                          color:  Color(0xFF036CB2)),
                       //color: Colors.indigo[300],
                       padding: EdgeInsets.all(10),
                       child: Row(
@@ -447,9 +422,9 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                           Container(
                             child: Text(
                               "Package Collection Details",
-                              style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
+                              style: TextStyle(fontSize: 18, color: Colors.white
                                 // fontWeight: FontWeight.bold,
-                              ), ),
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -472,14 +447,12 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                     child: Column(
                       children: [
                         MyTextField(
-                            preffixIcon: Icons.person,
                             controller: _packageCollectedByController,
                             suffixIcon: Icons.qr_code_2_outlined,
                             onPressed: _scanQRCode,
                             labelText: 'Package Collected by',
                             textInputType: TextInputType.text),
                         MyDateField(
-                          preffixIcon: Icons.calendar_today,
                           labelText: 'Package Collected on',
                           controller: _packageCollectedOnController,
                           onPressed: () {
@@ -495,9 +468,9 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Sign Here :',
-                           style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 16, color: Colors.white
-                              // fontWeight: FontWeight.bold,
-                            ), ),
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.normal),
                             ),
                           ),
                         ),
@@ -547,30 +520,27 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),*/
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.70,
-                    child: PositiveButton(
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.70,
+                  child: PositiveButton(
 
-                        text: 'Submit',
-                        onPressed: () {
-                          _uploadImage(_image!.path, _signatureImagePath);
+                      text: 'Submit',
+                      onPressed: () {
+                        _uploadImage(_image!.path, _signatureImagePath);
 
-                          /*
+                        /*
 
-                            Consumer<PackageReceivedFormScreenViewModel>(
-                                builder: (context, model, child) {
-                                  var data = model.postApiResponse.data!.status;
+                          Consumer<PackageReceivedFormScreenViewModel>(
+                              builder: (context, model, child) {
+                                var data = model.postApiResponse.data!.status;
 
-                                  if(data == 200){
-                                    Utils.toastMessage('Success');
-                                  }
-                                  return Container();
+                                if(data == 200){
+                                  Utils.toastMessage('Success');
                                 }
-                            );*/
-                        }),
-                  ),
+                                return Container();
+                              }
+                          );*/
+                      }),
                 )
               ],
             ),
@@ -607,9 +577,9 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
   Future<void> _saveSignatureImage() async {
     try {
       final signatureData =
-          await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
+      await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
       final data =
-          await signatureData.toByteData(format: ui.ImageByteFormat.png);
+      await signatureData.toByteData(format: ui.ImageByteFormat.png);
       final Directory directory = await getApplicationDocumentsDirectory();
       final String filePath = '${directory.path}/signature.png';
       final File file = File(filePath);
@@ -623,50 +593,65 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
     }
   }
 
+  Map<String, String> _parseQRCodeData(String qrCode) {
+    Map<String, String> data = {};
+
+    // Split the QR code data by newlines to separate the lines
+    List<String> lines = qrCode.split('\n');
+
+    // Extract the key-value pairs from each line
+    for (String line in lines) {
+      List<String> keyValue = line.split(':');
+      if (keyValue.length == 2) {
+        String key = keyValue[0].trim();
+        String value = keyValue[1].trim();
+        data[key] = value;
+      }
+    }
+
+    return data;
+  }
+
   Future<void> _scanQRCode() async {
     try {
-      final String qrCode = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', // Scanner color
-        'Cancel', // Cancel button text
-        true, // Show flash icon
-        ScanMode.QR, // Scan mode
+      qrViewController?.resumeCamera();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Container(
+              height: 250,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
+            ),
+          );
+        },
       );
-      setState(() {
-        _scanResult = qrCode;
-        _packageCollectedByController.text = _scanResult;
-      });
-    } on Exception catch (e) {
-      print('Error: $e');
+    } catch (e) {
+      print(e);
     }
   }
 
-  void _generateQRData() {
-    setState(() {
-      String _firstName = userDetails.firstName.toString();
-      String _lastName = userDetails.lastName.toString();
-      String _email = userDetails.emailAddress.toString();
-      String _blockName = userDetails.blockName.toString();
-      String _unitNumber = userDetails.unitNumber.toString();
-      String _appUserTypeName = userDetails.appUserTypeName.toString();
-      String _mobile = userDetails.mobileNo.toString();
-      _qrData =
-          'First Name: $_firstName\nLast Name: $_lastName\nEmail: $_email\nBlock Name: $_blockName\nUnit No: $_unitNumber\nApp User Type Name: $_appUserTypeName\nMobile No: $_mobile';
+  void _onQRViewCreated(QRViewController controller) {
+    qrViewController = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrCode = scanData.code!;
+        qrData = _parseQRCodeData(qrCode);
+        qrViewController?.pauseCamera();
 
-      // Sample sample = Sample();
-      // sample.firstName = userDetails.firstName.toString();
-      // sample.lastName = userDetails.lastName.toString();
-      // sample.emailAddress = userDetails.emailAddress.toString();
-      // sample.blockName = userDetails.blockName.toString();
-      // sample.unitNumber = userDetails.unitNumber.toString();
-      // sample.appUserTypeName = userDetails.appUserTypeName.toString();
-      // sample.mobileNo = userDetails.mobileNo.toString();
-      // _qrData = sample.toJson().toString();
+        Navigator.pop(context);
+
+        _packageCollectedByController.text = qrData!['User Id']!;
+      });
     });
   }
 
   Future getImage() async {
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    await ImagePicker().pickImage(source: ImageSource.camera);
 
     setState(() {
       _image = File(pickedFile!.path);
@@ -702,7 +687,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
     DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
         .parse(_packageReceivedDateController.text.toString());
     String formattedDateTime =
-        DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+    DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
 
     String formattedDateTime1 = "";
     if (_packageCollectedOnController.text.isNotEmpty) {
@@ -736,10 +721,110 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
 
     Provider.of<PackageReceivedFormScreenViewModel>(context, listen: false)
         .getMediaUpload(
-            imagePath, signatureImagePath, request, context, widget.data);
+        imagePath, signatureImagePath, request, context, widget.data);
   }
 
+  void popUpBlock() {
+    _blockNameController.text = '';
+    showDialog(
+      context: context,
 
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 16,
+          child: SingleChildScrollView(
+            child: Column(
+              //mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    //gradient: blueGreenGradient,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Center(
+                      child: Text(
+                        'Block Names',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Enter your block name or choose from the dropdown :',
+                    softWrap: true,
+                  ),
+                ),
+                MyTextField(
+                    controller: _blockNameController,
+                    labelText: 'Enter Block Name',
+                    onChanged: (value) {
+                      setState(() {
+                        blockName = value;
+                      });
+                    },
+                    textInputType: TextInputType.text),
+                Consumer<PackageReceivedFormScreenViewModel>(
+                    builder: (context, model, child) {
+                      if (model.blockUnitNumber.data != null) {
+                        var data = model.blockUnitNumber.data!.result!.items!;
+
+                        for(int i=0;i<data.length;i++){
+                          if(_blockSuggestions.contains(data[i].blockName)){
+
+                          } else{
+                            _blockSuggestions.add(data[i].blockName.toString());
+                          }
+                        }
+
+                        return MyDropDown(
+                            hintText: 'Choose Block Name',
+                            value: null,
+                            items: _blockSuggestions
+                                .map((item) => item)
+                                .map((blockName) =>
+                                DropdownMenuItem<String>(
+                                  value: blockName,
+                                  child: Text(blockName),
+                                ))
+                                .toList(),
+                            onchanged: (value) {
+                              setState(() {
+                                blockName = value;
+                              });
+                            });
+                      }
+                      return Container();
+                    }),
+                Align(
+                  alignment: Alignment.center,
+                  child: PositiveButton(
+                      text: 'Select',
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
   void popUpBlockList() {
 
     showDialog(
@@ -770,48 +855,46 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                     child: Center(
                       child: Text(
                         'Block Names',
-                       style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 16, color: Colors.white
-                        // fontWeight: FontWeight.bold,
-                      ), ),
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
                       ),
                     ),
                   ),
                 ),
-          Consumer<PackageReceivedFormScreenViewModel>(
-              builder: (context, model, child) {
-                if (model.blockUnitNumber.data != null) {
-                  var data = model.blockUnitNumber.data!.result!.items!;
+                Consumer<PackageReceivedFormScreenViewModel>(
+                    builder: (context, model, child) {
+                      if (model.blockUnitNumber.data != null) {
+                        var data = model.blockUnitNumber.data!.result!.items!;
 
 
 
-                  return ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      var item =data[index];
+                        return ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            var item =data[index];
 
-                      return InkWell(
-                        child: ListTile(
-                          title: Text(item.blockName ?? ''),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _blockNameController.text = item.blockName ?? '';
-                          });
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        // height: MediaQuery.of(context).size.height * 0.01,
-                      );
-                    },
-                  );
-                }
-                return Container();
-              }),
+                            return InkWell(
+                              child: ListTile(
+                                title: Text(item.blockName ?? ''),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  _blockNameController.text = item.blockName ?? '';
+                                });
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              // height: MediaQuery.of(context).size.height * 0.01,
+                            );
+                          },
+                        );
+                      }
+                      return Container();
+                    }),
                 Align(
                   alignment: Alignment.center,
                   child: PositiveButton(
@@ -831,7 +914,106 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
     );
   }
 
+  void popUpUnit() {
+    _unitNoController.text = '';
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 16,
+          child: SingleChildScrollView(
+            child: Column(
+              //mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    //gradient: blueGreenGradient,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Center(
+                      child: Text(
+                        'Unit Numbers',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Enter your unit number or choose from the dropdown :',
+                    softWrap: true,
+                  ),
+                ),
+                MyTextField(
+                    controller: _unitNoController,
+                    labelText: 'Enter Unit No',
+                    onChanged: (value) {
+                      setState(() {
+                        unitNo = value;
+                      });
+                    },
+                    textInputType: TextInputType.text),
+                Consumer<PackageReceivedFormScreenViewModel>(
+                    builder: (context, model, child) {
+                      if (model.blockUnitNumber.data != null) {
+                        var data = model.blockUnitNumber.data!.result!.items!;
 
+                        for(int i=0;i<data.length;i++){
+                          if(_unitSuggestions.contains(data[i].unitNumber)){
+
+                          } else{
+                            _unitSuggestions.add(data[i].unitNumber.toString());
+                          }
+                        }
+
+                        return MyDropDown(
+                            hintText: 'Choose Unit No',
+                            value: null,
+                            items: _unitSuggestions
+                                .map((item) => item)
+                                .map((blockName) =>
+                                DropdownMenuItem<String>(
+                                  value: blockName,
+                                  child: Text(blockName),
+                                ))
+                                .toList(),
+                            onchanged: (value) {
+                              setState(() {
+                                unitNo = value;
+                              });
+                            });
+                      }
+                      return Container();
+                    }),
+                Align(
+                  alignment: Alignment.center,
+                  child: PositiveButton(
+                      text: 'Select',
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void popUpUnitList() {
     showDialog(
@@ -862,9 +1044,7 @@ class _PackageReceivedFormScreenState extends State<PackageReceivedFormScreen> {
                     child: Center(
                       child: Text(
                         'Unit Numbers',
-                          style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 16, color: Colors.white
-                            // fontWeight: FontWeight.bold,
-                          ), ),
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
                       ),
                     ),
                   ),

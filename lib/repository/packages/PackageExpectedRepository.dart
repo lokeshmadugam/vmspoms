@@ -23,7 +23,7 @@ class PackageExpectedRepository {
       var url = (AppUrl.packageExpectedList);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = PackageExpected.fromJson(response);
       return jsonData;
@@ -31,6 +31,7 @@ class PackageExpectedRepository {
       rethrow;
     }
   }
+
   // Delete Expected Data
   Future<dynamic> deleteExpectedDetails(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,7 +43,7 @@ class PackageExpectedRepository {
     // String query = "/$data";
     // var url1 = url+"/$data";
     dynamic response =
-    await apiServices.deleteApiResponsewithtoken(url,token, query);
+        await apiServices.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;
@@ -50,6 +51,4 @@ class PackageExpectedRepository {
       throw e;
     }
   }
-
-
 }

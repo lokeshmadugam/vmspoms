@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -41,31 +39,30 @@ class LoginViewModel extends ChangeNotifier {
         .loginApi(data)
         .then((value) => _setUserDetails(ApiResponse.success(value), context))
         .onError((error, stackTrace) =>
-        _setUserDetails(ApiResponse.error(error.toString()), context));
+            _setUserDetails(ApiResponse.error(error.toString()), context));
   }
 
-
-  Future<ApiResponse<SignInModel>> fetchUserDetails1(var data, BuildContext context) async {
+  Future<ApiResponse<SignInModel>> fetchUserDetails1(
+      var data, BuildContext context) async {
     ApiResponse<SignInModel> response = ApiResponse.loading();
-
 
     try {
       SignInModel value = await _myRepo.loginApi(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 201){
-        if(value.userDetails != null){
+      if (value.status == 201) {
+        if (value.userDetails != null) {
           userDetails = response;
           saveUserDetails(userDetails.data, context);
           notifyListeners();
           Utils.flushBarErrorMessage("${value.mobMessage}", context);
         }
-      }
-        else {
+      } else {
         Utils.flushBarErrorMessage(" ${value.mobMessage}".toString(), context);
       }
     } catch (error) {
-      Utils.flushBarErrorMessage(" ${response.data!.mobMessage}".toString(), context);
+      Utils.flushBarErrorMessage(
+          " ${response.data!.mobMessage}".toString(), context);
       // Utils.flushBarErrorMessage(error.toString(), context);
       response = ApiResponse.error(error.toString());
       // Utils.flushBarErrorMessage("${response.data?.mobMessage}", context);

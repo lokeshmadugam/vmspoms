@@ -24,7 +24,7 @@ class UnclaimedItemsRepository {
       var url = (AppUrl.unclaimed);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = UnclaimedItems.fromJson(response);
       return jsonData;
@@ -32,6 +32,7 @@ class UnclaimedItemsRepository {
       rethrow;
     }
   }
+
   // Delete Unclaimed Items Data
   Future<dynamic> deleteUnclaimedDetails(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,7 +44,7 @@ class UnclaimedItemsRepository {
     // String query = "/$data";
     // var url1 = url+"/$data";
     dynamic response =
-    await apiServices.deleteApiResponsewithtoken(url,token, query);
+        await apiServices.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;

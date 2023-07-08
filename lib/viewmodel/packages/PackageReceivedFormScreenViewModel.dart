@@ -152,7 +152,7 @@ class PackageReceivedFormScreenViewModel extends ChangeNotifier {
             _setBlockUnitNoList(ApiResponse.error(error.toString())));
   }
 
- /* void _setPackageStatus(ApiResponse<PackageStatus> response) {
+  /* void _setPackageStatus(ApiResponse<PackageStatus> response) {
     if (response.data != null) {
       packageStatus = response;
       notifyListeners();
@@ -182,5 +182,4 @@ class PackageReceivedFormScreenViewModel extends ChangeNotifier {
     }
     return response;
   }
-
 }

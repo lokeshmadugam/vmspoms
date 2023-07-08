@@ -215,7 +215,8 @@ class UnOccupied {
         totalItemCounts: json["totalItemCounts"],
         orderBy: json["orderBy"],
         orderByPropertyName: json["orderByPropertyName"],
-        items: List<ParkingItem>.from(json["items"].map((x) => ParkingItem.fromJson(x))),
+        items: List<ParkingItem>.from(
+            json["items"].map((x) => ParkingItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

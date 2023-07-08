@@ -1,17 +1,13 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:poms_app/model/visitorreg/GetAllParkings.dart';
-import 'package:poms_app/model/visitorreg/ParkingTypeModel.dart';
-import 'package:poms_app/repository/visitorreg/ParkingRepo.dart';
+import '/model/visitorreg/GetAllParkings.dart';
+import '/model/visitorreg/ParkingTypeModel.dart';
+import '/repository/visitorreg/ParkingRepo.dart';
 
 import '../../data/respose/ApiResponse.dart';
 import '../../model/visitorreg/ParkingModel.dart';
 
 class ParkingViewModel extends ChangeNotifier {
-
-
-
   final _myRepo = ParkingRepository();
 
   // ApiResponse<ParkingType> parkingtype = ApiResponse.loading();
@@ -37,16 +33,18 @@ class ParkingViewModel extends ChangeNotifier {
   //       _setParkingtype(ApiResponse.error(error.toString())));
   // }
 // Get Parking
-  Future<ApiResponse<ParkingModel>> getParking(String orderBy,
+  Future<ApiResponse<ParkingModel>> getParking(
+      String orderBy,
       String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId, String unitNo) async {
-    ApiResponse<ParkingModel> listResponse = ApiResponse
-        .loading();
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      String unitNo) async {
+    ApiResponse<ParkingModel> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getParking(
-          orderBy, orderByPropertyName, pageNumber, pageSize, propertyId,
-          unitNo);
+      final value = await _myRepo.getParking(orderBy, orderByPropertyName,
+          pageNumber, pageSize, propertyId, unitNo);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -58,15 +56,19 @@ class ParkingViewModel extends ChangeNotifier {
 
     return listResponse;
   }
+
   // Get Parking type
   Future<ApiResponse<ParkingType>> getParkingType(
-      String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId) async {
-    ApiResponse<ParkingType> listResponse = ApiResponse
-        .loading();
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId) async {
+    ApiResponse<ParkingType> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getParkingType(orderBy,orderByPropertyName,pageNumber,pageSize,propertyId);
+      final value = await _myRepo.getParkingType(
+          orderBy, orderByPropertyName, pageNumber, pageSize, propertyId);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -81,13 +83,17 @@ class ParkingViewModel extends ChangeNotifier {
 
   // Get all Parking
   Future<ApiResponse<GetAllParkings>> getAllParkings(
-    String baytype, String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId) async {
-    ApiResponse<GetAllParkings> listResponse = ApiResponse
-        .loading();
+      String baytype,
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId) async {
+    ApiResponse<GetAllParkings> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getAllParkings(baytype,orderBy,orderByPropertyName,pageNumber,pageSize,propertyId);
+      final value = await _myRepo.getAllParkings(baytype, orderBy,
+          orderByPropertyName, pageNumber, pageSize, propertyId);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {

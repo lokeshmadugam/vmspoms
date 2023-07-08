@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:poms_app/view/intercom/IntercomListingScreen.dart';
-import 'package:poms_app/view/trustednbgh/TrustedNeighbourScreen.dart';
+import '/view/intercom/IntercomListingScreen.dart';
+import '/view/trustednbgh/TrustedNeighbourScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Model/SignInModel.dart';
 import '../../model/PermissionModel.dart';
@@ -12,6 +12,7 @@ import '../../view/clockinclockout/AttendanceTabsScreen.dart';
 import '../../view/facility/FacilityBookingTabsScreen.dart';
 import '../../view/greylist/GreyListingsScreen.dart';
 import '../../view/lostfound/LostFoundTabsScreen.dart';
+
 // import '../../view/managementservices/ManagementServicesTabScreen.dart';
 // import '../../view/packages/PackageTabsScreen.dart';
 import '../../view/securityrounds/SecurityTabsScreen.dart';
@@ -30,7 +31,6 @@ class HomeScreen2 extends StatefulWidget {
 }
 
 class _HomeScreen2State extends State<HomeScreen2> {
-
   final List<String> _sliderImages = [
     'https://cdn.naturettl.com/wp-content/uploads/2017/02/22014001/top-tips-improve-landscapes-ross-hoddinott-11-1200x675-cropped.jpg',
     'https://www.photographytalk.com/images/articles/2018/12/03/articles/2017_8/mountain-landscape-ponta-delgada-island-azores-picture-id944812540.jpg',
@@ -67,52 +67,71 @@ class _HomeScreen2State extends State<HomeScreen2> {
     Map<String, dynamic> jsonData = jsonDecode(details!);
     userDetails = SignInModel.fromJson(jsonData).userDetails!;
 
-    if(userDetails.permissions!=null){
+    if (userDetails.permissions != null) {
       var data = userDetails.permissions;
-      for(int i=0;i<data!.length;i++){
-        if(data[i].moduleDisplayNameMobile.toString().trim() == 'Visitor Registration' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Visitors'){
+      for (int i = 0; i < data!.length; i++) {
+        if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Visitor Registration' ||
+            data[i].moduleDisplayNameMobile.toString().trim() == 'Visitors') {
           visitor = true;
           greylisted = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Packages'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Packages') {
           packages = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Security Rounds' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Security Logs'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Security Rounds' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Security Logs') {
           security = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Attendance' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Attendance Details' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Clock-in/Clock-out'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Attendance' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Attendance Details' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Clock-in/Clock-out') {
           attendance = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Grey listed' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Visitors'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Grey listed' ||
+            data[i].moduleDisplayNameMobile.toString().trim() == 'Visitors') {
           greylisted = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'facility bookings' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Facility Booking' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Facilities'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'facility bookings' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Facility Booking' ||
+            data[i].moduleDisplayNameMobile.toString().trim() == 'Facilities') {
           facility = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Lost & Found'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Lost & Found') {
           lostfound = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Intercom'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Intercom') {
           intercom = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Announcements & Notifications' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Notification' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Notifications'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Announcements & Notifications' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Notification' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Notifications') {
           announcements = true;
           notifications = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'News Bulletin'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'News Bulletin') {
           newsbulletin = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'House Rules'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'House Rules') {
           houserules = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Invoice'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Invoice') {
           billinginvoice = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Configuration'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Configuration') {
           settings = true;
         }
       }
     }
 
     setState(() {
-      if(visitor){
+      if (visitor) {
         PermissionModel model = PermissionModel();
         model.name = 'Visitor Registration';
         model.image = 'assets/images/package_gradeient_red.png';
@@ -120,7 +139,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
         _permissionsList.add(model);
       }
 
-      if(packages){
+      if (packages) {
         PermissionModel model = PermissionModel();
         model.name = 'Packages';
         model.image = 'assets/images/package_gradeient_red.png';
@@ -128,14 +147,14 @@ class _HomeScreen2State extends State<HomeScreen2> {
         _permissionsList.add(model);
       }
 
-      if(security){
+      if (security) {
         PermissionModel model = PermissionModel();
         model.name = 'Security Rounds';
         model.image = 'assets/images/package_gradeient_red.png';
         _permissionsList.add(model);
       }
 
-      if(attendance){
+      if (attendance) {
         PermissionModel model = PermissionModel();
         model.name = 'Attendance';
         model.image = 'assets/images/package_gradeient_red.png';
@@ -143,14 +162,14 @@ class _HomeScreen2State extends State<HomeScreen2> {
         // package_blue.png
       }
 
-      if(greylisted){
+      if (greylisted) {
         PermissionModel model = PermissionModel();
         model.name = 'Grey List';
         model.image = 'assets/images/package_gradeient_red.png';
         _permissionsList.add(model);
       }
 
-      if(facility){
+      if (facility) {
         PermissionModel model = PermissionModel();
         model.name = 'Facility Bookings';
         model.image = 'assets/images/package_gradeient_red.png';
@@ -158,64 +177,64 @@ class _HomeScreen2State extends State<HomeScreen2> {
         // package_10.png
       }
 
-      if(lostfound){
+      if (lostfound) {
         PermissionModel model = PermissionModel();
         model.name = 'Lost & Found';
         model.image = 'assets/images/package_b2_r150.png';
         _permissionsList.add(model);
       }
 
-      if(intercom){
+      if (intercom) {
         PermissionModel model = PermissionModel();
         model.name = 'Intercom';
         model.image = 'assets/images/package_b2_r150.png';
         _permissionsList.add(model);
       }
 
-      if(notifications){
+      if (notifications) {
         PermissionModel model = PermissionModel();
         model.name = 'Notifications';
         model.image = 'assets/images/package_b2_r150.png';
         _permissionsList.add(model);
       }
 
-      if(announcements){
+      if (announcements) {
         PermissionModel model = PermissionModel();
         model.name = 'Announcements';
         model.image = 'assets/images/package_b2_r150.png';
         _permissionsList.add(model);
       }
 
-      if(newsbulletin){
+      if (newsbulletin) {
         PermissionModel model = PermissionModel();
         model.name = 'News Bulletin';
         model.image = 'assets/images/package_11.png';
         _permissionsList.add(model);
       }
 
-      if(houserules){
+      if (houserules) {
         PermissionModel model = PermissionModel();
         model.name = 'House Rules';
         model.image = 'assets/images/package_11.png';
         _permissionsList.add(model);
       }
 
-      if(billinginvoice){
+      if (billinginvoice) {
         PermissionModel model = PermissionModel();
         model.name = 'Invoice';
         model.image = 'assets/images/package_11.png';
         _permissionsList.add(model);
       }
 
-      if(settings){
+      if (settings) {
         PermissionModel model = PermissionModel();
         model.name = 'Settings';
         model.image = 'assets/images/package_11.png';
         _permissionsList.add(model);
       }
 
-      if(userDetails.appUsageTypeName == 'VMS Management modules ' ||
-          userDetails.appUsageTypeName == 'Unit users' ){
+      if (userDetails.appUsageTypeName == 'VMS Management modules ' ||
+          userDetails.appUsageTypeName == 'Unit users') {
         PermissionModel model = PermissionModel();
         model.name = 'Trusted Neighbour';
         model.image = 'assets/images/announcements.png';
@@ -232,10 +251,10 @@ class _HomeScreen2State extends State<HomeScreen2> {
       model1.image = 'assets/images/package_b2_r150.png';
       _permissionsList.add(model1);
     });
-
-
   }
+
   final dummyContact = Contact(displayName: " ", phones: []);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,7 +279,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.01,
                         ),
-                        if(userDetails.propertyDispName != null)
+                        if (userDetails.propertyDispName != null)
                           Text(
                             userDetails.propertyDispName.toString(),
                             style: TextStyle(
@@ -274,7 +293,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                       ],
                     )),
               ),
-              if(userDetails.propertyImg!=null)
+              if (userDetails.propertyImg != null)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                   child: Container(
@@ -298,9 +317,8 @@ class _HomeScreen2State extends State<HomeScreen2> {
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Container(
                     decoration: BoxDecoration(
-                      color:Color(0xFF036CB2),
-                        border:
-                        Border.all(color: Color(0xFF036CB2), width: 1),
+                        color: Color(0xFF036CB2),
+                        border: Border.all(color: Color(0xFF036CB2), width: 1),
                         /*borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(35),
                         topRight: Radius.circular(35),
@@ -317,7 +335,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                             children: [
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Text(
                                 "${userDetails.unitNumber} - ${userDetails.firstName} ${userDetails.lastName}",
@@ -328,10 +346,11 @@ class _HomeScreen2State extends State<HomeScreen2> {
                               ),
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               const Text(
-                                'Payment due on 15th June', softWrap: true,
+                                'Payment due on 15th June',
+                                softWrap: true,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.white,
@@ -340,28 +359,30 @@ class _HomeScreen2State extends State<HomeScreen2> {
                               ),
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                             ],
                           ),
                           const Spacer(),
-                          if(userDetails.profileImg!=null)
+                          if (userDetails.profileImg != null)
                             Expanded(
                               child: InkWell(
                                 child: Container(
                                   height:
-                                  MediaQuery.of(context).size.height * 0.08,
-                                  width: MediaQuery.of(context).size.width * 0.18,
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.18,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: Colors.white,
                                       width: 1.0,
                                     ),
-                                    image:  DecorationImage(
+                                    image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          userDetails.profileImg.toString().trim()),
+                                      image: NetworkImage(userDetails.profileImg
+                                          .toString()
+                                          .trim()),
                                     ),
                                   ),
                                 ),
@@ -372,34 +393,33 @@ class _HomeScreen2State extends State<HomeScreen2> {
                       ),
                     )),
               ),
-              if(_permissionsList.isNotEmpty)
+              if (_permissionsList.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: Container(
                     decoration: BoxDecoration(
                         border:
-                        // Border.all(color: Colors.white, width: 3),
-                        Border.all(color: Color(0xFF036CB2), width: 1),
+                            // Border.all(color: Colors.white, width: 3),
+                            Border.all(color: Color(0xFF036CB2), width: 1),
                         // color: Color(0xFF3F9AE5),
                         color: Color(0xFFD2EEFF),
                         // color: Color(0xFF6EB8FA),
                         borderRadius: BorderRadius.circular(20)),
                     child: GridView.builder(
-                        padding: const EdgeInsets.only(top: 20.0,bottom: 20),
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 20),
                         scrollDirection: Axis.vertical,
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: _permissionsList.length,
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 5,
-                          childAspectRatio:1,
-                          mainAxisExtent:100
-                          // mainAxisSpacing: 0
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 5,
+                                childAspectRatio: 1,
+                                mainAxisExtent: 100
+                                // mainAxisSpacing: 0
 
-
-                        ),
+                                ),
                         itemBuilder: (context, index) {
                           // return Column(
                           //   mainAxisAlignment: MainAxisAlignment.center,
@@ -541,7 +561,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.network(
                                   imageUrl,
                                   fit: BoxFit.cover,
@@ -562,6 +582,3 @@ class _HomeScreen2State extends State<HomeScreen2> {
     );
   }
 }
-
-
-

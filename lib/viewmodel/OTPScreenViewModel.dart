@@ -8,7 +8,8 @@ import '../utils/Utils.dart';
 class OTPScreenViewModel extends ChangeNotifier {
   final _myRepo = OTPRepo();
 
-  Future<ApiResponse<PostApiResponse>> verifyEmail(var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> verifyEmail(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     try {
@@ -25,6 +26,4 @@ class OTPScreenViewModel extends ChangeNotifier {
 
     return response;
   }
-
-
 }

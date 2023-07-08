@@ -9,7 +9,7 @@ class GreyList {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -101,27 +101,27 @@ class Items {
 
   Items(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.visitorName,
-        this.visitTypeId,
-        this.visitorMobileNo,
-        this.vehiclePlateNo,
-        this.idDrivingLicenseNo,
-        this.visitorCheckinDate,
-        this.visitorTransportMode,
-        this.vehicleImg,
-        this.userIdReqGreylist,
-        this.userTypeIdReqBlock,
-        this.blockReqDate,
-        this.blockReason,
-        this.remarksByMgmtGuardhse,
-        this.blockRequestStatus,
-        this.recStatus,
-        this.visitType,
-        this.vehicleType,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.visitorName,
+      this.visitTypeId,
+      this.visitorMobileNo,
+      this.vehiclePlateNo,
+      this.idDrivingLicenseNo,
+      this.visitorCheckinDate,
+      this.visitorTransportMode,
+      this.vehicleImg,
+      this.userIdReqGreylist,
+      this.userTypeIdReqBlock,
+      this.blockReqDate,
+      this.blockReason,
+      this.remarksByMgmtGuardhse,
+      this.blockRequestStatus,
+      this.recStatus,
+      this.visitType,
+      this.vehicleType,
+      this.recStatusname});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

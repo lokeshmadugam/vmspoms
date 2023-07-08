@@ -68,7 +68,8 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
       headerName = items.epollingName.toString();
     });
 
-    fetchDynamicFormsList(items.epollingcatGroupId, userDetails.propertyId, userDetails.id);
+    fetchDynamicFormsList(
+        items.epollingcatGroupId, userDetails.propertyId, userDetails.id);
     fetchApprovalStatusItems('ApprovalStatus');
   }
 
@@ -89,9 +90,11 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
     });
   }
 
-  Future<void> fetchDynamicFormsList(var categoryId, var propertyId,
-      var userId) async {
-    viewmodel.fetchEPollDynamicFormList(categoryId, propertyId, userId).then((response) {
+  Future<void> fetchDynamicFormsList(
+      var categoryId, var propertyId, var userId) async {
+    viewmodel
+        .fetchEPollDynamicFormList(categoryId, propertyId, userId)
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.propertyEpollingRest;
@@ -209,7 +212,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                       if (fieldType == 'Text') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyTextField(
                             controller: _controllers[index],
                             hintText: fieldName,
@@ -219,7 +222,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                       } else if (fieldType == 'Date') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyDateField(
                             labelText: fieldName.toString(),
                             controller: _controllers[index],
@@ -230,7 +233,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                       } else if (fieldType == 'Dropdown') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyDropDown(
                             value: _controllers[index].text,
                             hintText: fieldName,
@@ -238,20 +241,21 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                                 .propertyEpollingDropdownFieldsRest
                                 ?.map((item) => item.fieldDispName)
                                 .map((displayName) => DropdownMenuItem<String>(
-                              value: displayName,
-                              child: Text(
-                                displayName!,
-                              ),
-                            ))
+                                      value: displayName,
+                                      child: Text(
+                                        displayName!,
+                                      ),
+                                    ))
                                 .toList(),
                             onchanged: (value) {
                               _controllers[index].text = value;
                             });
                       } else if (fieldType == 'RadioButton') {
                         _addController();
+                        _controllers[index].text = fieldListWithData[index].fldValue!;
                         //selectedRadioItem[index] = fieldListWithData[index].fldValue!;
-                        var data =
-                            fieldsList[index].propertyEpollingDropdownFieldsRest;
+                        var data = fieldsList[index]
+                            .propertyEpollingDropdownFieldsRest;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -266,8 +270,8 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                               itemCount: data!.length,
                               shrinkWrap: true,
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3, childAspectRatio: 2),
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3, childAspectRatio: 2),
                               itemBuilder: (context, i) {
                                 return ListTile(
                                   title: Text(
@@ -276,7 +280,9 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                                   ),
                                   leading: Radio(
                                     value: data[i].fieldDispName,
-                                    groupValue: (fieldListWithData[index].fldValue ?? ""),
+                                    groupValue:
+                                        (fieldListWithData[index].fldValue ??
+                                            ""),
                                     onChanged: (value) {
                                       setSelectedRadioItem(value!, index);
                                     },
@@ -289,9 +295,9 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                       } else if (fieldType == 'CheckBox') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
-                        var data =
-                            fieldsList[index].propertyEpollingDropdownFieldsRest;
+                            fieldListWithData[index].fldValue!;
+                        var data = fieldsList[index]
+                            .propertyEpollingDropdownFieldsRest;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -306,14 +312,14 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                               itemCount: data!.length,
                               shrinkWrap: true,
                               gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 2.5),
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                      childAspectRatio: 2.5),
                               itemBuilder: (context, i) {
                                 List<String> words =
-                                _controllers[index].text.split(",");
+                                    _controllers[index].text.split(",");
 
                                 for (int j = 0; j < words.length; j++) {
                                   if (words[j] == data[i].fieldDispName) {
@@ -349,7 +355,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                       } else if (fieldType == 'TextEditor') {
                         _addController();
                         _controllers[index].text =
-                        fieldListWithData[index].fldValue!;
+                            fieldListWithData[index].fldValue!;
                         return MyTextField(
                             controller: _controllers[index],
                             hintText: fieldName,
@@ -363,22 +369,22 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(
-                        //height: MediaQuery.of(context).size.height * 0.01,
-                      );
+                          //height: MediaQuery.of(context).size.height * 0.01,
+                          );
                     }),
-                MyDropDown(
+                /*MyDropDown(
                     value: null,
                     hintText: 'Select Status',
                     labelText: 'Status',
                     items: statusItems
                         .map((item) => item.keyValue)
                         .map((displayName) => DropdownMenuItem<String>(
-                      value: displayName,
-                      child: Text(
-                        displayName!,
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ))
+                              value: displayName,
+                              child: Text(
+                                displayName!,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ))
                         .toList(),
                     onchanged: (value) {
                       for (int i = 0; i < statusItems.length; i++) {
@@ -387,7 +393,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
                           break;
                         }
                       }
-                    }),
+                    }),*/
                 Column(
                   children: [
                     SizedBox(
@@ -425,7 +431,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
   setSelectedRadioItem(String value, int index) {
     setState(() {
       fieldListWithData[index].fldValue = value;
-      _controllers[index].text = selectedRadioItem[index];
+      _controllers[index].text = value;
     });
   }
 
@@ -458,7 +464,7 @@ class _EditEPollScreenState extends State<EditEPollScreen> {
       "adm_module_id": items.admModuleId,
       "attachment_id": "string",
       "created_by": userDetails.id,
-      "epolling_id": items.id,
+      "epolling_id": items.epollingId,
       "epolling_status": items.epollingStatus,
       "epollingcat_group_id": items.epollingcatGroupId,
       "fied_data": jsonEncode(newFieldList),

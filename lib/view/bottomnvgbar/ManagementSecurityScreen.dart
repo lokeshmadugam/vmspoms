@@ -10,12 +10,12 @@ import '../../utils/MyTextField.dart';
 import '../../utils/Utils.dart';
 import '../../viewmodel/ManagementSecurityViewModel.dart';
 
-
 class ManagementSecurityScreen extends StatefulWidget {
   const ManagementSecurityScreen({Key? key}) : super(key: key);
 
   @override
-  State<ManagementSecurityScreen> createState() => _ManagementSecurityScreenState();
+  State<ManagementSecurityScreen> createState() =>
+      _ManagementSecurityScreenState();
 }
 
 class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
@@ -27,7 +27,6 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
 
   final _searchController = TextEditingController();
   var serviceTypeId;
-
 
   @override
   void initState() {
@@ -52,13 +51,14 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
           var data = response.data!.result!.items;
           if (data != null) {
             setState(() {
-              for(int i=0;i<data.length;i++){
-                if(data[i].keyValue == 'ManagementOffice'){
+              for (int i = 0; i < data.length; i++) {
+                if (data[i].keyValue == 'ManagementOffice') {
                   serviceTypeId = data[i].id;
                   break;
                 }
               }
-              fetchManagementContactItems(serviceTypeId, userDetails.propertyId);
+              fetchManagementContactItems(
+                  serviceTypeId, userDetails.propertyId);
             });
           }
         }
@@ -68,9 +68,11 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
     });
   }
 
-  Future<void> fetchManagementContactItems(var managementInHouseId,
-      var propertyId) async {
-    viewmodel.fetchManagementContactList(managementInHouseId, propertyId).then((response) {
+  Future<void> fetchManagementContactItems(
+      var managementInHouseId, var propertyId) async {
+    viewmodel
+        .fetchManagementContactList(managementInHouseId, propertyId)
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
@@ -96,6 +98,7 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
     );
     await launchUrl(launchUri);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +108,6 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -135,16 +137,25 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.01,
                             ),
-                            containerValue(icon: Icons.person, value: _managementContactsList[index].contactName.toString()),
+                            containerValue(
+                                icon: Icons.person,
+                                value: _managementContactsList[index]
+                                    .contactName
+                                    .toString()),
                             Divider(
                               color: Colors.grey,
                             ),
                             InkWell(
                               child: containerValue(
                                   icon: Icons.phone,
-                                  value: _managementContactsList[index].phoneNo.toString()),
+                                  value: _managementContactsList[index]
+                                      .phoneNo
+                                      .toString()),
                               onTap: () {
-                                _launchPhoneDialer(_managementContactsList[index].phoneNo.toString());
+                                _launchPhoneDialer(
+                                    _managementContactsList[index]
+                                        .phoneNo
+                                        .toString());
                               },
                             ),
                             Divider(
@@ -152,7 +163,9 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
                             ),
                             containerValue(
                                 icon: Icons.ac_unit,
-                                value: _managementContactsList[index].serviceTypeName.toString()),
+                                value: _managementContactsList[index]
+                                    .serviceTypeName
+                                    .toString()),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.01,
                             ),
@@ -176,10 +189,10 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
   void _runSearch(String searchTerm) {
     List<MgmtSecurityItems> results = [];
     for (var item in _items!) {
-      if (item.serviceTypeName!.toLowerCase().contains(searchTerm.toLowerCase()) ||
-          item.contactName!
+      if (item.serviceTypeName!
               .toLowerCase()
-              .contains(searchTerm.toLowerCase())) {
+              .contains(searchTerm.toLowerCase()) ||
+          item.contactName!.toLowerCase().contains(searchTerm.toLowerCase())) {
         results.add(item);
       }
     }
@@ -197,9 +210,7 @@ class _ManagementSecurityScreenState extends State<ManagementSecurityScreen> {
         padding: const EdgeInsets.all(2.0),
         child: Row(
           children: [
-            Icon(
-                icon, color: Color(0xFF036CB2)
-            ),
+            Icon(icon, color: Color(0xFF036CB2)),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.03,
             ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+
 class RuleBookScreen extends StatefulWidget {
   String? facilityName;
+
   RuleBookScreen({Key? key, required this.facilityName}) : super(key: key);
 
   @override
@@ -41,10 +43,8 @@ class _RuleBookScreenState extends State<RuleBookScreen> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
@@ -60,7 +60,7 @@ class _RuleBookScreenState extends State<RuleBookScreen> {
           backgroundColor: Color(0xFF036CB2),
         ),
         body: SafeArea(
-        child: SingleChildScrollView(
+            child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -99,8 +99,6 @@ class _RuleBookScreenState extends State<RuleBookScreen> {
               ],
             ),
           ),
-    )
-        )
-    );
+        )));
   }
 }

@@ -7,10 +7,10 @@ class HouseRulesModel {
 
   HouseRulesModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   HouseRulesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class HouseRulesModel {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -100,15 +100,15 @@ class HouseRulesItems {
 
   HouseRulesItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.documentName,
-        this.docPublishDate,
-        this.description,
-        this.notifyUserCommModeId,
-        this.recStatus,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.documentName,
+      this.docPublishDate,
+      this.description,
+      this.notifyUserCommModeId,
+      this.recStatus,
+      this.recStatusname});
 
   HouseRulesItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -138,4 +138,3 @@ class HouseRulesItems {
     return data;
   }
 }
-

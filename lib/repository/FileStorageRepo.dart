@@ -1,6 +1,3 @@
-
-
-
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/MediaUpload.dart';
 import '../resources/AppUrl.dart';
 import 'package:http/http.dart' as http;
-class FileStorageRepository {
 
+class FileStorageRepository {
   //
   // Future<dynamic> mediaUpload(var imagePath) async {
   //   try {
@@ -36,19 +33,16 @@ class FileStorageRepository {
   //   }
   // }
 
-
   Future<List<String>> mediaUpload(List<String> imagePaths) async {
     final List<String> urls = [];
 
     try {
-
-
       for (final imagePath in imagePaths) {
         final url = AppUrl.mediaUpload;
         final request = http.MultipartRequest('POST', Uri.parse(url));
 
         final file =
-        await http.MultipartFile.fromPath('fileToUpload', imagePath);
+            await http.MultipartFile.fromPath('fileToUpload', imagePath);
         request.files.add(file);
 
         // Add any additional request parameters or headers if required
@@ -59,15 +53,13 @@ class FileStorageRepository {
         final responseJson = jsonDecode(responseString);
 
         if (responseJson is Map<String, dynamic> &&
-            responseJson.containsKey('originalName')    &&
-            responseJson.containsKey('refName')   ) {
+            responseJson.containsKey('originalName') &&
+            responseJson.containsKey('refName')) {
           var originalName = responseJson['originalName'];
           var refName = responseJson['refName'];
           urls.add(originalName);
           urls.add(refName);
-
-        }
-        else {
+        } else {
           throw Exception('Failed to extract URL from the response');
         }
       }
@@ -78,15 +70,4 @@ class FileStorageRepository {
       rethrow;
     }
   }
-
-
-
-
-
-
-
-
-
-
-
 }

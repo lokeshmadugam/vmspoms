@@ -163,8 +163,6 @@ class _DigitalScreenState extends State<DigitalScreen> {
           'Block Name:$_blockName\n'
           'Unit Number: $_unitnumber';
     }
-
-
   }
 
   Future<String?> _generateQRCodeImage() async {

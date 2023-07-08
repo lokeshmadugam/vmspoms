@@ -14,7 +14,8 @@ import '../../viewmodel/greylist/GreyListFormScreenViewModel.dart';
 
 class AddVisitorInGreyList extends StatefulWidget {
   VistorsListItems data;
- AddVisitorInGreyList({Key? key,required this.data}) : super(key: key);
+
+  AddVisitorInGreyList({Key? key, required this.data}) : super(key: key);
 
   @override
   State<AddVisitorInGreyList> createState() => _AddVisitorInGreyListState();
@@ -38,19 +39,23 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
   int? updatedBy;
   var checkIn;
   var checkOut;
+
   @override
   void initState() {
     super.initState();
-    if(widget.data == null){
+    if (widget.data == null) {
       updatedBy = 0;
     } else {
-      if (widget.data.visitorCheckInOutDate.toString().isNotEmpty || widget.data.visitorCheckInOutDate != null  ){
+      if (widget.data.visitorCheckInOutDate.toString().isNotEmpty ||
+          widget.data.visitorCheckInOutDate != null) {
         var data = widget.data.visitorCheckInOutDate;
-        for (var i in data!)   {
-          if(i.visitorCheckinDate.toString().isNotEmpty || i.visitorCheckinDate != null) {
+        for (var i in data!) {
+          if (i.visitorCheckinDate.toString().isNotEmpty ||
+              i.visitorCheckinDate != null) {
             checkIn = i.visitorCheckinDate.toString();
           }
-          if (i.visitorCheckoutDate.toString().isNotEmpty || i.visitorCheckoutDate != null){
+          if (i.visitorCheckoutDate.toString().isNotEmpty ||
+              i.visitorCheckoutDate != null) {
             checkOut = i.visitorCheckoutDate.toString();
           }
         }
@@ -58,11 +63,9 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
       updatedBy = widget.data.id;
       _nameController.text = widget.data.visitorName.toString();
       _numberController.text = widget.data.visitorMobileNo.toString();
-      _checkInDateController.text =  checkIn != null
-          ? DateFormat('yyyy-MM-dd hh:mm a').format(
-          DateTime.parse(
-              checkIn
-                  .toString()))
+      _checkInDateController.text = checkIn != null
+          ? DateFormat('yyyy-MM-dd hh:mm a')
+              .format(DateTime.parse(checkIn.toString()))
           : '';
       _vehiclePlateController.text = widget.data.vehiclePlateNo.toString();
       _licenseController.text = widget.data.idDrivingLicenseNo.toString();
@@ -70,11 +73,13 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
     }
     _getUserDetails();
   }
+
   int userId = 0;
   String firstName = "";
   String lastName = "";
   int propertyId = 0;
   int userTypeId = 0;
+
   Future<void> _getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final firstname = value.userDetails?.firstName;
@@ -104,43 +109,46 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
       final appusagetypeid = value.userDetails?.appUsageTypeId;
       // appusagetypeId = appusagetypeid ?? 0;
     });
-
   }
-   void submitData() async{
 
-     DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(_checkInDateController.text.toString());
-     String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
-     Map<String, dynamic> data = {
-       "block_reason": _blockReasonController.text.toString(),
-       "block_req_date": formattedDateTime,
-       "block_request_status": "string",
-       "created_by": userId,
-       "id_driving_license_no": _licenseController.text.toString(),
-       "property_id": propertyId,
-       "rec_status":8,
-       "remarks_by_mgmt_guardhse": "string",
-       "user_id_req_greylist": userId,
-       "user_type_id_req_block": userTypeId,
-       "vehicle_img": "string",
-       "vehicle_plate_no": _vehiclePlateController.text.toString(),
-       "visit_type_id": visitTypeId,
-       "visitor_checkin_date": formattedDateTime,
-       "visitor_mobile_no": _numberController.text.toString(),
-       "visitor_name": _nameController.text.toString(),
-       "visitor_transport_mode": transportModeId
-     };
-     greylistVM.submitGreyListForm(data, context).then((value) {
-       if (value.data!.status == 201) {
-         print('msg = ${value.data!.mobMessage}');
-         Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
-       }
-     }).onError((error, stackTrace) {
-       if (kDebugMode) {
-         Utils.flushBarErrorMessage(error.toString(), context);
-         print(error.toString());
-       }
-     });
-   }
+  void submitData() async {
+    DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
+        .parse(_checkInDateController.text.toString());
+    String formattedDateTime =
+        DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+    Map<String, dynamic> data = {
+      "block_reason": _blockReasonController.text.toString(),
+      "block_req_date": formattedDateTime,
+      "block_request_status": "string",
+      "created_by": userId,
+      "id_driving_license_no": _licenseController.text.toString(),
+      "property_id": propertyId,
+      "is_block": 0,
+      "rec_status": 8,
+      "remarks_by_mgmt_guardhse": "string",
+      "user_id_req_greylist": userId,
+      "user_type_id_req_block": userTypeId,
+      "vehicle_img": "string",
+      "vehicle_plate_no": _vehiclePlateController.text.toString(),
+      "visit_type_id": visitTypeId,
+      "visitor_checkin_date": formattedDateTime,
+      "visitor_mobile_no": _numberController.text.toString(),
+      "visitor_name": _nameController.text.toString(),
+      "visitor_transport_mode": transportModeId
+    };
+    greylistVM.submitGreyListForm(data, context).then((value) {
+      if (value.data!.status == 201) {
+        print('msg = ${value.data!.mobMessage}');
+        Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
+      }
+    }).onError((error, stackTrace) {
+      if (kDebugMode) {
+        Utils.flushBarErrorMessage(error.toString(), context);
+        print(error.toString());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,21 +182,17 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Add to Grey List',
-         style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Add to Grey List',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
-        backgroundColor:Color(0xFF036CB2),
+        backgroundColor: Color(0xFF036CB2),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -198,14 +202,14 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
             child: Column(
               children: [
                 MyTextField(
-                  preffixIcon: Icons.person,
-                  enabled: false,
+                    preffixIcon: Icons.person,
+                    enabled: false,
                     controller: _nameController,
                     labelText: 'Visitor Name',
                     textInputType: TextInputType.text),
                 MyTextField(
-                  preffixIcon: Icons.phone_android,
-                  enabled: false,
+                    preffixIcon: Icons.phone_android,
+                    enabled: false,
                     controller: _numberController,
                     labelText: 'Mobile Number',
                     textInputType: TextInputType.number),
@@ -219,25 +223,25 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
                   },
                 ),
                 MyTextField(
-                  preffixIcon: Icons.view_carousel_outlined,
+                    preffixIcon: Icons.view_carousel_outlined,
                     enabled: false,
                     controller: _visitTypeController,
                     labelText: 'Visit Type',
                     textInputType: TextInputType.text),
                 MyTextField(
-                  preffixIcon: CupertinoIcons.car,
+                    preffixIcon: CupertinoIcons.car,
                     enabled: false,
                     controller: _vehiclePlateController,
                     labelText: 'Vehicle Plate No',
                     textInputType: TextInputType.text),
                 MyTextField(
-                    preffixIcon:  Icons.credit_card_rounded,
+                    preffixIcon: Icons.credit_card_rounded,
                     enabled: false,
                     controller: _licenseController,
                     labelText: 'Driving License No',
                     textInputType: TextInputType.text),
                 MyTextField(
-                  preffixIcon: Icons.block,
+                    preffixIcon: Icons.block,
                     controller: _blockReasonController,
                     labelText: 'Block Reason',
                     textInputType: TextInputType.text),
@@ -247,13 +251,11 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width*0.70,
+                    width: MediaQuery.of(context).size.width * 0.70,
                     child: PositiveButton(
                         text: 'Submit',
                         onPressed: () {
-
-                       submitData();
-
+                          submitData();
                         }),
                   ),
                 )
@@ -264,6 +266,7 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
       ),
     );
   }
+
   Future<void> _pickDateTime(TextEditingController controller) async {
     final DateTime? selected = await showDatePicker(
       context: context,
@@ -280,14 +283,12 @@ class _AddVisitorInGreyListState extends State<AddVisitorInGreyList> {
 
       if (selectedTime != null) {
         setState(() {
-          _selectedDateTime = DateTime(selected.year, selected.month, selected.day, selectedTime.hour, selectedTime.minute);
-          controller.text = DateFormat('yyyy-MM-dd hh:mm a').format(_selectedDateTime!);
+          _selectedDateTime = DateTime(selected.year, selected.month,
+              selected.day, selectedTime.hour, selectedTime.minute);
+          controller.text =
+              DateFormat('yyyy-MM-dd hh:mm a').format(_selectedDateTime!);
         });
       }
     }
   }
 }
-
-
-
-

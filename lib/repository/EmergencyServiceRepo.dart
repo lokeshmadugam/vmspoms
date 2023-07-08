@@ -9,8 +9,8 @@ import '../../resources/AppUrl.dart';
 class EmergencyServiceRepo {
   final BaseApiServices _apiService = NetworkApiService();
 
-  Future<dynamic> getEmergencyServices(var countryCode, var serviceTypeId,
-      var subServiceType) async {
+  Future<dynamic> getEmergencyServices(
+      var countryCode, var serviceTypeId, var subServiceType) async {
     try {
       Map<String, String> queryParameters = {
         'country_name': countryCode.toString(),
@@ -26,7 +26,7 @@ class EmergencyServiceRepo {
       var url = AppUrl.emergencyService;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = EmergencyService.fromJson(response);
       return jsonData;
@@ -48,7 +48,7 @@ class EmergencyServiceRepo {
       var url = AppUrl.configItemsUrl;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = ServiceType.fromJson(response);
       return jsonData;
@@ -56,5 +56,4 @@ class EmergencyServiceRepo {
       rethrow;
     }
   }
-
 }

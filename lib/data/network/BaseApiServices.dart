@@ -1,5 +1,3 @@
-
-
 abstract class BaseApiServices {
   Future<dynamic> postApiResponse(String url, dynamic data);
 
@@ -15,11 +13,6 @@ abstract class BaseApiServices {
   Future<dynamic> deleteApiResponsewithtoken(
       String url, String token, dynamic query);
 
-  Future<dynamic> putApiResponsewithtoken(String url, String token,
-      dynamic data, dynamic query);
+  Future<dynamic> putApiResponsewithtoken(
+      String url, String token, dynamic data, dynamic query);
 }
-
-
-
-
-

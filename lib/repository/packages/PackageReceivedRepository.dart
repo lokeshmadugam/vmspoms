@@ -23,15 +23,15 @@ class PackageReceivedRepository {
       var url = (AppUrl.packageReceiptsList);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = PackageReceived.fromJson(response);
       return jsonData;
     } catch (e) {
       rethrow;
     }
-
   }
+
   // Delete Received Data
   Future<dynamic> deleteReceivedDetails(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,7 +43,7 @@ class PackageReceivedRepository {
     // String query = "/$data";
     // var url1 = url+"/$data";
     dynamic response =
-    await apiServices.deleteApiResponsewithtoken(url,token, query);
+        await apiServices.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;
@@ -51,6 +51,4 @@ class PackageReceivedRepository {
       throw e;
     }
   }
-
-
 }

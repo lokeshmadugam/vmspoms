@@ -9,7 +9,7 @@ class FacilityTypeModel {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -104,30 +104,30 @@ class FacilityTypes {
 
   FacilityTypes(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.facilityId,
-        this.facilityDeckName,
-        this.facilityDeckLevel,
-        this.facilityDeckMap,
-        this.facilityNoCode,
-        this.facilityQrCode,
-        this.facilityName,
-        this.facilityThumbnailImb,
-        this.facilityImg,
-        this.facilityRulebook,
-        this.bookingHrsDay,
-        this.bookingFees,
-        this.allowedAgeToUse,
-        this.isFeeRequired,
-        this.isBookingRequired,
-        this.operatingHoursFrom,
-        this.operatingHoursTo,
-        this.isOpenDuringHolidays,
-        this.remarks,
-        this.recStatus,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.facilityId,
+      this.facilityDeckName,
+      this.facilityDeckLevel,
+      this.facilityDeckMap,
+      this.facilityNoCode,
+      this.facilityQrCode,
+      this.facilityName,
+      this.facilityThumbnailImb,
+      this.facilityImg,
+      this.facilityRulebook,
+      this.bookingHrsDay,
+      this.bookingFees,
+      this.allowedAgeToUse,
+      this.isFeeRequired,
+      this.isBookingRequired,
+      this.operatingHoursFrom,
+      this.operatingHoursTo,
+      this.isOpenDuringHolidays,
+      this.remarks,
+      this.recStatus,
+      this.recStatusname});
 
   FacilityTypes.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -187,11 +187,3 @@ class FacilityTypes {
     return data;
   }
 }
-
-
-
-
-
-
-
-

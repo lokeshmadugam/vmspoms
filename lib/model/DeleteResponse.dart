@@ -7,17 +7,16 @@ class DeleteResponse {
 
   DeleteResponse(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   DeleteResponse.fromJson(Map<String, dynamic> json) {
-    if(json['status'] is String) {
+    if (json['status'] is String) {
       status = int.parse(json['status']);
-    } else if(json['status'] is int) {
+    } else if (json['status'] is int) {
       status = json['status'];
-
     }
     // status = json['status'];
     megCategory = json['megCategory'];
@@ -36,4 +35,3 @@ class DeleteResponse {
     return data;
   }
 }
-

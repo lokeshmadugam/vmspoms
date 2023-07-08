@@ -7,10 +7,10 @@ class FavoriteVisitorModel {
 
   FavoriteVisitorModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   FavoriteVisitorModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class FavoriteVisitorModel {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -111,26 +111,26 @@ class FavoriteVisitorsItems {
 
   FavoriteVisitorsItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.userId,
-        this.userTypeId,
-        this.visitorName,
-        this.visitorMobileNo,
-        this.visitorTransportMode,
-        this.noOfVisitor,
-        this.vehiclePlateNo,
-        this.idDrivingLicenseNo,
-        this.blockName,
-        this.unitNumber,
-        this.isPreregistered,
-        this.isParkingRequired,
-        this.visitTypeId,
-        this.visitReasonId,
-        this.visitorRegistrDate,
-        this.remarks,
-        this.recStatus});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.userId,
+      this.userTypeId,
+      this.visitorName,
+      this.visitorMobileNo,
+      this.visitorTransportMode,
+      this.noOfVisitor,
+      this.vehiclePlateNo,
+      this.idDrivingLicenseNo,
+      this.blockName,
+      this.unitNumber,
+      this.isPreregistered,
+      this.isParkingRequired,
+      this.visitTypeId,
+      this.visitReasonId,
+      this.visitorRegistrDate,
+      this.remarks,
+      this.recStatus});
 
   FavoriteVisitorsItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -182,4 +182,3 @@ class FavoriteVisitorsItems {
     return data;
   }
 }
-

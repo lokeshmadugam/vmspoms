@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:poms_app/model/visitorreg/FavoriteVisitors.dart';
-import 'package:poms_app/model/visitorreg/ParkingModel.dart';
+import '/model/visitorreg/FavoriteVisitors.dart';
+import '/model/visitorreg/ParkingModel.dart';
 import '../../model/DeleteResponse.dart';
 import '../../data/respose/ApiResponse.dart';
 import '../../model/PostApiResponse.dart';
@@ -15,28 +15,23 @@ import '../../repository/visitorreg/Invitevisitorrepo.dart';
 import '../../utils/utils.dart';
 
 class InviteVisitorViewModel extends ChangeNotifier {
-
-
-
-var visitorDetails;
-
-
-
+  var visitorDetails;
 
   var orgId = 0;
   var userId = 0;
 
   final _myRepo = InviteVisitorRepository();
+
   //VisitType
   ApiResponse<VisitorTypeModel> visitTypeResponse = ApiResponse.loading();
+
   setVisitTypeResponse(ApiResponse<VisitorTypeModel> response) {
     visitTypeResponse = response;
     notifyListeners();
   }
+
   Future<void> getVisitorType1() async {
-    _myRepo
-        .getVisitorTypes()
-        .then((value) {
+    _myRepo.getVisitorTypes().then((value) {
       setVisitTypeResponse(
         ApiResponse.success(value),
       );
@@ -48,34 +43,34 @@ var visitorDetails;
       }
     });
   }
-Future<ApiResponse<VisitorTypeModel>> getVisitorType(
-   ) async {
-  ApiResponse<VisitorTypeModel> listResponse = ApiResponse.loading();
 
-  try {
-    final value = await _myRepo.getVisitorTypes();
-    listResponse = ApiResponse.success(value);
-    print("response = $listResponse");
-  } catch (error) {
-    if (kDebugMode) {
-      listResponse = ApiResponse.error(error.toString());
-      print(error);
+  Future<ApiResponse<VisitorTypeModel>> getVisitorType() async {
+    ApiResponse<VisitorTypeModel> listResponse = ApiResponse.loading();
+
+    try {
+      final value = await _myRepo.getVisitorTypes();
+      listResponse = ApiResponse.success(value);
+      print("response = $listResponse");
+    } catch (error) {
+      if (kDebugMode) {
+        listResponse = ApiResponse.error(error.toString());
+        print(error);
+      }
     }
-  }
 
-  return listResponse;
-}
+    return listResponse;
+  }
 
 //VisitReason
   ApiResponse<VisitReasonModel> visitReasonResponse = ApiResponse.loading();
+
   setVisitReasonResponse(ApiResponse<VisitReasonModel> response) {
     visitReasonResponse = response;
     notifyListeners();
   }
+
   Future<void> getVisitReasons1() async {
-    _myRepo
-        .getVisitReasons()
-        .then((value) {
+    _myRepo.getVisitReasons().then((value) {
       setVisitReasonResponse(
         ApiResponse.success(value),
       );
@@ -87,34 +82,34 @@ Future<ApiResponse<VisitorTypeModel>> getVisitorType(
       }
     });
   }
-Future<ApiResponse<VisitReasonModel>> getVisitReasons(
-   ) async {
-  ApiResponse<VisitReasonModel> listResponse = ApiResponse
-      .loading();
 
-  try {
-    final value = await _myRepo.getVisitReasons();
-    listResponse = ApiResponse.success(value);
-    print("response = $listResponse");
-  } catch (error) {
-    if (kDebugMode) {
-      listResponse = ApiResponse.error(error.toString());
-      print(error);
+  Future<ApiResponse<VisitReasonModel>> getVisitReasons() async {
+    ApiResponse<VisitReasonModel> listResponse = ApiResponse.loading();
+
+    try {
+      final value = await _myRepo.getVisitReasons();
+      listResponse = ApiResponse.success(value);
+      print("response = $listResponse");
+    } catch (error) {
+      if (kDebugMode) {
+        listResponse = ApiResponse.error(error.toString());
+        print(error);
+      }
     }
+
+    return listResponse;
   }
 
-  return listResponse;
-}
 // VehicleType
   ApiResponse<VehicleTypeModel> vehicleTypeResponse = ApiResponse.loading();
+
   setVehicleTypeResponse(ApiResponse<VehicleTypeModel> response) {
     vehicleTypeResponse = response;
     notifyListeners();
   }
+
   Future<void> getVehicleTypes1() async {
-    _myRepo
-        .getVehicleType()
-        .then((value) {
+    _myRepo.getVehicleType().then((value) {
       setVehicleTypeResponse(
         ApiResponse.success(value),
       );
@@ -126,10 +121,9 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
       }
     });
   }
-  Future<ApiResponse<VehicleTypeModel>> getVehicleTypes(
-     ) async {
-    ApiResponse<VehicleTypeModel> listResponse = ApiResponse
-        .loading();
+
+  Future<ApiResponse<VehicleTypeModel>> getVehicleTypes() async {
+    ApiResponse<VehicleTypeModel> listResponse = ApiResponse.loading();
 
     try {
       final value = await _myRepo.getVehicleType();
@@ -144,15 +138,19 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return listResponse;
   }
+
   // Get All Visitors List
   Future<ApiResponse<VisitorsListModel>> getVisitorsList(
-      String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId) async {
-    ApiResponse<VisitorsListModel> listResponse = ApiResponse
-        .loading();
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId) async {
+    ApiResponse<VisitorsListModel> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getVisitList(orderBy, orderByPropertyName, pageNumber, pageSize, propertyId);
+      final value = await _myRepo.getVisitList(
+          orderBy, orderByPropertyName, pageNumber, pageSize, propertyId);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -164,11 +162,14 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return listResponse;
   }
+
   // Visitors Status
 
-  ApiResponse<VisitorsStatusModel> _visitorStatusResponse = ApiResponse.loading();
+  ApiResponse<VisitorsStatusModel> _visitorStatusResponse =
+      ApiResponse.loading();
 
-  ApiResponse<VisitorsStatusModel> get visitorStatusResponse => _visitorStatusResponse;
+  ApiResponse<VisitorsStatusModel> get visitorStatusResponse =>
+      _visitorStatusResponse;
 
   void setVisitorStatusResponse(ApiResponse<VisitorsStatusModel> response) {
     _visitorStatusResponse = response;
@@ -176,7 +177,7 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
   }
 
   Future<void> getVisitorsStatus1(String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, String appUseage ,String configKey) async {
+      int pageNumber, int pageSize, String appUseage, String configKey) async {
     try {
       final result = await _myRepo.getVisitorStatus(
         orderBy,
@@ -192,11 +193,15 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
       print(e);
     }
   }
-  Future<ApiResponse<VisitorsStatusModel>> getVisitorsStatus(String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, String appUseage ,String configKey
-      ) async {
-    ApiResponse<VisitorsStatusModel> listResponse = ApiResponse
-        .loading();
+
+  Future<ApiResponse<VisitorsStatusModel>> getVisitorsStatus(
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      String appUseage,
+      String configKey) async {
+    ApiResponse<VisitorsStatusModel> listResponse = ApiResponse.loading();
 
     try {
       final value = await _myRepo.getVisitorStatus(
@@ -206,7 +211,8 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
         pageSize,
         appUseage,
         configKey,
-      );;
+      );
+      ;
       listResponse = ApiResponse.success(value);
       print("response = $listResponse");
     } catch (error) {
@@ -218,7 +224,9 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return listResponse;
   }
-  Future<ApiResponse<PostApiResponse>> visitorRegistration(var data, BuildContext context) async {
+
+  Future<ApiResponse<PostApiResponse>> visitorRegistration(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -227,10 +235,9 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
       response = ApiResponse.success(value);
 
       // if (value.status == 200){
-        // print('response = ${value.message}');
-        // Utils.flushBarErrorMessage("${value.message}", context);
-        // final result = value.result;
-
+      // print('response = ${value.message}');
+      // Utils.flushBarErrorMessage("${value.message}", context);
+      // final result = value.result;
 
       // } else {
       //   Utils.flushBarErrorMessage(" Registration Failed".toString(), context);
@@ -246,8 +253,6 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return response;
   }
-
-
 
   // ApiResponse<VisitorDetailsModel> visitorDetailsResponse = ApiResponse.loading();
   // setVisitorDetailsResponse(ApiResponse<VisitorDetailsModel> response) {
@@ -283,15 +288,16 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
     }
     return response;
   }
+
 // Update Visitor Registration
-  Future<ApiResponse<PostApiResponse>> updateVisitorRegistration(var data,int id, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> updateVisitorRegistration(
+      var data, int id, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
     try {
-      PostApiResponse value = await _myRepo.updateVisitorDetails(data,id);
+      PostApiResponse value = await _myRepo.updateVisitorDetails(data, id);
       response = ApiResponse.success(value);
-
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
       response = ApiResponse.error(error.toString());
@@ -303,8 +309,10 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return response;
   }
+
   // Delete Visitor Data
-  Future<ApiResponse<DeleteResponse>> deletetVisitorDetails(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deletetVisitorDetails(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -312,9 +320,8 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
       DeleteResponse value = await _myRepo.deleteVisitorDetails(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
@@ -327,19 +334,21 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return response;
   }
-  Future<ApiResponse<PostApiResponse>> addFavoriteVisitor(var data, BuildContext context) async {
+
+  Future<ApiResponse<PostApiResponse>> addFavoriteVisitor(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
     try {
-      PostApiResponse value = await _myRepo.addFavoriteVisitorRegistration(data);
+      PostApiResponse value =
+          await _myRepo.addFavoriteVisitorRegistration(data);
       response = ApiResponse.success(value);
 
       // if (value.status == 200){
       // print('response = ${value.message}');
       // Utils.flushBarErrorMessage("${value.message}", context);
       // final result = value.result;
-
 
       // } else {
       //   Utils.flushBarErrorMessage(" Registration Failed".toString(), context);
@@ -358,13 +367,17 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
   // Get All Visitors List
   Future<ApiResponse<FavoriteVisitorModel>> getFavoriteVisitors(
-      String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId,int userId) async {
-    ApiResponse<FavoriteVisitorModel> listResponse = ApiResponse
-        .loading();
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      int userId) async {
+    ApiResponse<FavoriteVisitorModel> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getFavoriteVisitorList(orderBy, orderByPropertyName, pageNumber, pageSize, propertyId,userId);
+      final value = await _myRepo.getFavoriteVisitorList(orderBy,
+          orderByPropertyName, pageNumber, pageSize, propertyId, userId);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -376,13 +389,7 @@ Future<ApiResponse<VisitReasonModel>> getVisitReasons(
 
     return listResponse;
   }
-
 }
-
-
-
-
-
 
 //Visitor Registration
 

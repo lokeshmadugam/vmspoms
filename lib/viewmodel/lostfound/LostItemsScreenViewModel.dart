@@ -8,11 +8,9 @@ import '../../data/respose/ApiResponse.dart';
 import '../../utils/Utils.dart';
 
 class LostItemsScreenViewModel extends ChangeNotifier {
-
   final _myRepo = LostItemsRepository();
 
   ApiResponse<LostItems> lostItems = ApiResponse.loading();
-
 
   void _setLostItemsList(ApiResponse<LostItems> response) {
     if (response.data != null) {
@@ -27,10 +25,12 @@ class LostItemsScreenViewModel extends ChangeNotifier {
         .getLostItemsList(propertyId)
         .then((value) => _setLostItemsList(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setLostItemsList(ApiResponse.error(error.toString())));
+            _setLostItemsList(ApiResponse.error(error.toString())));
   }
+
   // Delete Lost Item Data
-  Future<ApiResponse<DeleteResponse>> deletetLostItemsDetails(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deletetLostItemsDetails(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -38,9 +38,8 @@ class LostItemsScreenViewModel extends ChangeNotifier {
       DeleteResponse value = await _myRepo.deleteLostDetails(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);

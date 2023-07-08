@@ -7,10 +7,10 @@ class RulesModel {
 
   RulesModel(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   RulesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class RulesModel {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -104,19 +104,19 @@ class RulesItems {
 
   RulesItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.documentTypeId,
-        this.documentName,
-        this.docPublishDate,
-        this.documentText,
-        this.documentUrl,
-        this.description,
-        this.notifyUserCommModeId,
-        this.recStatus,
-        this.recStatusname,
-        this.propertydocumentTypeName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.documentTypeId,
+      this.documentName,
+      this.docPublishDate,
+      this.documentText,
+      this.documentUrl,
+      this.description,
+      this.notifyUserCommModeId,
+      this.recStatus,
+      this.recStatusname,
+      this.propertydocumentTypeName});
 
   RulesItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -154,4 +154,3 @@ class RulesItems {
     return data;
   }
 }
-

@@ -9,7 +9,7 @@ class AttendanceListings {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -109,35 +109,35 @@ class Items {
 
   Items(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.userId,
-        this.propertyId,
-        this.employeeId,
-        this.activity,
-        this.clockInTime,
-        this.clockOutTime,
-        this.clockInIp,
-        this.clockOutIp,
-        this.clockInLocation,
-        this.clockOutLocation,
-        this.clockInLatitude,
-        this.clockInLongitude,
-        this.checkOutLatitude,
-        this.checkOutLongitude,
-        this.timeOutMinutes,
-        this.clockinoutDate,
-        this.remarks,
-        this.imgUrlClockin,
-        this.imgUrlClockout,
-        this.imgUrlRequestTimeOffIntime,
-        this.emailFlag,
-        this.employeeFirstName,
-        this.employeeLastName,
-        this.clockIn,
-        this.clockOut,
-        this.reqTime,
-        this.reqTimeOff});
+      this.createdBy,
+      this.createdOn,
+      this.userId,
+      this.propertyId,
+      this.employeeId,
+      this.activity,
+      this.clockInTime,
+      this.clockOutTime,
+      this.clockInIp,
+      this.clockOutIp,
+      this.clockInLocation,
+      this.clockOutLocation,
+      this.clockInLatitude,
+      this.clockInLongitude,
+      this.checkOutLatitude,
+      this.checkOutLongitude,
+      this.timeOutMinutes,
+      this.clockinoutDate,
+      this.remarks,
+      this.imgUrlClockin,
+      this.imgUrlClockout,
+      this.imgUrlRequestTimeOffIntime,
+      this.emailFlag,
+      this.employeeFirstName,
+      this.employeeLastName,
+      this.clockIn,
+      this.clockOut,
+      this.reqTime,
+      this.reqTimeOff});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

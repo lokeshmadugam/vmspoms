@@ -18,16 +18,15 @@ class PositiveButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xFF036CB2),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25))),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
       onPressed: onPressed,
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        softWrap: true,
-       style: Theme.of(context).textTheme.headlineMedium
-        // const TextStyle(fontSize: 16, color: Colors.white,fontWeight: FontWeight.w500),
-      ),
+      child: Text(text,
+          textAlign: TextAlign.center,
+          softWrap: true,
+          style: Theme.of(context).textTheme.headlineMedium
+          // const TextStyle(fontSize: 16, color: Colors.white,fontWeight: FontWeight.w500),
+          ),
     );
   }
 }

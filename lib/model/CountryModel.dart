@@ -9,7 +9,7 @@ class CountryModel {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -101,27 +101,27 @@ class CountryItems {
 
   CountryItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.alpha2Code,
-        this.alpha3Code,
-        this.callingCode,
-        this.currencyCode,
-        this.currencySymbol,
-        this.domain,
-        this.svgFlagUrl,
-        this.mobFlagUrl,
-        this.cloudImgUrl,
-        this.serverImgPath,
-        this.dbImg,
-        this.name,
-        this.nativeName,
-        this.region,
-        this.urlTag,
-        this.seqNo,
-        this.activeFlag,
-        this.status,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.alpha2Code,
+      this.alpha3Code,
+      this.callingCode,
+      this.currencyCode,
+      this.currencySymbol,
+      this.domain,
+      this.svgFlagUrl,
+      this.mobFlagUrl,
+      this.cloudImgUrl,
+      this.serverImgPath,
+      this.dbImg,
+      this.name,
+      this.nativeName,
+      this.region,
+      this.urlTag,
+      this.seqNo,
+      this.activeFlag,
+      this.status,
+      this.recStatusname});
 
   CountryItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -175,4 +175,3 @@ class CountryItems {
     return data;
   }
 }
-

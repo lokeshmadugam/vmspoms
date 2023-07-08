@@ -29,7 +29,7 @@ class EFormRepository {
       var url = AppUrl.eFormCategoryNames;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = EFormCategoryName.fromJson(response);
       return jsonData;
@@ -52,7 +52,7 @@ class EFormRepository {
       var url = AppUrl.dynamicFormList;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = DynamicList.fromJson(response);
       return jsonData;
@@ -75,7 +75,7 @@ class EFormRepository {
       var url = AppUrl.EFormUserData;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = EFormUserData.fromJson(response);
       return jsonData;
@@ -97,7 +97,7 @@ class EFormRepository {
       var url = AppUrl.configItemsUrl;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = ServiceType.fromJson(response);
       return jsonData;
@@ -107,7 +107,6 @@ class EFormRepository {
   }
 
   Future<dynamic> submitEFormList(var data) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -115,8 +114,8 @@ class EFormRepository {
 
       var url = (AppUrl.submitEForm);
 
-      dynamic response = await _apiService.postApiResponsewithtoken(url,
-          token, data);
+      dynamic response =
+          await _apiService.postApiResponsewithtoken(url, token, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -126,7 +125,6 @@ class EFormRepository {
   }
 
   Future<dynamic> updateEFormList(var id, var data) async {
-
     String userFormId = id.toString();
     String query = "/$userFormId";
 
@@ -137,8 +135,8 @@ class EFormRepository {
 
       var url = (AppUrl.submitEForm);
 
-      dynamic response = await _apiService.putApiResponsewithtoken(url,
-          token, data, query);
+      dynamic response =
+          await _apiService.putApiResponsewithtoken(url, token, data, query);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -147,9 +145,7 @@ class EFormRepository {
     }
   }
 
-
   /////E Pollsss
-
 
   Future<dynamic> getEPollsUserDataList(var userId, var propertyId) async {
     try {
@@ -165,7 +161,7 @@ class EFormRepository {
       var url = AppUrl.EPollUserData;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = EPollUserData.fromJson(response);
       return jsonData;
@@ -187,7 +183,7 @@ class EFormRepository {
       var url = AppUrl.ePollCategoryNames;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = EPollCategoryName.fromJson(response);
       return jsonData;
@@ -196,8 +192,8 @@ class EFormRepository {
     }
   }
 
-  Future<dynamic> getEPollDynamicFormList(var categoryId, var propertyId,
-      var userId) async {
+  Future<dynamic> getEPollDynamicFormList(
+      var categoryId, var propertyId, var userId) async {
     try {
       Map<String, String> queryParameters = {
         'category_id': categoryId.toString(),
@@ -212,7 +208,7 @@ class EFormRepository {
       var url = AppUrl.ePollDynamicList;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = EPollDynamicList.fromJson(response);
       return jsonData;
@@ -222,7 +218,6 @@ class EFormRepository {
   }
 
   Future<dynamic> submitEPollList(var data) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -230,8 +225,8 @@ class EFormRepository {
 
       var url = (AppUrl.submitEPoll);
 
-      dynamic response = await _apiService.postApiResponsewithtoken(url,
-          token, data);
+      dynamic response =
+          await _apiService.postApiResponsewithtoken(url, token, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -241,7 +236,6 @@ class EFormRepository {
   }
 
   Future<dynamic> updateEPollList(var id, var data) async {
-
     String userFormId = id.toString();
     String query = "/$userFormId";
 
@@ -252,13 +246,51 @@ class EFormRepository {
 
       var url = (AppUrl.submitEPoll);
 
-      dynamic response = await _apiService.putApiResponsewithtoken(url,
-          token, data, query);
+      dynamic response =
+          await _apiService.putApiResponsewithtoken(url, token, data, query);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<DeleteResponse> deleteEForm(dynamic data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? bearerToken = prefs.getString('token');
+    String token = jsonDecode(bearerToken!);
+    var url = AppUrl.EFormUserData;
+    String id = data.toString();
+    String query = "/$id";
+    // String query = "/$data";
+    // var url1 = url+"/$data";
+    dynamic response =
+    await _apiService.deleteApiResponsewithtoken(url, token, query);
+    try {
+      final jsonData = DeleteResponse.fromJson(response);
+      return jsonData;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<DeleteResponse> deleteEPoll(dynamic data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? bearerToken = prefs.getString('token');
+    String token = jsonDecode(bearerToken!);
+    var url = AppUrl.EPollUserData;
+    String id = data.toString();
+    String query = "/$id";
+    // String query = "/$data";
+    // var url1 = url+"/$data";
+    dynamic response =
+    await _apiService.deleteApiResponsewithtoken(url, token, query);
+    try {
+      final jsonData = DeleteResponse.fromJson(response);
+      return jsonData;
+    } catch (e) {
+      throw e;
     }
   }
 

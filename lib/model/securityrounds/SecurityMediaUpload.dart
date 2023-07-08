@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class SecurityMediaUpload{
+class SecurityMediaUpload {
   int? id;
   File? imagePath;
   String? securityRounds;

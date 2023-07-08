@@ -18,8 +18,10 @@ import '../../utils/Utils.dart';
 
 class PackageExpectedFormScreen extends StatefulWidget {
   var data;
-bool update;
-  PackageExpectedFormScreen({super.key, required this.data,required this.update});
+  bool update;
+
+  PackageExpectedFormScreen(
+      {super.key, required this.data, required this.update});
 
   @override
   State<PackageExpectedFormScreen> createState() =>
@@ -48,7 +50,8 @@ class _PackageExpectedFormScreenState extends State<PackageExpectedFormScreen> {
   String? blockName;
   String? unitNo;
   String? packageType;
-var value;
+  var value;
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +60,8 @@ var value;
       items = widget.data;
       _blockNameController.text = items.blockName.toString();
       _unitNoController.text = items.unitNumber.toString();
-      _packageExpectedDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.parse(items.packageExpectDate.toString() ?? ''));
+      _packageExpectedDateController.text = DateFormat('yyyy-MM-dd')
+          .format(DateTime.parse(items.packageExpectDate.toString() ?? ''));
       _remarksController.text = items.remarks.toString();
       _courierName = items.packageFrom.toString();
       packageType = items.packageTypeId.toString();
@@ -127,23 +131,18 @@ var value;
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Package Expected',
-      style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Package Expected',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
-
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -173,7 +172,8 @@ var value;
                                 width: MediaQuery.of(context).size.width / 2,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
@@ -194,9 +194,7 @@ var value;
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 8, top: 4),
-                            child: Text(
-                              'Unit No :'
-                            ),
+                            child: Text('Unit No :'),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(4.0),
@@ -204,7 +202,8 @@ var value;
                               width: MediaQuery.of(context).size.width / 2,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
@@ -219,15 +218,15 @@ var value;
                     ),
                   ],
                 ),
-
                 Consumer<PackageExpectedFormScreenViewModel>(
                     builder: (context, model, child) {
                   if (model.deliveryService.data != null) {
                     var data = model.deliveryService.data!.result!.items!;
 
                     return MyDropDown(
-                      enabled: widget.update,
-                        hintText: 'Courier Services', // package from
+                        enabled: widget.update,
+                        hintText: 'Courier Services',
+                        // package from
                         value: _courierName,
                         items: data
                             .map((item) => item.deliveryServName)
@@ -257,7 +256,7 @@ var value;
                     var data = model.packageType.data!.result!.items!;
 
                     return MyDropDown(
-                      enabled: widget.update,
+                        enabled: widget.update,
                         hintText: 'Package Type',
                         value: null,
                         items: data
@@ -279,8 +278,8 @@ var value;
                   return Container();
                 }),
                 MyTextField(
-                  enabled: widget.update,
-                  preffixIcon: Icons.sticky_note_2_sharp,
+                    enabled: widget.update,
+                    preffixIcon: Icons.sticky_note_2_sharp,
                     controller: _remarksController,
                     labelText: 'Remarks',
                     textInputType: TextInputType.text),
@@ -294,10 +293,12 @@ var value;
                     child: PositiveButton(
                         text: 'Submit',
                         onPressed: () {
-                          DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(
-                              _packageExpectedDateController.text.toString());
+                          DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
+                              .parse(_packageExpectedDateController.text
+                                  .toString());
                           String formattedDateTime =
-                              DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+                              DateFormat('yyyy-MM-ddTHH:mm:ss')
+                                  .format(dateTime);
 
                           Map<String, dynamic> data = {
                             "block_name": userDetails.blockName,
@@ -315,11 +316,13 @@ var value;
                           };
 
                           if (widget.data == null) {
-                            Provider.of<PackageExpectedFormScreenViewModel>(context,
+                            Provider.of<PackageExpectedFormScreenViewModel>(
+                                    context,
                                     listen: false)
                                 .createExpectedPackage(data, context);
                           } else {
-                            Provider.of<PackageExpectedFormScreenViewModel>(context,
+                            Provider.of<PackageExpectedFormScreenViewModel>(
+                                    context,
                                     listen: false)
                                 .updateExpectedPackage(data, items.id, context);
                           }
@@ -349,11 +352,14 @@ var value;
       // );
 
       // if (selectedTime != null) {
-        setState(() {
-          _selectedDateTime = DateTime(selected.year, selected.month,
-              selected.day,);
-          controller.text = DateFormat('yyyy-MM-dd').format(_selectedDateTime!);
-        });
+      setState(() {
+        _selectedDateTime = DateTime(
+          selected.year,
+          selected.month,
+          selected.day,
+        );
+        controller.text = DateFormat('yyyy-MM-dd').format(_selectedDateTime!);
+      });
       // }
     }
   }

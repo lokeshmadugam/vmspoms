@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:poms_app/view/bottomnvgbar/NotificationsScreen.dart';
+import '/view/bottomnvgbar/NotificationsScreen.dart';
 
 import 'EmergencyServiceTabsScreen.dart';
 import 'HomeScreen.dart';
 import 'ProfileTabsScreen.dart';
 import 'SettingsScreen.dart';
 import 'NotificationsScreen.dart';
-
 
 class BottomNavigationBarScreen extends StatefulWidget {
   const BottomNavigationBarScreen({super.key});
@@ -30,13 +29,10 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
   final List pages = [
     HomeScreen(),
     EmergencyServiceScreen(),
-NotificationsScreen(),
-
-
+    NotificationsScreen(),
     ProfileTabsScreen(
       showAppBar: false,
     ),
-
     SettingsScreen(),
   ];
 
@@ -68,7 +64,12 @@ NotificationsScreen(),
           selectedItemColor: Colors.blue.shade100,
           unselectedItemColor: Colors.white,
           selectedIconTheme: IconThemeData(color: Colors.red),
-selectedLabelStyle: GoogleFonts.roboto(textStyle:TextStyle(fontWeight: FontWeight.w500,fontSize: 12,),),
+          selectedLabelStyle: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+          ),
           unselectedIconTheme: IconThemeData(color: Colors.white),
           // Set the color for the selected icon
 
@@ -93,7 +94,10 @@ selectedLabelStyle: GoogleFonts.roboto(textStyle:TextStyle(fontWeight: FontWeigh
               label: 'Emergency Services',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notification_add, color: Colors.white,),
+              icon: Icon(
+                Icons.notification_add,
+                color: Colors.white,
+              ),
               label: 'Notifications',
             ),
             BottomNavigationBarItem(

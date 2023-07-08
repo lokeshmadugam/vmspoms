@@ -10,7 +10,8 @@ import '../../resources/AppUrl.dart';
 class ManagementSecurityRepo {
   final BaseApiServices _apiService = NetworkApiService();
 
-  Future<dynamic> getManagementContactList(var mgmtInHouseId, var propertyId) async {
+  Future<dynamic> getManagementContactList(
+      var mgmtInHouseId, var propertyId) async {
     try {
       Map<String, String> queryParameters = {
         'mgmt_inhouse_services_id': mgmtInHouseId.toString(),
@@ -24,7 +25,7 @@ class ManagementSecurityRepo {
       var url = AppUrl.managementSecurity;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = ManagementSecurity.fromJson(response);
       return jsonData;
@@ -46,7 +47,7 @@ class ManagementSecurityRepo {
       var url = AppUrl.configItemsUrl;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = ServiceType.fromJson(response);
       return jsonData;
@@ -54,5 +55,4 @@ class ManagementSecurityRepo {
       rethrow;
     }
   }
-
 }

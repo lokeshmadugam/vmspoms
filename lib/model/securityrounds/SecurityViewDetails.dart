@@ -9,7 +9,7 @@ class SecurityViewDetails {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -99,25 +99,25 @@ class Items {
 
   Items(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.roundsGroupid,
-        this.checkpointId,
-        this.checkinOfficerUserid,
-        this.checkinTime,
-        this.checkinLatitude,
-        this.checkinLongitude,
-        this.checkpointLocationImg,
-        this.checkpointVisitDailyCnt,
-        this.remarks,
-        this.recStatus,
-        this.recStatusname,
-        this.securityFirstName,
-        this.securityLastName,
-        this.mapView,
-        this.checkpointName,
-        this.checkPointImg});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.roundsGroupid,
+      this.checkpointId,
+      this.checkinOfficerUserid,
+      this.checkinTime,
+      this.checkinLatitude,
+      this.checkinLongitude,
+      this.checkpointLocationImg,
+      this.checkpointVisitDailyCnt,
+      this.remarks,
+      this.recStatus,
+      this.recStatusname,
+      this.securityFirstName,
+      this.securityLastName,
+      this.mapView,
+      this.checkpointName,
+      this.checkPointImg});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

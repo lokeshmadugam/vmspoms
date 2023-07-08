@@ -9,7 +9,7 @@ class FacilityBookingModel {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -109,35 +109,35 @@ class FacilityItems {
 
   FacilityItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.userId,
-        this.userTypeId,
-        this.unitNumber,
-        this.unitDeviceCnt,
-        this.noOfUsrGuests,
-        this.facilityId,
-        this.bookingId,
-        this.bookingStatus,
-        this.cancelReason,
-        this.requestedDate,
-        this.usageDate,
-        this.usageStarttime,
-        this.usageEndtime,
-        this.bookingHrsDay,
-        this.feePaidStatus,
-        this.facilityKeyCodeCollectionTime,
-        this.facilityKeyCodeHandoverTime,
-        this.facilityKeyCodeHandoverBy,
-        this.keyCollectedBy,
-        this.remarks,
-        this.recStatus,
-        this.recStatusname,
-        this.facilityName,
-        this.facilityImg,
-        this.keyCollectedName,
-        this.bookingStatusName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.userId,
+      this.userTypeId,
+      this.unitNumber,
+      this.unitDeviceCnt,
+      this.noOfUsrGuests,
+      this.facilityId,
+      this.bookingId,
+      this.bookingStatus,
+      this.cancelReason,
+      this.requestedDate,
+      this.usageDate,
+      this.usageStarttime,
+      this.usageEndtime,
+      this.bookingHrsDay,
+      this.feePaidStatus,
+      this.facilityKeyCodeCollectionTime,
+      this.facilityKeyCodeHandoverTime,
+      this.facilityKeyCodeHandoverBy,
+      this.keyCollectedBy,
+      this.remarks,
+      this.recStatus,
+      this.recStatusname,
+      this.facilityName,
+      this.facilityImg,
+      this.keyCollectedName,
+      this.bookingStatusName});
 
   FacilityItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -208,14 +208,3 @@ class FacilityItems {
     return data;
   }
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -45,10 +45,9 @@ class _PublicServiceScreenState extends State<PublicServiceScreen> {
     String? details = prefs.getString('userDetails');
     Map<String, dynamic> jsonData = jsonDecode(details!);
     userDetails = SignInModel.fromJson(jsonData).userDetails!;
-setState(() {
-  fetchServiceTypeItems('OtherUsefulServices');
-});
-
+    setState(() {
+      fetchServiceTypeItems('OtherUsefulServices');
+    });
   }
 
   Future<void> fetchServiceTypeItems(var serviceType) async {
@@ -166,26 +165,24 @@ setState(() {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                    // TextStyle(
-                    //   fontSize: 16, // reduce the font size
-                    //   color: Colors.white,
-                    //   fontWeight: FontWeight.bold,
-                    // ),
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium
+                      // TextStyle(
+                      //   fontSize: 16, // reduce the font size
+                      //   color: Colors.white,
+                      //   fontWeight: FontWeight.bold,
+                      // ),
+                      ),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Service Providers',
-          style: Theme.of(context).textTheme.headlineLarge
-          // TextStyle(
-          //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+        title: Text('Service Providers',
+            style: Theme.of(context).textTheme.headlineLarge
+            // TextStyle(
+            //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
@@ -343,14 +340,12 @@ setState(() {
               width: MediaQuery.of(context).size.width * 0.03,
             ),
             Expanded(
-              child: Text(
-                value,
-                style: Theme.of(context).textTheme.bodySmall
-                // TextStyle(
-                //   color: Colors.black,
-                //   fontSize: 14,
-                // ),
-              ),
+              child: Text(value, style: Theme.of(context).textTheme.bodySmall
+                  // TextStyle(
+                  //   color: Colors.black,
+                  //   fontSize: 14,
+                  // ),
+                  ),
             ),
           ],
         ),

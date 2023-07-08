@@ -7,10 +7,10 @@ class EPollUserData {
 
   EPollUserData(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   EPollUserData.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class EPollUserData {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -107,22 +107,22 @@ class PollItems {
 
   PollItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.userId,
-        this.admModuleId,
-        this.epollingId,
-        this.hideForAll,
-        this.epollingcatGroupId,
-        this.fiedData,
-        this.attachmentId,
-        this.epollingStatus,
-        this.recStatus,
-        this.moduleName,
-        this.epollingName,
-        this.epollingStatusName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.userId,
+      this.admModuleId,
+      this.epollingId,
+      this.hideForAll,
+      this.epollingcatGroupId,
+      this.fiedData,
+      this.attachmentId,
+      this.epollingStatus,
+      this.recStatus,
+      this.moduleName,
+      this.epollingName,
+      this.epollingStatusName,
+      this.recStatusname});
 
   PollItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];

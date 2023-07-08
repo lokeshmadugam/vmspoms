@@ -1,4 +1,4 @@
-import 'package:poms_app/model/CountryModel.dart';
+import '/model/CountryModel.dart';
 
 import '../../data/network/BaseApiServices.dart';
 import '../../data/network/NetworkApiServices.dart';
@@ -10,12 +10,10 @@ class SignUpRepo {
   BaseApiServices apiServices = NetworkApiService();
 
   Future<dynamic> submitSignUpDetails(var data) async {
-
     try {
       var url = (AppUrl.signUp);
 
-      dynamic response =
-      await apiServices.postApiResponse(url, data);
+      dynamic response = await apiServices.postApiResponse(url, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -33,7 +31,7 @@ class SignUpRepo {
       var url = AppUrl.configItemsUrl;
 
       dynamic response =
-      await apiServices.getQueryResponse(url, '', queryParameters, '');
+          await apiServices.getQueryResponse(url, '', queryParameters, '');
 
       final jsonData = ServiceType.fromJson(response);
       return jsonData;
@@ -41,16 +39,21 @@ class SignUpRepo {
       rethrow;
     }
   }
-  Future<dynamic> getCoutry(String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,) async {
+
+  Future<dynamic> getCoutry(
+    String orderBy,
+    String orderByPropertyName,
+    int pageNumber,
+    int pageSize,
+  ) async {
     String orderby = orderBy;
-    String orderByPN= orderByPropertyName;
+    String orderByPN = orderByPropertyName;
     String pagenumber = pageNumber.toString();
     String pagesize = pageSize.toString();
     try {
       Map<String, String> queryParameters = {
-        'orderBy':orderby,
-        'orderByPropertyName':orderByPN,
+        'orderBy': orderby,
+        'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
       };
@@ -58,7 +61,7 @@ class SignUpRepo {
       var url = AppUrl.countryUrl;
 
       dynamic response =
-      await apiServices.getQueryResponse(url, '', queryParameters, '');
+          await apiServices.getQueryResponse(url, '', queryParameters, '');
 
       final jsonData = CountryModel.fromJson(response);
       return jsonData;
@@ -66,5 +69,4 @@ class SignUpRepo {
       rethrow;
     }
   }
-
 }

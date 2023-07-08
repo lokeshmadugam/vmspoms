@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,10 +24,12 @@ class CommonClockInClockOutScreen extends StatefulWidget {
   const CommonClockInClockOutScreen({Key? key}) : super(key: key);
 
   @override
-  State<CommonClockInClockOutScreen> createState() => _CommonClockInClockOutScreenState();
+  State<CommonClockInClockOutScreen> createState() =>
+      _CommonClockInClockOutScreenState();
 }
 
-class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScreen> {
+class _CommonClockInClockOutScreenState
+    extends State<CommonClockInClockOutScreen> {
   TextEditingController employeeIdController = TextEditingController();
   File? _image;
   XFile? pickedFile;
@@ -68,7 +69,7 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
   bool isLoading = false;
 
   ClockInClockOutByEmployeeId clockInClockOutByEmployeeId =
-  ClockInClockOutByEmployeeId();
+      ClockInClockOutByEmployeeId();
 
   @override
   void dispose() {
@@ -128,7 +129,7 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     final placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
     setState(() {
       locationNameLine1 = placemarks[0].street.toString();
@@ -213,11 +214,12 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
             title: Text(
               'Clock-In/Clock-Out',
               style: TextStyle(
-                  fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
-            backgroundColor: Color(0xFF036CB2)
-        ),
+            backgroundColor: Color(0xFF036CB2)),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -242,13 +244,13 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
                     ),
                     Container(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            date.toString() + "  "+ _timeString,
-                            style:
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        date.toString() + "  " + _timeString,
+                        style:
                             TextStyle(fontSize: 14, color: Color(0xFF036CB2)),
-                          ),
-                        )),
+                      ),
+                    )),
                   ],
                 ),
                 //if (pathPoints.isNotEmpty)
@@ -257,26 +259,26 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
                   child: isLoading
                       ? CircularProgressIndicator()
                       : Container(
-                    height: MediaQuery.of(context).size.height / 5,
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: pathPoints.first,
-                        zoom: 15.0,
-                      ),
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller = controller;
-                        setState(() {
-                          _markers.add(
-                            Marker(
-                              markerId: MarkerId('start'),
-                              position: pathPoints.first,
+                          height: MediaQuery.of(context).size.height / 5,
+                          child: GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                              target: pathPoints.first,
+                              zoom: 15.0,
                             ),
-                          );
-                        });
-                      },
-                      markers: _markers,
-                    ),
-                  ),
+                            onMapCreated: (GoogleMapController controller) {
+                              _controller = controller;
+                              setState(() {
+                                _markers.add(
+                                  Marker(
+                                    markerId: MarkerId('start'),
+                                    position: pathPoints.first,
+                                  ),
+                                );
+                              });
+                            },
+                            markers: _markers,
+                          ),
+                        ),
                 ),
                 if (locationNameLine1.isNotEmpty)
                   Align(
@@ -322,9 +324,9 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
                       child: _image == null
                           ? null
                           : Image.file(
-                        _image!,
-                        fit: BoxFit.cover,
-                      ),
+                              _image!,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                 ),
@@ -365,8 +367,8 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
                           text: 'Clock-In',
                           onPressed: () {
                             if (employeeIdController.text.isNotEmpty) {
-                              var data = viewModel
-                                  .configItem.data!.result!.items;
+                              var data =
+                                  viewModel.configItem.data!.result!.items;
 
                               for (int i = 0; i < data!.length; i++) {
                                 if (data[i].keyValue == 'Attendance') {
@@ -435,15 +437,15 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
                 ),
                 Consumer<ClockInClockOutScreenViewModel>(
                     builder: (context, model, child) {
-                      if (model.clockInClockOutByEmployeeId.data != null) {
-                        var data = model.clockInClockOutByEmployeeId.data!.result!;
+                  if (model.clockInClockOutByEmployeeId.data != null) {
+                    var data = model.clockInClockOutByEmployeeId.data!.result!;
 
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          setState(() {
-                            // _image = null;
-                            // employeeIdController.text = '';
-                            // name = '';
-                            /*if (data.clockIn == false) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        // _image = null;
+                        // employeeIdController.text = '';
+                        // name = '';
+                        /*if (data.clockIn == false) {
                               clockIn = true;
                               clockOut = false;
                               timeOff = false;
@@ -458,11 +460,11 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
                               clockOut = false;
                               timeOff = false;
                             }*/
-                          });
-                        });
-                      }
-                      return Container();
-                    }),
+                      });
+                    });
+                  }
+                  return Container();
+                }),
               ],
             ),
           ),
@@ -570,7 +572,7 @@ class _CommonClockInClockOutScreenState extends State<CommonClockInClockOutScree
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     final placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
     setState(() {
       clockInLocationName = placemarks[0].name ?? '';

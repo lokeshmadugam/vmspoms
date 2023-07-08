@@ -15,9 +15,7 @@ class ClockInClockOutRepository {
 
   Future<dynamic> getConfigItems() async {
     try {
-      Map<String, String> queryParameters = {
-        'configKey': 'CIOActivity'
-      };
+      Map<String, String> queryParameters = {'configKey': 'CIOActivity'};
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -26,7 +24,7 @@ class ClockInClockOutRepository {
       var url = (AppUrl.configItemsUrl);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = ClockInRequestTimeConfigItem.fromJson(response);
       return jsonData;
@@ -35,9 +33,8 @@ class ClockInClockOutRepository {
     }
   }
 
-  Future<dynamic> getClockInClockOutByEmployeeId(var clockInOutDate,
-      var employeeId, var propertyId) async {
-
+  Future<dynamic> getClockInClockOutByEmployeeId(
+      var clockInOutDate, var employeeId, var propertyId) async {
     String query = "/$propertyId/$clockInOutDate/$employeeId";
     try {
       Map<String, String> queryParameters = {};
@@ -48,8 +45,8 @@ class ClockInClockOutRepository {
 
       var url = (AppUrl.clockInClockOutByEmployeId);
 
-      dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, query);
+      dynamic response = await apiServices.getQueryResponse(
+          url, token, queryParameters, query);
 
       final jsonData = ClockInClockOutByEmployeeId.fromJson(response);
       return jsonData;
@@ -67,7 +64,8 @@ class ClockInClockOutRepository {
       final url = (AppUrl.mediaUpload);
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
-      final image = await http.MultipartFile.fromPath('fileToUpload', imagePath);
+      final image =
+          await http.MultipartFile.fromPath('fileToUpload', imagePath);
       request.files.add(image);
 
       dynamic response = await request.send();
@@ -77,14 +75,12 @@ class ClockInClockOutRepository {
 
       final jsonData = MediaUpload.fromJson(responseJson);
       return jsonData;
-
     } catch (e) {
       rethrow;
     }
   }
 
   Future<dynamic> submitClockIn(ClockInClockOutRequest request) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -92,8 +88,8 @@ class ClockInClockOutRepository {
 
       var url = (AppUrl.submitClockIn);
 
-      dynamic response =
-      await apiServices.postApiResponsewithtoken(url, token, request.toJson());
+      dynamic response = await apiServices.postApiResponsewithtoken(
+          url, token, request.toJson());
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -102,8 +98,8 @@ class ClockInClockOutRepository {
     }
   }
 
-  Future<dynamic> updateClockOut(var propertyId, ClockInClockOutRequest request) async {
-
+  Future<dynamic> updateClockOut(
+      var propertyId, ClockInClockOutRequest request) async {
     String propertyID = propertyId.toString();
 
     String id = propertyID.toString();
@@ -116,8 +112,8 @@ class ClockInClockOutRepository {
 
       var url = (AppUrl.updateClockOut);
 
-      dynamic response =
-      await apiServices.putApiResponsewithtoken(url, token, request.toJson(),query);
+      dynamic response = await apiServices.putApiResponsewithtoken(
+          url, token, request.toJson(), query);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -127,7 +123,6 @@ class ClockInClockOutRepository {
   }
 
   Future<dynamic> submitRequestTimeOff(ClockInClockOutRequest request) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -135,8 +130,8 @@ class ClockInClockOutRepository {
 
       var url = (AppUrl.submitRequestTime);
 
-      dynamic response =
-      await apiServices.postApiResponsewithtoken(url, token, request.toJson());
+      dynamic response = await apiServices.postApiResponsewithtoken(
+          url, token, request.toJson());
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -144,5 +139,4 @@ class ClockInClockOutRepository {
       rethrow;
     }
   }
-
 }

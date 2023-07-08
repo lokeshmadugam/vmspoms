@@ -54,13 +54,19 @@ class MyTextField extends StatelessWidget {
           ),
 
           labelText: labelText,
-          labelStyle:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 12,fontWeight: FontWeight.normal), ),
+          labelStyle: GoogleFonts.roboto(
+            textStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+                fontWeight: FontWeight.normal),
+          ),
 
-    // const TextStyle(
+          // const TextStyle(
           //   color: Colors.grey,
           // ),
           // contentPadding: const EdgeInsets.fromLTRB(15,0,0,0),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey, width: 0.5),
             borderRadius: BorderRadius.circular(10.0),
@@ -71,9 +77,12 @@ class MyTextField extends StatelessWidget {
           ),
           prefixText: ' ',
           hintText: hintText,
-          hintStyle: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.normal), ),
-
-
+          hintStyle: GoogleFonts.roboto(
+            textStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+                fontWeight: FontWeight.normal),
+          ),
 
           prefixIcon: preffixIcon != null
               ? Icon(

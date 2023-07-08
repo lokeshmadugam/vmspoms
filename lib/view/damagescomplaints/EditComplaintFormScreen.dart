@@ -23,8 +23,10 @@ import '../../viewmodel/damagescomplaints/ComplaintsViewModel.dart';
 
 class EditComplaintFormScreen extends StatefulWidget {
   var data;
-bool update;
-  EditComplaintFormScreen({super.key, required this.data,required this.update});
+  bool update;
+
+  EditComplaintFormScreen(
+      {super.key, required this.data, required this.update});
 
   @override
   State<EditComplaintFormScreen> createState() =>
@@ -93,22 +95,22 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
       _complaintDescriptionController.text =
           items.complaintDescription.toString();
 
-      if(items.resolutionGivenByUsrid != null && items.resolutionGivenByUsrid != 0){
-
-        _solutionDateController.text = items.resolutionDatetime!= null
-        ? DateFormat('yyyy-MM-dd hh:mm a')
-          .format(DateTime.parse(items.resolutionDatetime
-          .toString()))
-          : '';
+      if (items.resolutionGivenByUsrid != null &&
+          items.resolutionGivenByUsrid != 0) {
+        _solutionDateController.text = items.resolutionDatetime != null
+            ? DateFormat('yyyy-MM-dd hh:mm a')
+                .format(DateTime.parse(items.resolutionDatetime.toString()))
+            : '';
         items.resolutionDatetime.toString();
         _solutionByController.text = items.resolutionGivenByUsrid.toString();
-        _complaintResolutionController.text = items.complaintResolution.toString();
+        _complaintResolutionController.text =
+            items.complaintResolution.toString();
       }
 
       fetchComplaintStatusItems('complaintstatus');
       fetchComplaintTypeItems('Complaints');
-      fetchComplaintAssignedToItems(userDetails.appUserTypeId, userDetails.propertyId);
-
+      fetchComplaintAssignedToItems(
+          userDetails.appUserTypeId, userDetails.propertyId);
     });
   }
 
@@ -170,8 +172,11 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
     });
   }
 
-  Future<void> fetchComplaintAssignedToItems(var appUserTypeId, var propertyId) async {
-    viewmodel.fetchComplaintAssignedToItems(appUserTypeId, propertyId).then((response) {
+  Future<void> fetchComplaintAssignedToItems(
+      var appUserTypeId, var propertyId) async {
+    viewmodel
+        .fetchComplaintAssignedToItems(appUserTypeId, propertyId)
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
@@ -220,21 +225,18 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Edit Complaint',
-          style: Theme.of(context).textTheme.headlineLarge
-          // TextStyle(
-          //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
-        ),
+        title: Text('Edit Complaint',
+            style: Theme.of(context).textTheme.headlineLarge
+            // TextStyle(
+            //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
+            ),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
@@ -261,10 +263,9 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                     child: Row(
                       children: [
                         Container(
-                          child: Text(
-                            "Complaint Details",
-                            style: Theme.of(context).textTheme.headlineMedium
-                          ),
+                          child: Text("Complaint Details",
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium),
                         ),
                         Spacer(),
                         Icon(
@@ -356,9 +357,10 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Complaint Image :',
-                                  style: GoogleFonts.roboto(textStyle:TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.normal) ),
+                                  style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal)),
                                 ),
                               ),
                             ),
@@ -374,16 +376,17 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: GridView.count(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.all(8),
-                        children: List.generate(complaintPicsArray.length, (index) {
-                          return Image.network(complaintPicsArray[index]);
-                        }),
-                      ),
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.all(8),
+                              children: List.generate(complaintPicsArray.length,
+                                  (index) {
+                                return Image.network(complaintPicsArray[index]);
+                              }),
+                            ),
                           ),
                         ),
                       ],
@@ -408,13 +411,12 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                     child: Row(
                       children: [
                         Container(
-                          child: Text(
-                            "Solution Details",
-                            style: Theme.of(context).textTheme.headlineMedium
-                            // TextStyle(fontSize: 18, color: Colors.white
-                            //     // fontWeight: FontWeight.bold,
-                            //     ),
-                          ),
+                          child: Text("Solution Details",
+                              style: Theme.of(context).textTheme.headlineMedium
+                              // TextStyle(fontSize: 18, color: Colors.white
+                              //     // fontWeight: FontWeight.bold,
+                              //     ),
+                              ),
                         ),
                         Spacer(),
                         Icon(
@@ -439,15 +441,20 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                             value: null,
                             items: managementOfficeItems
                                 .map((item) => item.firstName)
-                                .map((managementOffice) => DropdownMenuItem<String>(
-                              value: managementOffice,
-                              child: Text(managementOffice!),
-                            ))
+                                .map((managementOffice) =>
+                                    DropdownMenuItem<String>(
+                                      value: managementOffice,
+                                      child: Text(managementOffice!),
+                                    ))
                                 .toList(),
                             onchanged: (value) {
-                              for(int i=0;i<managementOfficeItems.length;i++){
-                                if(value == managementOfficeItems[i].firstName){
-                                  complaintAssignedToId = managementOfficeItems[i].id!;
+                              for (int i = 0;
+                                  i < managementOfficeItems.length;
+                                  i++) {
+                                if (value ==
+                                    managementOfficeItems[i].firstName) {
+                                  complaintAssignedToId =
+                                      managementOfficeItems[i].id!;
                                   break;
                                 }
                               }
@@ -464,9 +471,13 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                                     ))
                                 .toList(),
                             onchanged: (value) {
-                              for(int i=0;i<_complaintStatusItems.length;i++){
-                                if(value == _complaintStatusItems[i].keyValue){
-                                  complaintStatusId = _complaintStatusItems[i].id!;
+                              for (int i = 0;
+                                  i < _complaintStatusItems.length;
+                                  i++) {
+                                if (value ==
+                                    _complaintStatusItems[i].keyValue) {
+                                  complaintStatusId =
+                                      _complaintStatusItems[i].id!;
                                   break;
                                 }
                               }
@@ -499,15 +510,15 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                if(widget.update)
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.70,
-                  child: PositiveButton(
-                      text: 'Submit',
-                      onPressed: () {
-                        submitData();
-                      }),
-                )
+                if (widget.update)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.70,
+                    child: PositiveButton(
+                        text: 'Submit',
+                        onPressed: () {
+                          submitData();
+                        }),
+                  )
               ],
             ),
           ),
@@ -554,7 +565,7 @@ class _EditComplaintFormScreenState extends State<EditComplaintFormScreen> {
     DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
         .parse(_solutionDateController.text.toString());
     String formattedDateTime =
-    DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+        DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
 
     Map<String, dynamic> data = {
       "complaint_assigned_to_user_id": complaintAssignedToId,

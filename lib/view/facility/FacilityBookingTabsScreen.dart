@@ -7,15 +7,18 @@ import 'ViewMyBookingsDetailsScreen.dart';
 
 class FacilityBookingTabsScreen extends StatefulWidget {
   var data;
-  FacilityBookingTabsScreen({Key? key,required this.data}) : super(key: key);
+
+  FacilityBookingTabsScreen({Key? key, required this.data}) : super(key: key);
 
   @override
-  State<FacilityBookingTabsScreen> createState() => _FacilityBookingTabsScreenState();
+  State<FacilityBookingTabsScreen> createState() =>
+      _FacilityBookingTabsScreenState();
 }
 
 class _FacilityBookingTabsScreenState extends State<FacilityBookingTabsScreen> {
   String _selectedButton = 'Book Facility';
   List<Permissions> permissions = [];
+
   void initState() {
     super.initState();
 
@@ -23,14 +26,18 @@ class _FacilityBookingTabsScreenState extends State<FacilityBookingTabsScreen> {
     // for (var item in permissions){
     //   print(item.moduleDisplayNameMobile);
     // }
-
   }
+
   Widget _getSelectedScreen() {
     switch (_selectedButton) {
       case 'Book Facility':
-        return FacilityScreen(permisssions: widget.data,);
+        return FacilityScreen(
+          permisssions: widget.data,
+        );
       case 'View My Bookings':
-        return ViewMyBookingDetailsScreen(permisssions: widget.data,);
+        return ViewMyBookingDetailsScreen(
+          permisssions: widget.data,
+        );
 
       default:
         return Container(); // Return a default screen
@@ -44,10 +51,10 @@ class _FacilityBookingTabsScreenState extends State<FacilityBookingTabsScreen> {
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 14;
       print("SmallSize = $fontSize");
-    }else {
+    } else {
       fontSize = 16;
       print("BigSize = $fontSize");
     }
@@ -83,99 +90,110 @@ class _FacilityBookingTabsScreenState extends State<FacilityBookingTabsScreen> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                      // TextStyle(
-                      //   fontSize: 16, // reduce the font size
-                      //   color: Colors.white,
-                      //   fontWeight: FontWeight.bold,
-                      // ),
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium
+                        // TextStyle(
+                        //   fontSize: 16, // reduce the font size
+                        //   color: Colors.white,
+                        //   fontWeight: FontWeight.bold,
+                        // ),
+                        ),
                   ),
                 ),
               ),
             ],
           ),
-          title: Text(
-            'Facility Bookings',
-         style: Theme.of(context).textTheme.headlineLarge
-            // TextStyle(
-            //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+          title: Text('Facility Bookings',
+              style: Theme.of(context).textTheme.headlineLarge
+              // TextStyle(
+              //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+              ),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
         ),
-        body: Column(
-            children: [
-              Container(
-                  alignment: Alignment.bottomCenter,
-                  color: Color(0xFF036CB2),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: _selectedButton == 'Book Facility'
+        body: Column(children: [
+          Container(
+              alignment: Alignment.bottomCenter,
+              color: Color(0xFF036CB2),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _selectedButton == 'Book Facility'
+                                ? Colors.white
+                                : Color(0xFF1883BD),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(35),
+                                    bottomLeft: Radius.circular(0.0))),
+                            // side: BorderSide(width: 1.0,color: Colors.grey),
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              _selectedButton = 'Book Facility';
+                            });
+                          },
+                          child: Text(
+                            "Book Facility",
+                            softWrap: true,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize,
+                                    color: _selectedButton == "Book Facility"
+                                        ? Colors.black
+                                        : Colors.white)),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  _selectedButton == 'View My Bookings'
                                       ? Colors.white
                                       : Color(0xFF1883BD),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(35),
-                                          bottomLeft: Radius.circular(0.0))),
-                                // side: BorderSide(width: 1.0,color: Colors.grey),
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  _selectedButton = 'Book Facility';
-                                });
-                              },
-                              child: Text(
-                                "Book Facility", softWrap: true, textAlign: TextAlign.center,
-                                style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: _selectedButton == "Book Facility" ? Colors.black : Colors.white)),
-                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0.0),
+                                bottomLeft: Radius.circular(0.0),
+                                topRight: Radius.circular(35.0),
+                                bottomRight: Radius.circular(0.0),
+                              )),
+                              // side: BorderSide(width: 1.0,color: Colors.grey),
+                            ),
+                            onPressed: () async {
+                              setState(() {
+                                _selectedButton = 'View My Bookings';
+                              });
+                            },
+                            child: Text(
+                              "View My Bookings",
+                              softWrap: true,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                      fontSize: fontSize,
+                                      color:
+                                          _selectedButton == "View My Bookings"
+                                              ? Colors.black
+                                              : Colors.white)),
                             ),
                           ),
-                          Expanded(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: _selectedButton == 'View My Bookings'
-                                        ? Colors.white
-                                        : Color(0xFF1883BD),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(0.0),
-                                          bottomLeft: Radius.circular(0.0),
-                                          topRight: Radius.circular(35.0),
-                                          bottomRight: Radius.circular(0.0),
-                                        )),
-                                  // side: BorderSide(width: 1.0,color: Colors.grey),
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    _selectedButton = 'View My Bookings';
-                                  });
-                                },
-                                child: Text(
-                                  "View My Bookings", softWrap: true, textAlign: TextAlign.center,
-                                  style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: _selectedButton == "View My Bookings" ? Colors.black : Colors.white) ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ]),
-                  )),
-              Expanded(child: _getSelectedScreen()),
-            ])
-
-    );
+                        ),
+                      )
+                    ]),
+              )),
+          Expanded(child: _getSelectedScreen()),
+        ]));
   }
 }

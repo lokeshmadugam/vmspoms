@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:poms_app/model/SignInModel.dart';
-import 'package:poms_app/view/visitorreg/FavoriteVisitors.dart';
-import 'package:poms_app/view/visitorreg/ParkingScreen.dart';
-import 'package:poms_app/view/visitorreg/VisitorCheckoutScreen.dart';
+import '/model/SignInModel.dart';
+import '/view/visitorreg/FavoriteVisitors.dart';
+import '/view/visitorreg/ParkingScreen.dart';
+import '/view/visitorreg/VisitorCheckoutScreen.dart';
 
 import 'ContactsScreen.dart';
 import 'VisitorRegistrationFormScreen.dart';
@@ -15,9 +15,15 @@ import '../../viewmodel/UserViewModel.dart';
 
 class InvitationsScreen extends StatefulWidget {
   var contact;
-var data;
-var favoritevisitor;
-  InvitationsScreen({Key? key, required this.contact,required this.data,this.favoritevisitor}) : super(key: key);
+  var data;
+  var favoritevisitor;
+
+  InvitationsScreen(
+      {Key? key,
+        required this.contact,
+        required this.data,
+        this.favoritevisitor})
+      : super(key: key);
 
   //
   @override
@@ -32,7 +38,7 @@ class _InvitationsScreenState extends State<InvitationsScreen> {
   String unitNumber = '';
   String blockName = '';
   bool isButtonSelected = false;
-List<Permissions> permissions = [];
+  List<Permissions> permissions = [];
 
   bool iscreate = false;
   bool isupdate = false;
@@ -41,13 +47,13 @@ List<Permissions> permissions = [];
   bool isupload = false;
   bool isprint = false;
   bool isdownload = false;
+
   @override
   void initState() {
     super.initState();
     getUserDetails();
     permissions = widget.data;
     actionPermissions();
-
   }
 
   Future<void> getUserDetails() async {
@@ -76,58 +82,47 @@ List<Permissions> permissions = [];
       });
     });
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Visitor Registration ") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Visitor Registration ") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Print" || act.actionId == 5) {
+            } else if (act.actionName == "Print" || act.actionId == 5) {
               isprint = true;
               print("print = $isprint");
-
-            }
-            else if ( act.actionName == "Download files" || act.actionId == 6) {
+            } else if (act.actionName == "Download files" ||
+                act.actionId == 6) {
               isdownload = true;
               print("download = $isdownload");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
-var contact;
+
+  var contact;
+
   Widget _getSelectedScreen() {
     switch (_selectedButton) {
-
       case "Registration":
         return InviteGuestScreen(
           contact: widget.contact,
@@ -136,7 +131,9 @@ var contact;
       case "Checkin/Checkout":
         return ScanQrcodeScreen();
       case "View Invitations":
-        return ViewInvistationsScreen(permission: widget.data,);
+        return ViewInvistationsScreen(
+          permission: widget.data,
+        );
       default:
         return Container(); // Return a default screen
     }
@@ -149,12 +146,10 @@ var contact;
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 14;
-
-    }else {
+    } else {
       fontSize = 16;
-
     }
     return Scaffold(
         appBar: AppBar(
@@ -187,43 +182,27 @@ var contact;
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
             ],
           ),
-          title: Text(
-            'Invitations',
-       style: Theme.of(context).textTheme.headlineLarge
-          ),
+          title: Text('Invitations',
+              style: Theme.of(context).textTheme.headlineLarge),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
           actions: [
-            if (userTypeName != "Resident / Unit users")
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context)  => VisitorCheckoutScreen(),
-                    ),
-                  );
-                }, icon: Icon(FontAwesomeIcons.checkToSlot),
-              ),
             if (userTypeName != "Resident / Unit users")
               IconButton(
                   onPressed: () async {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context)  => ParkingScreen(),
+                        builder: (context) => ParkingScreen(),
                       ),
                     );
-                   
 
                     // if (result != null) {
                     //   var mobileNumber = result['_selectedContact'] as String;
@@ -237,8 +216,8 @@ var contact;
                     // }
                   },
                   icon: Icon(FontAwesomeIcons.car)),
-
-            if (userTypeName == "Resident / Unit users" && (_selectedButton == "Registration"))
+            if (userTypeName == "Resident / Unit users" &&
+                (_selectedButton == "Registration"))
               IconButton(
                 onPressed: () {
                   // Navigator.push(
@@ -249,9 +228,11 @@ var contact;
                   // );
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => FavoriteVisitorsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => FavoriteVisitorsScreen()),
                   );
-                }, icon: Icon(FontAwesomeIcons.star),
+                },
+                icon: Icon(FontAwesomeIcons.star),
               ),
           ],
         ),
@@ -261,8 +242,8 @@ var contact;
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    if (userTypeName == "Resident / Unit users")
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  if (userTypeName == "Resident / Unit users")
                     Container(
                       width: MediaQuery.of(context).size.width * 0.15,
                       decoration: BoxDecoration(
@@ -291,17 +272,16 @@ var contact;
                               ),
                             ),
                             onPressed: () async {
-
-
                               // final result = await Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
                               //     builder: (context) => ContactsScreen(),
                               //   ),
                               // );
-                              final result = await  Navigator.pushReplacement(
+                              final result = await Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => ContactsScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => ContactsScreen()),
                               );
                               if (result != null) {
                                 var mobileNumber = result['contact'];
@@ -310,8 +290,6 @@ var contact;
                                   contact = mobileNumber;
                                 });
                               }
-
-
                             },
                             child: Icon(
                               Icons.call,
@@ -352,16 +330,16 @@ var contact;
                           });
                         },
                         child: Center(
-                          child: Text(
-                            "Registration",
-                            textAlign: TextAlign.center,
-                            style:GoogleFonts.roboto(textStyle:TextStyle(
-                              fontSize: fontSize,
-                              color: _selectedButton == "Registration"
-                                  ? Colors.black
-                                  : Colors.white,
-                            ), )
-                          ),
+                          child: Text("Registration",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  fontSize: fontSize,
+                                  color: _selectedButton == "Registration"
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                              )),
                         ),
                       ),
                     ),
@@ -378,73 +356,71 @@ var contact;
                                   : Color(0xFF1883BD),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0.0),
-                                bottomLeft: Radius.circular(0.0),
-                                topRight: Radius.circular(0.0),
-                                bottomRight: Radius.circular(0.0),
-                              ))),
+                                    topLeft: Radius.circular(0.0),
+                                    bottomLeft: Radius.circular(0.0),
+                                    topRight: Radius.circular(0.0),
+                                    bottomRight: Radius.circular(0.0),
+                                  ))),
                           onPressed: () async {
                             setState(() {
-                              _selectedButton = 'QR Code';
+                              _selectedButton = 'Checkin/Checkout';
                             });
                           },
                           icon: Icon(
                             Icons.qr_code_scanner,
                             size: 18,
-                            color: _selectedButton == "QR Code"
+                            color: _selectedButton == "Checkin/Checkout"
                                 ? Colors.black
                                 : Colors.white,
                           ),
-                          label: Text(
-                            "Checkin/Checkout",
-                            textAlign: TextAlign.center,
-                            style:GoogleFonts.roboto(textStyle: TextStyle(
-                                fontSize: fontSize,
-                                color: _selectedButton == "Checkin/Checkout"
-                                    ? Colors.black
-                                    : Colors.white),
-                            )
-                          ),
+                          label: Text("Checkin/Checkout",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize,
+                                    color: _selectedButton == "Checkin/Checkout"
+                                        ? Colors.black
+                                        : Colors.white),
+                              )),
                         ),
                       ),
                     ),
                   Expanded(
                       child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    // width: MediaQuery.of(context).size.width / 3,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: _selectedButton == 'View Invitations'
-                              ? Colors.white
-                              : Color(0xFF1883BD),
-                          // side: BorderSide(
-                          //     width: 1.0,color: Color(0xFFD7DE7C)
-                          // ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0.0),
-                            bottomLeft: Radius.circular(0.0),
-                            topRight: Radius.circular(35.0),
-                            bottomRight: Radius.circular(0.0),
-                          ))),
-                      onPressed: () async {
-                        setState(() {
-                          _selectedButton = 'View Invitations';
-                        });
-                      },
-                      child: Text(
-                        "View Invitations",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                          fontSize: fontSize,
-                          color: _selectedButton == "View Invitations"
-                              ? Colors.black
-                              : Colors.white,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        // width: MediaQuery.of(context).size.width / 3,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: _selectedButton == 'View Invitations'
+                                  ? Colors.white
+                                  : Color(0xFF1883BD),
+                              // side: BorderSide(
+                              //     width: 1.0,color: Color(0xFFD7DE7C)
+                              // ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(0.0),
+                                    bottomLeft: Radius.circular(0.0),
+                                    topRight: Radius.circular(35.0),
+                                    bottomRight: Radius.circular(0.0),
+                                  ))),
+                          onPressed: () async {
+                            setState(() {
+                              _selectedButton = 'View Invitations';
+                            });
+                          },
+                          child: Text("View Invitations",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  fontSize: fontSize,
+                                  color: _selectedButton == "View Invitations"
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                              )),
                         ),
-                        )
-                      ),
-                    ),
-                  ))
+                      ))
                 ]),
               )),
           Expanded(child: _getSelectedScreen()),

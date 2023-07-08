@@ -1,23 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:poms_app/model/houserules/HouseRulesModel.dart';
-import 'package:poms_app/model/houserules/RulesModel.dart';
-import 'package:poms_app/repository/houserules/HouseRulesRepo.dart';
+import '/model/houserules/HouseRulesModel.dart';
+import '/model/houserules/RulesModel.dart';
+import '/repository/houserules/HouseRulesRepo.dart';
 
 import '../../data/respose/ApiResponse.dart';
 import '../../model/intercom/IntercomListingModel.dart';
 
 class HouseRulesViewModel extends ChangeNotifier {
-
-
   final _myRepo = HouseRulesRepository();
 
 // Get All HouseRules List
-  Future<ApiResponse<HouseRulesModel>> getHouseRulesList(String orderBy,
-      String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId,) async {
-    ApiResponse<HouseRulesModel> listResponse = ApiResponse
-        .loading();
+  Future<ApiResponse<HouseRulesModel>> getHouseRulesList(
+    String orderBy,
+    String orderByPropertyName,
+    int pageNumber,
+    int pageSize,
+    int propertyId,
+  ) async {
+    ApiResponse<HouseRulesModel> listResponse = ApiResponse.loading();
 
     try {
       final value = await _myRepo.getHouseRulesList(
@@ -33,15 +34,20 @@ class HouseRulesViewModel extends ChangeNotifier {
 
     return listResponse;
   }
+
 // Get All Rules
-  Future<ApiResponse<RulesModel>> getRules(String orderBy,
+  Future<ApiResponse<RulesModel>> getRules(
+      String orderBy,
       String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId,int documentId) async {
-    ApiResponse<RulesModel> listResponse = ApiResponse
-        .loading();
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      int documentId) async {
+    ApiResponse<RulesModel> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getRules(orderBy, orderByPropertyName, pageNumber, pageSize, propertyId, documentId);
+      final value = await _myRepo.getRules(orderBy, orderByPropertyName,
+          pageNumber, pageSize, propertyId, documentId);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {

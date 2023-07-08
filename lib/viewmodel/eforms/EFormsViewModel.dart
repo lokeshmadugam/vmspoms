@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import '../../model/DeleteResponse.dart';
 import '../../model/eforms/DynamicList.dart';
 import '../../model/eforms/EPollUserData.dart';
 import '../../repository/eforms/EFormRepository.dart';
@@ -67,9 +68,10 @@ class EFormsViewModel with ChangeNotifier {
     return serviceListResponse;
   }
 
-  Future<ApiResponse<EFormUserData>> fetchEFormUserDataList(var userId,
-      var propertyId) async {
-    ApiResponse<EFormUserData> eFormUserDataListResponse = ApiResponse.loading();
+  Future<ApiResponse<EFormUserData>> fetchEFormUserDataList(
+      var userId, var propertyId) async {
+    ApiResponse<EFormUserData> eFormUserDataListResponse =
+        ApiResponse.loading();
 
     try {
       final value = await _myRepo.getEFormUserDataList(userId, propertyId);
@@ -102,8 +104,8 @@ class EFormsViewModel with ChangeNotifier {
     return response;
   }
 
-  Future<ApiResponse<PostApiResponse>> updateEForm(var id,
-      var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> updateEForm(
+      var id, var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     try {
@@ -120,15 +122,12 @@ class EFormsViewModel with ChangeNotifier {
     return response;
   }
 
-
-
   ////E Pollsss
 
-
-
-  Future<ApiResponse<EPollUserData>> fetchEPollsUserDataList(var userId,
-      var propertyId) async {
-    ApiResponse<EPollUserData> ePollUserDataListResponse = ApiResponse.loading();
+  Future<ApiResponse<EPollUserData>> fetchEPollsUserDataList(
+      var userId, var propertyId) async {
+    ApiResponse<EPollUserData> ePollUserDataListResponse =
+        ApiResponse.loading();
 
     try {
       final value = await _myRepo.getEPollsUserDataList(userId, propertyId);
@@ -146,7 +145,7 @@ class EFormsViewModel with ChangeNotifier {
   Future<ApiResponse<EPollCategoryName>> fetchEPollCategoryNameList(
       var propertyId) async {
     ApiResponse<EPollCategoryName> categoryNameListResponse =
-    ApiResponse.loading();
+        ApiResponse.loading();
 
     try {
       final value = await _myRepo.getEPollCategoryNameList(propertyId);
@@ -163,11 +162,12 @@ class EFormsViewModel with ChangeNotifier {
 
   Future<ApiResponse<EPollDynamicList>> fetchEPollDynamicFormList(
       var categoryId, var propertyId, var userId) async {
-    ApiResponse<EPollDynamicList> dynamicFormListResponse = ApiResponse.loading();
+    ApiResponse<EPollDynamicList> dynamicFormListResponse =
+        ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getEPollDynamicFormList(categoryId, propertyId,
-      userId);
+      final value =
+          await _myRepo.getEPollDynamicFormList(categoryId, propertyId, userId);
       dynamicFormListResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -197,8 +197,8 @@ class EFormsViewModel with ChangeNotifier {
     return response;
   }
 
-  Future<ApiResponse<PostApiResponse>> updateEPoll(var id,
-      var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> updateEPoll(
+      var id, var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     try {
@@ -214,5 +214,54 @@ class EFormsViewModel with ChangeNotifier {
     }
     return response;
   }
+
+  Future<ApiResponse<DeleteResponse>> deleteEForm(
+      var data, BuildContext context) async {
+    ApiResponse<DeleteResponse> response = ApiResponse.loading();
+    notifyListeners();
+    PostApiResponse postListResult;
+    try {
+      DeleteResponse value = await _myRepo.deleteEForm(data);
+      response = ApiResponse.success(value);
+
+      if (value.status == 200) {
+        print('response = ${value.mobMessage}');
+      }
+    } catch (error) {
+      Utils.flushBarErrorMessage(error.toString(), context);
+      response = ApiResponse.error(error.toString());
+    }
+
+    if (kDebugMode) {
+      print(response.toString());
+    }
+
+    return response;
+  }
+
+  Future<ApiResponse<DeleteResponse>> deleteEPoll(
+      var data, BuildContext context) async {
+    ApiResponse<DeleteResponse> response = ApiResponse.loading();
+    notifyListeners();
+    PostApiResponse postListResult;
+    try {
+      DeleteResponse value = await _myRepo.deleteEPoll(data);
+      response = ApiResponse.success(value);
+
+      if (value.status == 200) {
+        print('response = ${value.mobMessage}');
+      }
+    } catch (error) {
+      Utils.flushBarErrorMessage(error.toString(), context);
+      response = ApiResponse.error(error.toString());
+    }
+
+    if (kDebugMode) {
+      print(response.toString());
+    }
+
+    return response;
+  }
+
 
 }

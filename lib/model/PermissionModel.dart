@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PermissionModel{
+class PermissionModel {
   String? name;
   String? image;
   Icon? icon;

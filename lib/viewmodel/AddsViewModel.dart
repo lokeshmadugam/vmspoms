@@ -1,25 +1,22 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:poms_app/model/AddsSliderModel.dart';
+import '/model/AddsSliderModel.dart';
 
-import 'package:poms_app/repository/AddsSliderRepo.dart';
-
+import '/repository/AddsSliderRepo.dart';
 
 import '../../data/respose/ApiResponse.dart';
 
-
 class AddsViewModel extends ChangeNotifier {
-
-
   final _myRepo = AddsRepository();
 
   // Get Adds
-  Future<ApiResponse<AddsSliderModel>> getAdds(String orderBy,
+  Future<ApiResponse<AddsSliderModel>> getAdds(
+      String orderBy,
       String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId) async {
-    ApiResponse<AddsSliderModel> listResponse = ApiResponse
-        .loading();
+      int pageNumber,
+      int pageSize,
+      int propertyId) async {
+    ApiResponse<AddsSliderModel> listResponse = ApiResponse.loading();
 
     try {
       final value = await _myRepo.getAdds(

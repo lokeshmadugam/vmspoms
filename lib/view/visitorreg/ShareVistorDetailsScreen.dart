@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:poms_app/utils/PositiveButton.dart';
+import '/utils/PositiveButton.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:share_plus/share_plus.dart';
@@ -31,6 +31,7 @@ class _ShareVisitorDetailsScreenState extends State<ShareVisitorDetailsScreen> {
   String imageUrl = '';
   DateTime currentDate = DateTime.now();
   bool sharebutton = false;
+
   // DateTime? visitorStayEndDate;
   void initState() {
     super.initState();
@@ -38,8 +39,6 @@ class _ShareVisitorDetailsScreenState extends State<ShareVisitorDetailsScreen> {
     DateTime? visitorStayEndDate = widget.item.visitorStayEnddate != null
         ? DateTime.parse(widget.item.visitorStayEnddate.toString())
         : null;
-
-
 
     if (widget.item.visitTypeName != null &&
         (widget.item.visitTypeName == "One Time" ||
@@ -57,7 +56,8 @@ class _ShareVisitorDetailsScreenState extends State<ShareVisitorDetailsScreen> {
     }
     if (visitorStayEndDate != null) {
       if (widget.item.visitTypeName != null &&
-          (widget.item.visitTypeName == "Multiple Entry" || widget.item.visitTypeId == 2) &&
+          (widget.item.visitTypeName == "Multiple Entry" ||
+              widget.item.visitTypeId == 2) &&
           (visitorStayEndDate.isAfter(currentDate) ||
               visitorStayEndDate.isAtSameMomentAs(currentDate))) {
         setState(() {
@@ -70,12 +70,14 @@ class _ShareVisitorDetailsScreenState extends State<ShareVisitorDetailsScreen> {
       }
     }
   }
+
   int userId = 0;
   String firstName = "";
   String lastName = "";
   String propertyName = "";
-String unitNumber = "";
-String blockName = "";
+  String unitNumber = "";
+  String blockName = "";
+
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final firstname = value.userDetails?.firstName;
@@ -213,6 +215,7 @@ String blockName = "";
       print('Error occurred while sharing QR code: $e');
     }
   }
+
   Future<void> _launchPhoneDialer(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -220,6 +223,7 @@ String blockName = "";
     );
     await launchUrl(launchUri);
   }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -229,15 +233,14 @@ String blockName = "";
     double? fontSize;
     double? fontSize1;
     double? fontSize2;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 11;
       fontSize1 = 14;
       fontSize2 = 21;
-
-    }else {
+    } else {
       fontSize = 14;
       fontSize1 = 16;
- fontSize2 = 24;
+      fontSize2 = 24;
     }
     return Scaffold(
         backgroundColor: Colors.white,
@@ -270,10 +273,8 @@ String blockName = "";
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
@@ -281,7 +282,7 @@ String blockName = "";
           ),
           title: Text(
             'Share Details',
-       style: Theme.of(context).textTheme.headlineLarge,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
@@ -305,13 +306,13 @@ String blockName = "";
               Padding(
                 padding: const EdgeInsets.only(top: 5.0, bottom: 5),
                 child: Text(propertyName.toString(),
-                    style: GoogleFonts.roboto(textStyle:TextStyle(
+                    style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
                       fontSize: fontSize2,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF580066),
-                    ) )),
+                    ))),
               ),
-
             Padding(
               padding: const EdgeInsets.only(top: 5.0, bottom: 5),
               child: RepaintBoundary(
@@ -333,25 +334,24 @@ String blockName = "";
             Center(
               child: Text(
                 widget.item.registrationQrcode ?? " ",
-                style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 20)),
+                style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: 20)),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10.0, bottom: 10,left: 15),
+              padding: EdgeInsets.only(top: 10.0, bottom: 10, left: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Host : $firstName",
-                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                            fontSize: fontSize1,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF002449)),)
-                      ),
-
+                      Text("Host : $firstName",
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                fontSize: fontSize1,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF002449)),
+                          )),
                     ],
                   ),
                   SizedBox(
@@ -360,25 +360,27 @@ String blockName = "";
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Block : $blockName",
-                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                            fontSize: fontSize1,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF002449)),
-                      )),
+                      Text("Block : $blockName",
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                fontSize: fontSize1,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF002449)),
+                          )),
                       SizedBox(
                         width: 10,
                       ),
 
                       Text(
                         "Unit No. : $unitNumber",
-                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                            fontSize: fontSize1,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF002449)),
-                      ),
-                      )// Text(lastName,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                        style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              fontSize: fontSize1,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF002449)),
+                        ),
+                      )
+                      // Text(lastName,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
                     ],
                   ),
                 ],
@@ -400,7 +402,8 @@ String blockName = "";
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.005),
                       SizedBox(
                         // height: MediaQuery.of(context).size.height * 0.05,
                         child: Card(
@@ -414,15 +417,17 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('Visitor Name',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 Expanded(
                                     child: Text(widget.item.visitorName ?? '',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -441,16 +446,18 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('Mobile No.',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 Expanded(
                                     child: Text(
                                         widget.item.visitorMobileNo ?? '',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -469,15 +476,17 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('Visit Type',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 Expanded(
                                     child: Text(widget.item.visitTypeName ?? '',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -496,16 +505,18 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('Vehicle No.',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 Expanded(
                                     child: Text(
                                         widget.item.vehiclePlateNo ?? '',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -524,15 +535,17 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('Purpose of Visit',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 Expanded(
                                     child: Text(widget.item.vistReason ?? '',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -551,16 +564,18 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('ID/Driver\'s License',
-                                        style:GoogleFonts.roboto(textStyle: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 Expanded(
                                     child: Text(
                                         widget.item.idDrivingLicenseNo ?? '',
-                                        style:GoogleFonts.roboto(textStyle: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -579,18 +594,20 @@ String blockName = "";
                                     width: MediaQuery.of(context).size.width *
                                         0.32,
                                     child: Text('No. of Visitor',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                                 Text(": "),
                                 // add a one-character space
                                 Expanded(
                                     child: Text(
                                         widget.item.noOfVisitor.toString() ??
                                             '',
-                                        style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            color: Colors.black,
-                                            fontSize: fontSize)))),
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: fontSize)))),
                               ],
                             ),
                           ),
@@ -610,23 +627,28 @@ String blockName = "";
                                         0.32,
                                     child: Text(
                                       'Visitor Status',
-                                      style: GoogleFonts.roboto(textStyle:TextStyle(
-                                          color: Colors.black, fontSize: fontSize)),
+                                      style: GoogleFonts.roboto(
+                                          textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: fontSize)),
                                     )),
                                 Text(": "),
                                 // add a one-character space
                                 Expanded(
                                     child: Text(
                                   widget.item.visitorRegistrstionStatus ?? '',
-                                  style: GoogleFonts.roboto(textStyle:TextStyle(
-                                      color: Colors.black, fontSize: fontSize)),
+                                  style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: fontSize)),
                                 )),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.005),
                     ],
                   ),
                 ),
@@ -673,7 +695,6 @@ String blockName = "";
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.70,
                   child: PositiveButton(
-
                       onPressed: () {
                         Navigator.pop(context);
                       },

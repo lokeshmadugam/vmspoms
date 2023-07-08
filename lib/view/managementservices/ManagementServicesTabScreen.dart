@@ -8,14 +8,15 @@ import '../../view/clockinclockout/ClockInClockOutScreen.dart';
 import '../../view/managementservices/ManagementOfficeListingsScreen.dart';
 import '../../view/managementservices/SecurityOfficeListingsScreen.dart';
 
-
 class ManagementServicesTabScreen extends StatefulWidget {
   @override
-  _ManagementServicesTabScreenState createState() => _ManagementServicesTabScreenState();
+  _ManagementServicesTabScreenState createState() =>
+      _ManagementServicesTabScreenState();
 }
 
-class _ManagementServicesTabScreenState extends State<ManagementServicesTabScreen> with SingleTickerProviderStateMixin {
-
+class _ManagementServicesTabScreenState
+    extends State<ManagementServicesTabScreen>
+    with SingleTickerProviderStateMixin {
   String _selectedButton = 'Management Office';
 
   Widget _getSelectedScreen() {
@@ -37,10 +38,10 @@ class _ManagementServicesTabScreenState extends State<ManagementServicesTabScree
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 14;
       print("SmallSize = $fontSize");
-    }else {
+    } else {
       fontSize = 16;
       print("BigSize = $fontSize");
     }
@@ -75,88 +76,98 @@ class _ManagementServicesTabScreenState extends State<ManagementServicesTabScree
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
             ],
           ),
-          title: Text(
-            'Management Services',
-            style: Theme.of(context).textTheme.headlineLarge
-          ),
+          title: Text('Management Services',
+              style: Theme.of(context).textTheme.headlineLarge),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
         ),
-
-        body: Column(
-            children: [
-              Container(
-                  alignment: Alignment.bottomCenter,
-                  color: Color(0xFF036CB2),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: _selectedButton == 'Management Office'
+        body: Column(children: [
+          Container(
+              alignment: Alignment.bottomCenter,
+              color: Color(0xFF036CB2),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  _selectedButton == 'Management Office'
                                       ? Colors.white
                                       : Color(0xFF1883BD),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(35),
-                                          bottomLeft: Radius.circular(0.0)))),
-                              onPressed: () async {
-                                setState(() {
-                                  _selectedButton = 'Management Office';
-                                });
-                              },
-                              child: Text(
-                                "Management Office", softWrap: true, textAlign: TextAlign.center,
-                            style:GoogleFonts.roboto(textStyle:  TextStyle(fontSize: fontSize, color: _selectedButton == "Management Office" ? Colors.black : Colors.white)),
-                              ),
-                            ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(35),
+                                      bottomLeft: Radius.circular(0.0)))),
+                          onPressed: () async {
+                            setState(() {
+                              _selectedButton = 'Management Office';
+                            });
+                          },
+                          child: Text(
+                            "Management Office",
+                            softWrap: true,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize,
+                                    color:
+                                        _selectedButton == "Management Office"
+                                            ? Colors.black
+                                            : Colors.white)),
                           ),
-                          Expanded(
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: _selectedButton == 'Security Office'
+                        ),
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    _selectedButton == 'Security Office'
                                         ? Colors.white
                                         : Color(0xFF1883BD),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(0.0),
-                                          bottomLeft: Radius.circular(0.0),
-                                          topRight: Radius.circular(35.0),
-                                          bottomRight: Radius.circular(0.0),
-                                        ))),
-                                onPressed: () async {
-                                  setState(() {
-                                    _selectedButton = 'Security Office';
-                                  });
-                                },
-                                child: Text(
-                                  "Security Office", softWrap: true, textAlign: TextAlign.center,
-                                  style:GoogleFonts.roboto(textStyle:  TextStyle(fontSize: fontSize, color: _selectedButton == "Security Office" ? Colors.black : Colors.white),
-                                  )
-                                ),
-                              ),
-                            ),
-                          )
-                        ]),
-                  )),
-              Expanded(child: _getSelectedScreen()),
-            ]));
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0.0),
+                                  bottomLeft: Radius.circular(0.0),
+                                  topRight: Radius.circular(35.0),
+                                  bottomRight: Radius.circular(0.0),
+                                ))),
+                            onPressed: () async {
+                              setState(() {
+                                _selectedButton = 'Security Office';
+                              });
+                            },
+                            child: Text("Security Office",
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                      fontSize: fontSize,
+                                      color:
+                                          _selectedButton == "Security Office"
+                                              ? Colors.black
+                                              : Colors.white),
+                                )),
+                          ),
+                        ),
+                      )
+                    ]),
+              )),
+          Expanded(child: _getSelectedScreen()),
+        ]));
   }
 }
