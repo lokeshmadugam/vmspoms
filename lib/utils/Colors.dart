@@ -16,7 +16,10 @@ Color negativeBtnBgColor = Colors.blueGrey.shade50;
 final blueGradient = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
-  colors: [Colors.blue.shade200, Colors.blue,],
+  colors: [
+    Colors.blue.shade200,
+    Colors.blue,
+  ],
 );
 
 final blueGreenGradient = LinearGradient(

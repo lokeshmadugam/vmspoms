@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/utils/CardData.dart';
+import '/utils/CardData.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/respose/Status.dart';
@@ -20,7 +20,9 @@ import '../../viewmodel/clockinclockout/AttendanceListingsScreenViewModel.dart';
 
 class AttendanceListingsScreen extends StatefulWidget {
   var permissions;
-  AttendanceListingsScreen({Key? key,required this.permissions}) : super(key: key);
+
+  AttendanceListingsScreen({Key? key, required this.permissions})
+      : super(key: key);
 
   @override
   State<AttendanceListingsScreen> createState() =>
@@ -45,6 +47,7 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
   bool isdelete = false;
   bool isview = false;
   bool isupload = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,48 +67,40 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
     // Provider.of<AttendanceListingsScreenViewModel>(context, listen: false)
     //     .fetchAttendanceListings("", "", "", userDetails.propertyId);
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Attendance") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Attendance") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   Future<void> fetchAttendenceList(var startDate, var endDate) async {
     attendenceVM
         .fetchAttendanceListings1(
-        "", startDate, endDate, userDetails.propertyId)
+            "", startDate, endDate, userDetails.propertyId)
         .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
@@ -129,9 +124,9 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
     for (var item in _items!) {
       if (item.clockInTime != null && item.clockOutTime != null) {
         final startTime =
-        DateFormat("yyyy-MM-ddTHH:mm:ss").parse(item.clockInTime!);
+            DateFormat("yyyy-MM-ddTHH:mm:ss").parse(item.clockInTime!);
         final endTime =
-        DateFormat("yyyy-MM-ddTHH:mm:ss").parse(item.clockOutTime!);
+            DateFormat("yyyy-MM-ddTHH:mm:ss").parse(item.clockOutTime!);
 
         int duration = endTime.difference(startTime).inMinutes;
         int workingTime = duration;
@@ -216,14 +211,14 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
               SizedBox(
                 child: Container(
                     child: MyTextField(
-                      hintText: 'Search',
-                      controller: _searchController,
-                      onChanged: (value) {
-                        _runSearch(value);
-                      },
-                      textInputType: TextInputType.text,
-                      suffixIcon: Icons.search,
-                    )),
+                  hintText: 'Search',
+                  controller: _searchController,
+                  onChanged: (value) {
+                    _runSearch(value);
+                  },
+                  textInputType: TextInputType.text,
+                  suffixIcon: Icons.search,
+                )),
               ),
               // SizedBox(
               //   height: MediaQuery.of(context).size.height * 0.01,
@@ -239,13 +234,12 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
                     var item = _searchResults![index];
                     var clockInOut;
 
-                    if (item.clockInTime != null &&
-                        item.clockOutTime != null) {
+                    if (item.clockInTime != null && item.clockOutTime != null) {
                       var format = DateFormat("HH:mm");
                       var clockIn =
-                      format.parse(item.clockInTime!.substring(11, 16));
+                          format.parse(item.clockInTime!.substring(11, 16));
                       var clockOut =
-                      format.parse(item.clockOutTime!.substring(11, 16));
+                          format.parse(item.clockOutTime!.substring(11, 16));
                       clockInOut = clockOut.difference(clockIn).inHours;
                     }
                     if (item == null) {
@@ -257,11 +251,11 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
                         ),
                         child: Text(
                           "No data found",
-                          style: GoogleFonts.roboto(textStyle:TextStyle(
+                          style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                          )
-                          ),
+                          )),
                         ),
                       );
                     }
@@ -278,51 +272,58 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
                           ),
                         ),
                         onDismissed: (direction) async {
-                          return  showDialog(
+                          setState(() {
+                            _searchResults!.removeAt(index);
+                          });
+
+                          return showDialog(
                               context: context,
                               barrierDismissible: true,
                               builder: (context) {
                                 return Dialog(
-                                    shape:
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius
-                                            .circular(
-                                            10)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     elevation: 16,
-                                    child: Popup(title: 'Attendance',
-                                      message: ' Are you sure you want to delete this id?',
+                                    child: Popup(
+                                      title: 'Attendance',
+                                      message:
+                                          ' Are you sure you want to delete this id?',
                                       negativeButtonText: "No",
                                       onNegativePressed: () {
+                                        fetchAttendenceList('', '');
                                         Navigator.pop(context);
                                       },
                                       positiveButtonText: "Yes",
                                       onPositivePressed: () async {
                                         final response = await attendenceVM
                                             .deletetAttendanceDetails(
-                                            item.id, context);
+                                                item.id, context);
 
-                                        if (response.data!.status ==
-                                            200) {
-                                          // Update local state of widget
+                                        if (response.data!.status == 200) {
+
                                           setState(() {
-                                            // _items?.removeAt(index);
-                                            Navigator.pop(context);
-                                            fetchAttendenceList("", "");
-                                          });
-                                          Utils.flushBarErrorMessage(
-                                              response.data!.mobMessage.toString(), context);
+                                            fetchAttendenceList('', '');
+                                            Utils.toastMessage(response
+                                                .data!.mobMessage
+                                                .toString());
 
-                                        } else
-                                        if (response.data!.result ==
+                                            Navigator.pop(context);
+                                          });
+                                        } else if (response.data!.result ==
                                             Status.error) {
-                                          // Show error message to user
-                                          Utils.flushBarErrorMessage(
-                                              response.data!.mobMessage.toString(), context);
+                                          setState(() {
+                                            _searchResults!.insert(index, item);
+                                            Utils.flushBarErrorMessage(
+                                                response.data!.mobMessage
+                                                    .toString(),
+                                                context);
+                                          });
+
                                         }
-                                      },)
-                                );
-                              }
-                          );
+                                      },
+                                    ));
+                              });
                         },
                         child: buildCard(context, item));
                   },
@@ -342,67 +343,68 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
 
   Card buildCard(BuildContext context, Items item) {
     return Card(
-                          color: Colors.grey.shade100,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.01,
-                              ),
-                              ContainerValue(
-                                text: "Name",
-                                value: ": ${item.employeeFirstName ?? ""}",
-                              ),
-                              Divider(
-                                color: Colors.grey.shade400,
-                              ),
-                              ContainerValue(
-                                text: "EmployeeId",
-                                value: ": ${item.employeeId.toString()}",
-                              ),
-                              Divider(
-                                color: Colors.grey.shade400,
-                              ),
-                              ContainerValue(
-                                text: "Clock In Time",
-                                value: ": ${item.clockInTime != null ? DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(item.clockInTime ?? '')) : ''}",
-                              ),
-                              Divider(
-                                color: Colors.grey.shade400,
-                              ),
-                              ContainerValue(
-                                text: "Clock Out Time",
-                                value: ": ${item.clockOutTime != null ? DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(item.clockOutTime ?? '')) : ''}",
-                              ),
-                              if (calculatedDurations
-                                  .containsKey(item.id))
-                                Divider(
-                                  color: Colors.grey.shade400,
-                                ),
-                              ContainerValue(
-                                text: 'Working Hours',
-                                value: ": ${calculatedDurations[item.id] ?? 'N/A'}",
-                              ),
-                              if (item.reqTimeOff == null)
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.01,
-                                ),
-                              if (item.reqTimeOff != null)
-                              Divider(
-                                color: Colors.grey.shade400,
-                              ),
-                              if (item.reqTimeOff != null)
-                                ContainerValue(
-                                  text: "Outing Time",
-                                  value: ": ${outingTimes[item.id] ?? 'N/A'}", ),
-                              if (item.reqTimeOff != null)
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.01,
-                                ),
-                            ],
-                          ),
-                        );
+      color: Colors.grey.shade100,
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.01,
+          ),
+          ContainerValue(
+            text: "Name",
+            value: ": ${item.employeeFirstName ?? ""}",
+          ),
+          Divider(
+            color: Colors.grey.shade400,
+          ),
+          ContainerValue(
+            text: "EmployeeId",
+            value: ": ${item.employeeId.toString()}",
+          ),
+          Divider(
+            color: Colors.grey.shade400,
+          ),
+          ContainerValue(
+            text: "Clock In Time",
+            value:
+                ": ${item.clockInTime != null ? DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(item.clockInTime ?? '')) : ''}",
+          ),
+          Divider(
+            color: Colors.grey.shade400,
+          ),
+          ContainerValue(
+            text: "Clock Out Time",
+            value:
+                ": ${item.clockOutTime != null ? DateFormat('yyyy-MM-dd HH:mm a').format(DateTime.parse(item.clockOutTime ?? '')) : ''}",
+          ),
+          if (calculatedDurations.containsKey(item.id))
+            Divider(
+              color: Colors.grey.shade400,
+            ),
+          ContainerValue(
+            text: 'Working Hours',
+            value: ": ${calculatedDurations[item.id] ?? 'N/A'}",
+          ),
+          if (item.reqTimeOff == null)
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+          if (item.reqTimeOff != null)
+            Divider(
+              color: Colors.grey.shade400,
+            ),
+          if (item.reqTimeOff != null)
+            ContainerValue(
+              text: "Outing Time",
+              value: ": ${outingTimes[item.id] ?? 'N/A'}",
+            ),
+          if (item.reqTimeOff != null)
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
+            ),
+        ],
+      ),
+    );
   }
-
 
   void _runSearch(String searchTerm) {
     List<Items> results = [];
@@ -435,7 +437,8 @@ class _AttendanceListingsScreenState extends State<AttendanceListingsScreen> {
 
         if (_startDateController.text.isNotEmpty &&
             _endDateController.text.toString().isNotEmpty) {
-          fetchAttendenceList(_startDateController.text, _endDateController.text);
+          fetchAttendenceList(
+              _startDateController.text, _endDateController.text);
         }
       });
     }

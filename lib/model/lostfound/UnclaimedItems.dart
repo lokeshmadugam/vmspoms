@@ -9,7 +9,7 @@ class UnclaimedItems {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -107,33 +107,33 @@ class Items {
 
   Items(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.lostReportUserId,
-        this.lostUnitNo,
-        this.lostLocation,
-        this.lostDescription,
-        this.lostItemName,
-        this.lostDateTime,
-        this.lostItemImgUrl,
-        this.foundBy,
-        this.foundLocation,
-        this.foundDescription,
-        this.foundItemName,
-        this.foundDateTime,
-        this.collectedBy,
-        this.collectedRemarks,
-        this.collectedDateTime,
-        this.receivedBySign,
-        this.foundByItemPic,
-        this.foundUnitNo,
-        this.recStatus,
-        this.recStatusname,
-        this.foundByFirstName,
-        this.foundByLastName,
-        this.collectedByFirstName,
-        this.collectedByLastName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.lostReportUserId,
+      this.lostUnitNo,
+      this.lostLocation,
+      this.lostDescription,
+      this.lostItemName,
+      this.lostDateTime,
+      this.lostItemImgUrl,
+      this.foundBy,
+      this.foundLocation,
+      this.foundDescription,
+      this.foundItemName,
+      this.foundDateTime,
+      this.collectedBy,
+      this.collectedRemarks,
+      this.collectedDateTime,
+      this.receivedBySign,
+      this.foundByItemPic,
+      this.foundUnitNo,
+      this.recStatus,
+      this.recStatusname,
+      this.foundByFirstName,
+      this.foundByLastName,
+      this.collectedByFirstName,
+      this.collectedByLastName});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

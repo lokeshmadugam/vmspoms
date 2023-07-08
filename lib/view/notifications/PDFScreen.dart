@@ -15,14 +15,12 @@ class PDFScreen extends StatefulWidget {
 }
 
 class _PDFScreenState extends State<PDFScreen> {
-
   bool pdfReady = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -79,28 +77,26 @@ class _PDFScreenState extends State<PDFScreen> {
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
         ),
-
-      body: PDFView(
-        filePath: widget.pdfPath,
-        enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageFling: false,
-        /*onRender: (pages) {
+        body: PDFView(
+          filePath: widget.pdfPath,
+          enableSwipe: true,
+          swipeHorizontal: true,
+          autoSpacing: false,
+          pageFling: false,
+          /*onRender: (pages) {
           setState(() {
             pdfReady = true;
           });
         },*/
-        onError: (error) {
-          print(error.toString());
-        },
-        onPageError: (page, error) {
-          print('Error loading page $page: $error');
-        },
-        onViewCreated: (PDFViewController controller) {
-          // TODO: Add custom logic here if needed
-        },
-      )
-    );
+          onError: (error) {
+            print(error.toString());
+          },
+          onPageError: (page, error) {
+            print('Error loading page $page: $error');
+          },
+          onViewCreated: (PDFViewController controller) {
+            // TODO: Add custom logic here if needed
+          },
+        ));
   }
 }

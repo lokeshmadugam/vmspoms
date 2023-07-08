@@ -23,7 +23,9 @@ import '../../utils/Utils.dart';
 
 class SecurityChecksScreen extends StatefulWidget {
   var permisssions;
-  SecurityChecksScreen({Key? key,required this.permisssions}) : super(key: key);
+
+  SecurityChecksScreen({Key? key, required this.permisssions})
+      : super(key: key);
 
   @override
   State<SecurityChecksScreen> createState() => _SecurityChecksScreenState();
@@ -49,6 +51,7 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
   bool isdelete = false;
   bool isview = false;
   bool isupload = false;
+
   @override
   void initState() {
     super.initState();
@@ -69,44 +72,36 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
         .fetchSecurityCheckPoints(userDetails.propertyId);
     fetchSecurityTempLogsList(userDetails.id, roundsId);
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Attendance") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Attendance") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   Future<void> fetchSecurityTempLogsList(var userId, var roundsId) async {
     viewmodel.getSecurityTempLogs(userId, roundsId, context).then((response) {
       if (response.data?.status == 200) {
@@ -239,11 +234,11 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
                               Column(
                                 children: [
                                   Center(
-                                      child: Text(
-                                    'Check In Details :',
-                                    style:
-                   GoogleFonts.roboto(textStyle:TextStyle(fontWeight: FontWeight.bold), )
-                                  )),
+                                      child: Text('Check In Details :',
+                                          style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ))),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.01,
@@ -289,14 +284,15 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
                                               //     .format(DateTime.parse(item
                                               //         .checkinTime
                                               //         .toString()))),
-                    Text(
-                      item
-                          .checkinTime!= null
-                    ? DateFormat('yyyy-MM-dd hh:mm a')
-                        .format(DateTime.parse(item
-                          .checkinTime
-                        .toString()))
-                        : '',),
+                                              Text(
+                                                item.checkinTime != null
+                                                    ? DateFormat(
+                                                            'yyyy-MM-dd hh:mm a')
+                                                        .format(DateTime.parse(
+                                                            item.checkinTime
+                                                                .toString()))
+                                                    : '',
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -360,7 +356,6 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
                     child: Center(
                       child: Text(
                         'Choose Action',
-
                         style: TextStyle(color: Colors.white, fontSize: 16.0),
                       ),
                     ),
@@ -410,7 +405,9 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
                         ),
                         Text(
                           'Take Photo',
-                          style: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.indigo.shade500) ),
+                          style: GoogleFonts.roboto(
+                              textStyle:
+                                  TextStyle(color: Colors.indigo.shade500)),
                         )
                       ],
                     ),
@@ -431,7 +428,9 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
                         ),
                         Text(
                           'QR Code',
-                          style: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.indigo.shade500)),
+                          style: GoogleFonts.roboto(
+                              textStyle:
+                                  TextStyle(color: Colors.indigo.shade500)),
                         )
                       ],
                     ),
@@ -527,7 +526,6 @@ class _SecurityChecksScreenState extends State<SecurityChecksScreen> {
       } else {
         _roundsList[index].imagePath = File("");
       }*/
-
     });
     tempLogsItems[index].checkinLatitude = '${position.latitude}';
     tempLogsItems[index].checkinLongitude = '${position.longitude}';

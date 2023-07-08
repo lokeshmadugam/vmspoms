@@ -26,7 +26,7 @@ class ComplaintsRepo {
       var url = AppUrl.complaints;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = Complaints.fromJson(response);
       return jsonData;
@@ -48,7 +48,7 @@ class ComplaintsRepo {
       var url = AppUrl.configItemsUrl;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = ServiceType.fromJson(response);
       return jsonData;
@@ -57,7 +57,8 @@ class ComplaintsRepo {
     }
   }
 
-  Future<dynamic> getComplaintAssignedToItems(var appUserTypeId, var propertyId) async {
+  Future<dynamic> getComplaintAssignedToItems(
+      var appUserTypeId, var propertyId) async {
     try {
       Map<String, String> queryParameters = {
         'app_user_id': appUserTypeId.toString(),
@@ -71,7 +72,7 @@ class ComplaintsRepo {
       var url = AppUrl.managementOffice;
 
       dynamic response =
-      await _apiService.getQueryResponse(url, token, queryParameters, '');
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = ManagementOffice.fromJson(response);
       return jsonData;
@@ -81,7 +82,6 @@ class ComplaintsRepo {
   }
 
   Future<dynamic> submitComplaint(var data) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -89,8 +89,8 @@ class ComplaintsRepo {
 
       var url = (AppUrl.submitComplaints);
 
-      dynamic response = await _apiService.postApiResponsewithtoken(url,
-          token, data);
+      dynamic response =
+          await _apiService.postApiResponsewithtoken(url, token, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -100,7 +100,6 @@ class ComplaintsRepo {
   }
 
   Future<dynamic> updateComplaint(var data, var complaintid) async {
-
     String id = complaintid.toString();
     String query = "/$id";
 
@@ -112,7 +111,7 @@ class ComplaintsRepo {
       var url = (AppUrl.submitComplaints);
 
       dynamic response =
-      await _apiService.putApiResponsewithtoken(url, token, data, query);
+          await _apiService.putApiResponsewithtoken(url, token, data, query);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -120,6 +119,7 @@ class ComplaintsRepo {
       rethrow;
     }
   }
+
   // Delete Visitor Data
   Future<DeleteResponse> deleteComplaintDetails(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -131,7 +131,7 @@ class ComplaintsRepo {
     // String query = "/$data";
     // var url1 = url+"/$data";
     dynamic response =
-    await _apiService.deleteApiResponsewithtoken(url,token, query);
+        await _apiService.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;
@@ -139,5 +139,4 @@ class ComplaintsRepo {
       throw e;
     }
   }
-
 }

@@ -7,10 +7,10 @@ class ManagementSecurity {
 
   ManagementSecurity(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   ManagementSecurity.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class ManagementSecurity {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -104,19 +104,19 @@ class MgmtSecurityItems {
 
   MgmtSecurityItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.mgmtInhouseServicesId,
-        this.serviceTypeId,
-        this.contactName,
-        this.phoneNo,
-        this.contactPriority,
-        this.remark,
-        this.recStatus,
-        this.mgmtInhouseServicesName,
-        this.serviceTypeName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.mgmtInhouseServicesId,
+      this.serviceTypeId,
+      this.contactName,
+      this.phoneNo,
+      this.contactPriority,
+      this.remark,
+      this.recStatus,
+      this.mgmtInhouseServicesName,
+      this.serviceTypeName,
+      this.recStatusname});
 
   MgmtSecurityItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];

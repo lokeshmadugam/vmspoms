@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,8 +26,6 @@ import '../utils/routes/routes_name.dart';
 import '../viewmodel/LoginViewModel.dart';
 import '../viewmodel/UserViewModel.dart';
 
-
-
 TextStyle getAndroidBodyTextStyle1() {
   return GoogleFonts.roboto(
     fontSize: 14,
@@ -36,6 +33,7 @@ TextStyle getAndroidBodyTextStyle1() {
     color: Colors.black,
   );
 }
+
 TextStyle getSmallAndroidBodyTextStyle1() {
   return GoogleFonts.roboto(
     fontSize: 11,
@@ -43,6 +41,7 @@ TextStyle getSmallAndroidBodyTextStyle1() {
     color: Colors.black,
   );
 }
+
 TextStyle getAndroidBodyTextStyle2() {
   return GoogleFonts.roboto(
     fontSize: 16,
@@ -50,6 +49,7 @@ TextStyle getAndroidBodyTextStyle2() {
     color: Colors.white,
   );
 }
+
 TextStyle getSmallAndroidBodyTextStyle2() {
   return GoogleFonts.roboto(
     fontSize: 14,
@@ -57,6 +57,7 @@ TextStyle getSmallAndroidBodyTextStyle2() {
     color: Colors.white,
   );
 }
+
 TextStyle getAndroidBodyTextStyle3() {
   return GoogleFonts.roboto(
     fontSize: 18,
@@ -64,6 +65,7 @@ TextStyle getAndroidBodyTextStyle3() {
     color: Colors.white,
   );
 }
+
 TextStyle getSmallAndroidBodyTextStyle3() {
   return GoogleFonts.roboto(
     fontSize: 16,
@@ -71,19 +73,15 @@ TextStyle getSmallAndroidBodyTextStyle3() {
     color: Colors.white,
   );
 }
+
 TextStyle getiOSBodyTextStyle1() {
   return GoogleFonts.roboto(
-    fontSize: 14,
-    fontWeight: FontWeight.normal,
-    color: Colors.black
-  );
+      fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black);
 }
+
 TextStyle getSmalliOSBodyTextStyle1() {
   return GoogleFonts.roboto(
-      fontSize: 11,
-      fontWeight: FontWeight.normal,
-      color: Colors.black
-  );
+      fontSize: 11, fontWeight: FontWeight.normal, color: Colors.black);
 }
 
 TextStyle getiOSBodyTextStyle2() {
@@ -93,6 +91,7 @@ TextStyle getiOSBodyTextStyle2() {
     color: Colors.white,
   );
 }
+
 TextStyle getSmalliOSBodyTextStyle2() {
   return GoogleFonts.roboto(
     fontSize: 14,
@@ -108,6 +107,7 @@ TextStyle getiOSBodyTextStyle3() {
     color: Colors.white,
   );
 }
+
 TextStyle getSmalliOSBodyTextStyle3() {
   return GoogleFonts.roboto(
     fontSize: 16,
@@ -115,6 +115,7 @@ TextStyle getSmalliOSBodyTextStyle3() {
     color: Colors.white,
   );
 }
+
 TextStyle getTabsiOSBodyTextStyle3() {
   return GoogleFonts.roboto(
     fontSize: 16,
@@ -122,6 +123,7 @@ TextStyle getTabsiOSBodyTextStyle3() {
     color: Colors.white,
   );
 }
+
 class DeviceUtil {
   static String get _getDeviceType {
     final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
@@ -133,10 +135,9 @@ class DeviceUtil {
   }
 }
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(DeviceUtil.isTablet){
+  if (DeviceUtil.isTablet) {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
 
@@ -145,9 +146,9 @@ void main() async {
     ]).then((value) {
       WidgetsFlutterBinding.ensureInitialized();
 
-      runApp( const MyApp());
+      runApp(const MyApp());
     });
-  }else {
+  } else {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       // Allow portrait orientation when device is upright
@@ -166,7 +167,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -175,38 +175,33 @@ class MyApp extends StatelessWidget {
     TextTheme textTheme;
     if (Theme.of(context).platform == TargetPlatform.android) {
       // For Android platform
-      if(width < 411 || height < 707) {
-        textTheme = GoogleFonts.robotoTextTheme(Theme
-            .of(context)
-            .textTheme).copyWith(
-
+      if (width < 411 || height < 707) {
+        textTheme =
+            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme).copyWith(
           bodySmall: getSmallAndroidBodyTextStyle1(),
           headlineMedium: getSmallAndroidBodyTextStyle2(),
           headlineLarge: getSmallAndroidBodyTextStyle3(),
         );
-      } else{
-        textTheme = GoogleFonts.robotoTextTheme(Theme
-            .of(context)
-            .textTheme).copyWith(
-        bodySmall: getAndroidBodyTextStyle1(),
-    headlineMedium: getAndroidBodyTextStyle2(),
-    headlineLarge: getAndroidBodyTextStyle3(),
+      } else {
+        textTheme =
+            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme).copyWith(
+          bodySmall: getAndroidBodyTextStyle1(),
+          headlineMedium: getAndroidBodyTextStyle2(),
+          headlineLarge: getAndroidBodyTextStyle3(),
         );
       }
     } else {
       // For iOS and other platforms
-      if(width < 411 || height < 707) {
-        textTheme = GoogleFonts.robotoTextTheme(Theme
-            .of(context)
-            .textTheme).copyWith(
+      if (width < 411 || height < 707) {
+        textTheme =
+            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme).copyWith(
           bodySmall: getSmalliOSBodyTextStyle1(),
           headlineMedium: getSmalliOSBodyTextStyle2(),
           headlineLarge: getSmalliOSBodyTextStyle3(),
         );
-      }else {
-        textTheme = GoogleFonts.robotoTextTheme(Theme
-            .of(context)
-            .textTheme).copyWith(
+      } else {
+        textTheme =
+            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme).copyWith(
           bodySmall: getiOSBodyTextStyle1(),
           headlineMedium: getiOSBodyTextStyle2(),
           headlineLarge: getiOSBodyTextStyle3(),
@@ -214,68 +209,56 @@ class MyApp extends StatelessWidget {
       }
     }
 
+    textTheme = textTheme;
 
-     textTheme = textTheme;
-
-
-      return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LoginViewModel()),
-          ChangeNotifierProvider(create: (_) => UserViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => PackageExpectedFormScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => PackageReceivedFormScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => PackageReceivedScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => PackageExpectedScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => SecurityChecksScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => SecurityViewDetailsScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => EditLostDetailsFormScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => LostDetailsFormScreenViewModel()),
-          ChangeNotifierProvider(create: (_) => LostItemsScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => UnclaimedItemsScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => AttendanceListingsScreenViewModel()),
-          ChangeNotifierProvider(
-              create: (_) => ClockInClockOutScreenViewModel()),
-          ChangeNotifierProvider(create: (_) => GreyListFormScreenViewModel()),
-          ChangeNotifierProvider(create: (_) => GreyListingsScreenViewModel()),
-        ],
-
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: MaterialColor(
-              0xFF036CB2,
-              <int, Color>{
-                50: Color(0xFF036CB2),
-                100: Color(0xFF036CB2),
-                200: Color(0xFF036CB2),
-                300: Color(0xFF036CB2),
-                400: Color(0xFF036CB2),
-                500: Color(0xFF036CB2),
-                600: Color(0xFF036CB2),
-                700: Color(0xFF036CB2),
-                800: Color(0xFF036CB2),
-                900: Color(0xFF036CB2),
-              },
-            ),
-            textTheme: textTheme,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(
+            create: (_) => PackageExpectedFormScreenViewModel()),
+        ChangeNotifierProvider(
+            create: (_) => PackageReceivedFormScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => PackageReceivedScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => PackageExpectedScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => SecurityChecksScreenViewModel()),
+        ChangeNotifierProvider(
+            create: (_) => SecurityViewDetailsScreenViewModel()),
+        ChangeNotifierProvider(
+            create: (_) => EditLostDetailsFormScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => LostDetailsFormScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => LostItemsScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => UnclaimedItemsScreenViewModel()),
+        ChangeNotifierProvider(
+            create: (_) => AttendanceListingsScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => ClockInClockOutScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => GreyListFormScreenViewModel()),
+        ChangeNotifierProvider(create: (_) => GreyListingsScreenViewModel()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: MaterialColor(
+            0xFF036CB2,
+            <int, Color>{
+              50: Color(0xFF036CB2),
+              100: Color(0xFF036CB2),
+              200: Color(0xFF036CB2),
+              300: Color(0xFF036CB2),
+              400: Color(0xFF036CB2),
+              500: Color(0xFF036CB2),
+              600: Color(0xFF036CB2),
+              700: Color(0xFF036CB2),
+              800: Color(0xFF036CB2),
+              900: Color(0xFF036CB2),
+            },
           ),
-          debugShowCheckedModeBanner: false,
-          initialRoute: RoutesName.splash,
-          onGenerateRoute: Routes.generateRoute,
-
+          textTheme: textTheme,
         ),
-      );
-
+        debugShowCheckedModeBanner: false,
+        initialRoute: RoutesName.splash,
+        onGenerateRoute: Routes.generateRoute,
+      ),
+    );
   }
 }
-

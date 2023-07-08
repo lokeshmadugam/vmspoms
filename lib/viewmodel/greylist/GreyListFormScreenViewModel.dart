@@ -8,13 +8,11 @@ import '../../repository/greylist/GreyListFormRepository.dart';
 import '../../utils/Utils.dart';
 
 class GreyListFormScreenViewModel extends ChangeNotifier {
-
   final _myRepo = GreyListFormRepository();
 
   ApiResponse<VisitType> visitType = ApiResponse.loading();
   ApiResponse<VehicleType> vehicleType = ApiResponse.loading();
   ApiResponse<PostApiResponse> postApiResponse = ApiResponse.loading();
-
 
   void _setVisitType(ApiResponse<VisitType> response) {
     if (response.data != null) {
@@ -29,7 +27,7 @@ class GreyListFormScreenViewModel extends ChangeNotifier {
         .getVisitType()
         .then((value) => _setVisitType(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setVisitType(ApiResponse.error(error.toString())));
+            _setVisitType(ApiResponse.error(error.toString())));
   }
 
   void _setVehicleType(ApiResponse<VehicleType> response) {
@@ -45,7 +43,7 @@ class GreyListFormScreenViewModel extends ChangeNotifier {
         .getVehicleType()
         .then((value) => _setVehicleType(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setVehicleType(ApiResponse.error(error.toString())));
+            _setVehicleType(ApiResponse.error(error.toString())));
   }
 
   // void _setSubmitGreyListForm(ApiResponse<PostApiResponse> response, BuildContext context) {
@@ -66,14 +64,14 @@ class GreyListFormScreenViewModel extends ChangeNotifier {
   //       _setSubmitGreyListForm(ApiResponse.error(error.toString()), context));
   // }
   //Grey List Registration
-  Future<ApiResponse<PostApiResponse>> submitGreyListForm(var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> submitGreyListForm(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
     try {
       PostApiResponse value = await _myRepo.submitGreyListForm(data);
       response = ApiResponse.success(value);
-
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
       response = ApiResponse.error(error.toString());
@@ -85,15 +83,16 @@ class GreyListFormScreenViewModel extends ChangeNotifier {
 
     return response;
   }
+
   // Update GreyList Data
-  Future<ApiResponse<PostApiResponse>> updateGreyListForm(int id,var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> updateGreyListForm(
+      int id, var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
     try {
       PostApiResponse value = await _myRepo.updateGreyListForm(id, data);
       response = ApiResponse.success(value);
-
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
       response = ApiResponse.error(error.toString());
@@ -105,13 +104,12 @@ class GreyListFormScreenViewModel extends ChangeNotifier {
 
     return response;
   }
-  // Future<void> updateGreyListForm(var greyListId, var data, BuildContext context) async {
-  //   _setSubmitGreyListForm(ApiResponse.loading(), context);
-  //   _myRepo
-  //       .updateGreyListForm(greyListId, data)
-  //       .then((value) => _setSubmitGreyListForm(ApiResponse.success(value), context))
-  //       .onError((error, stackTrace) =>
-  //       _setSubmitGreyListForm(ApiResponse.error(error.toString()), context));
-  // }
-
+// Future<void> updateGreyListForm(var greyListId, var data, BuildContext context) async {
+//   _setSubmitGreyListForm(ApiResponse.loading(), context);
+//   _myRepo
+//       .updateGreyListForm(greyListId, data)
+//       .then((value) => _setSubmitGreyListForm(ApiResponse.success(value), context))
+//       .onError((error, stackTrace) =>
+//       _setSubmitGreyListForm(ApiResponse.error(error.toString()), context));
+// }
 }

@@ -9,7 +9,7 @@ class ClockInClockOutByEmployeeId {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -53,31 +53,31 @@ class Result {
 
   Result(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.userId,
-        this.propertyId,
-        this.employeeId,
-        this.activity,
-        this.clockInTime,
-        this.clockOutTime,
-        this.clockInIp,
-        this.clockOutIp,
-        this.clockInLocation,
-        this.clockOutLocation,
-        this.clockInLatitude,
-        this.clockInLongitude,
-        this.checkOutLatitude,
-        this.checkOutLongitude,
-        this.clockinoutDate,
-        this.remarks,
-        this.imgUrlClockin,
-        this.imgUrlClockout,
-        this.imgUrlRequestTimeOffIntime,
-        this.emailFlag,
-        this.clockIn,
-        this.clockOut,
-        this.reqTime});
+      this.createdBy,
+      this.createdOn,
+      this.userId,
+      this.propertyId,
+      this.employeeId,
+      this.activity,
+      this.clockInTime,
+      this.clockOutTime,
+      this.clockInIp,
+      this.clockOutIp,
+      this.clockInLocation,
+      this.clockOutLocation,
+      this.clockInLatitude,
+      this.clockInLongitude,
+      this.checkOutLatitude,
+      this.checkOutLongitude,
+      this.clockinoutDate,
+      this.remarks,
+      this.imgUrlClockin,
+      this.imgUrlClockout,
+      this.imgUrlRequestTimeOffIntime,
+      this.emailFlag,
+      this.clockIn,
+      this.clockOut,
+      this.reqTime});
 
   Result.fromJson(Map<String, dynamic> json) {
     id = json['id'];

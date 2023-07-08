@@ -5,9 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 class MyDropDown extends StatelessWidget {
   MyDropDown({
     Key? key,
-
-     this.hintText,
-     this.labelText,
+    this.hintText,
+    this.labelText,
     required this.value,
     required this.items,
     required this.onchanged,
@@ -19,7 +18,8 @@ class MyDropDown extends StatelessWidget {
   var value;
   final List<DropdownMenuItem<dynamic>>? items;
   final ValueChanged onchanged;
-bool enabled = false;
+  bool enabled = false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,25 +30,28 @@ bool enabled = false;
             //menuMaxHeight: 200,
 
             decoration: InputDecoration(
-                labelText: labelText,
-                labelStyle:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.normal), ),
-                // Theme.of(context).textTheme.bodyText1,
-              enabled: enabled ,
-                contentPadding:
-                const EdgeInsets.fromLTRB(10,0,0,0),
-                enabledBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                ),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
-
-                ),
-                focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey, width: 0.5),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+              labelText: labelText,
+              labelStyle: GoogleFonts.roboto(
+                textStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal),
+              ),
+              // Theme.of(context).textTheme.bodyText1,
+              enabled: enabled,
+              contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.grey, width: 0.5),
+              ),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.grey, width: 0.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
             ),
             items: items,
             value: value,
@@ -56,7 +59,12 @@ bool enabled = false;
 
             hint: Text(
               hintText.toString(),
-              style: GoogleFonts.roboto(textStyle:TextStyle(color: Colors.grey,fontSize: 13,fontWeight: FontWeight.normal), ),
+              style: GoogleFonts.roboto(
+                textStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal),
+              ),
               // style: Theme.of(context).textTheme.bodyText1,
             ),
             icon: const Icon(

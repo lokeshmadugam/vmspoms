@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:poms_app/model/DeleteResponse.dart';
+import '/model/DeleteResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/network/BaseApiServices.dart';
 import '../../data/network/NetworkApiServices.dart';
@@ -9,14 +9,16 @@ import '../../model/trustednbgh/TrustedNeighboursModel.dart';
 import '../../resources/AppUrl.dart';
 
 class TrustedNeighbourRepository {
-
   final BaseApiServices _apiService = NetworkApiService();
+
 // Get Trusted Neighbours List
   Future<TrustedNeighbourListModel> getTrustedNeighbours(
       String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,
-      int propertyId,int userId) async {
-
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      int userId) async {
     String orderby = orderBy;
     String orderByPN = orderByPropertyName;
     String pagenumber = pageNumber.toString();
@@ -25,15 +27,12 @@ class TrustedNeighbourRepository {
     String userid = userId.toString();
     try {
       Map<String, String> queryParameters = {
-
         'orderBy': orderby,
         'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
         'property_id': propertyid,
-        'user_id':userid
-
-
+        'user_id': userid
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,13 +41,12 @@ class TrustedNeighbourRepository {
 
       var url = AppUrl.trustedNbghByUserIdUrl;
 
-      dynamic response = await _apiService.getQueryResponse(
-          url, token, queryParameters,'');
+      dynamic response =
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = TrustedNeighbourListModel.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -56,9 +54,11 @@ class TrustedNeighbourRepository {
   // Get Trusted Neighbours
   Future<TrustedNeighboursModel> getAllTrustedNeighbour(
       String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,
-      int propertyId,String serach) async {
-
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      String serach) async {
     String orderby = orderBy;
     String orderByPN = orderByPropertyName;
     String pagenumber = pageNumber.toString();
@@ -67,15 +67,12 @@ class TrustedNeighbourRepository {
     String sear = serach;
     try {
       Map<String, String> queryParameters = {
-
         'orderBy': orderby,
         'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
         'propertyId': propertyid,
-        'serach':sear
-
-
+        'serach': sear
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -84,16 +81,16 @@ class TrustedNeighbourRepository {
 
       var url = AppUrl.getAllTrustedNbghUrl;
 
-      dynamic response = await _apiService.getQueryResponse(
-          url, token, queryParameters,'');
+      dynamic response =
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = TrustedNeighboursModel.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
+
   // Add Trusted Neighbours
   Future<PostApiResponse> addTrustedNeighbours(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -101,7 +98,7 @@ class TrustedNeighbourRepository {
     String token = jsonDecode(bearerToken!);
     var url = AppUrl.trustednbghUrl;
     dynamic response =
-    await _apiService.postApiResponsewithtoken(url,token, data);
+        await _apiService.postApiResponsewithtoken(url, token, data);
     try {
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -135,7 +132,7 @@ class TrustedNeighbourRepository {
     String query = "/$id";
     var url = AppUrl.trustedNbghById;
     dynamic response =
-    await _apiService.deleteApiResponsewithtoken(url,token, query);
+        await _apiService.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;
@@ -143,5 +140,4 @@ class TrustedNeighbourRepository {
       throw e;
     }
   }
-
 }

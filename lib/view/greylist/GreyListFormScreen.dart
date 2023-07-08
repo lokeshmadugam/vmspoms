@@ -24,10 +24,9 @@ class GreyListFormScreen extends StatefulWidget {
 }
 
 class _GreyListFormScreenState extends State<GreyListFormScreen> {
-
   final _formKey = GlobalKey<FormState>();
   UserDetails userDetails = UserDetails();
-var greylistVM = GreyListFormScreenViewModel();
+  var greylistVM = GreyListFormScreenViewModel();
   DateTime? _selectedDateTime;
   final _checkInDateController = TextEditingController();
   final _nameController = TextEditingController();
@@ -46,14 +45,15 @@ var greylistVM = GreyListFormScreenViewModel();
   @override
   void initState() {
     super.initState();
-    if(widget.data == null){
+    if (widget.data == null) {
       updatedBy = 0;
     } else {
       items = widget.data;
       updatedBy = items.id;
       _nameController.text = items.visitorName.toString();
       _numberController.text = items.visitorMobileNo.toString();
-      _checkInDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.visitorCheckinDate.toString() ?? ''));
+      _checkInDateController.text = DateFormat('yyyy-MM-dd hh:mm a')
+          .format(DateTime.parse(items.visitorCheckinDate.toString() ?? ''));
       _vehiclePlateController.text = items.vehiclePlateNo.toString();
       _licenseController.text = items.idDrivingLicenseNo.toString();
       _blockReasonController.text = items.blockReason.toString();
@@ -125,9 +125,7 @@ var greylistVM = GreyListFormScreenViewModel();
                 fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Color(0xFF036CB2)
-      ),
-
+          backgroundColor: Color(0xFF036CB2)),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -155,56 +153,56 @@ var greylistVM = GreyListFormScreenViewModel();
                 ),
                 Consumer<GreyListFormScreenViewModel>(
                     builder: (context, model, child) {
-                      if(model.visitType.data != null){
-                        var data = model.visitType.data!.result!.items!;
+                  if (model.visitType.data != null) {
+                    var data = model.visitType.data!.result!.items!;
 
-                        return MyDropDown(
-                            hintText: 'Visit Type', // package from
-                            value: null,
-                            items: data
-                                .map((item) => item.visitType)
-                                .map((visitType) => DropdownMenuItem<String>(
-                              value: visitType,
-                              child: Text(visitType!),
-                            ))
-                                .toList(),
-                            onchanged: (value) {
-                              for(int i=0;i<data.length;i++){
-                                if(data[i].visitType == value){
-                                  visitTypeId = data[i].id;
-                                  break;
-                                }
-                              }
-                            });
-                      }
-                      return Container();
-                    }),
+                    return MyDropDown(
+                        hintText: 'Visit Type', // package from
+                        value: null,
+                        items: data
+                            .map((item) => item.visitType)
+                            .map((visitType) => DropdownMenuItem<String>(
+                                  value: visitType,
+                                  child: Text(visitType!),
+                                ))
+                            .toList(),
+                        onchanged: (value) {
+                          for (int i = 0; i < data.length; i++) {
+                            if (data[i].visitType == value) {
+                              visitTypeId = data[i].id;
+                              break;
+                            }
+                          }
+                        });
+                  }
+                  return Container();
+                }),
                 Consumer<GreyListFormScreenViewModel>(
                     builder: (context, model, child) {
-                      if(model.vehicleType.data != null){
-                        var data = model.vehicleType.data!.result!.items!;
+                  if (model.vehicleType.data != null) {
+                    var data = model.vehicleType.data!.result!.items!;
 
-                        return MyDropDown(
-                            hintText: 'Transport Mode', // package from
-                            value: null,
-                            items: data
-                                .map((item) => item.vehicleType)
-                                .map((vehicleType) => DropdownMenuItem<String>(
-                              value: vehicleType,
-                              child: Text(vehicleType!),
-                            ))
-                                .toList(),
-                            onchanged: (value) {
-                              for(int i=0;i<data.length;i++){
-                                if(data[i].vehicleType == value){
-                                  transportModeId = data[i].id;
-                                  break;
-                                }
-                              }
-                            });
-                      }
-                      return Container();
-                    }),
+                    return MyDropDown(
+                        hintText: 'Transport Mode', // package from
+                        value: null,
+                        items: data
+                            .map((item) => item.vehicleType)
+                            .map((vehicleType) => DropdownMenuItem<String>(
+                                  value: vehicleType,
+                                  child: Text(vehicleType!),
+                                ))
+                            .toList(),
+                        onchanged: (value) {
+                          for (int i = 0; i < data.length; i++) {
+                            if (data[i].vehicleType == value) {
+                              transportModeId = data[i].id;
+                              break;
+                            }
+                          }
+                        });
+                  }
+                  return Container();
+                }),
                 MyTextField(
                     preffixIcon: CupertinoIcons.car,
                     controller: _vehiclePlateController,
@@ -228,85 +226,96 @@ var greylistVM = GreyListFormScreenViewModel();
                   child: PositiveButton(
                       text: 'Submit',
                       onPressed: () {
+                        DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
+                            .parse(_checkInDateController.text.toString());
+                        String formattedDateTime =
+                            DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
 
-                        DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(_checkInDateController.text.toString());
-                        String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
-
-
-
-
-                        if(widget.data == null){
-
+                        if (widget.data == null) {
                           Map<String, dynamic> data = {
-                            "block_reason": _blockReasonController.text.toString(),
+                            "block_reason":
+                                _blockReasonController.text.toString(),
                             "block_req_date": formattedDateTime,
                             "block_request_status": "string",
                             "created_by": userDetails.id,
-                            "id_driving_license_no": _licenseController.text.toString(),
+                            "id_driving_license_no":
+                                _licenseController.text.toString(),
                             "property_id": userDetails.propertyId,
                             "rec_status": userDetails.recStatus,
                             "remarks_by_mgmt_guardhse": "string",
                             "user_id_req_greylist": userDetails.id,
                             "user_type_id_req_block": userDetails.userType,
                             "vehicle_img": "string",
-                            "vehicle_plate_no": _vehiclePlateController.text.toString(),
+                            "vehicle_plate_no":
+                                _vehiclePlateController.text.toString(),
                             "visit_type_id": visitTypeId,
                             "visitor_checkin_date": formattedDateTime,
-                            "visitor_mobile_no": _numberController.text.toString(),
+                            "visitor_mobile_no":
+                                _numberController.text.toString(),
                             "visitor_name": _nameController.text.toString(),
                             "visitor_transport_mode": transportModeId
                           };
-                          greylistVM.submitGreyListForm(data, context).then((value) {
+                          greylistVM
+                              .submitGreyListForm(data, context)
+                              .then((value) {
                             if (value.data!.status == 201) {
                               print('msg = ${value.data!.mobMessage}');
-                              Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
+                              Utils.flushBarErrorMessage(
+                                  "${value.data!.mobMessage}", context);
                             }
                           }).onError((error, stackTrace) {
                             if (kDebugMode) {
-                              Utils.flushBarErrorMessage(error.toString(), context);
+                              Utils.flushBarErrorMessage(
+                                  error.toString(), context);
                               print(error.toString());
                             }
                           });
                         } else {
-
                           Map<String, dynamic> data = {
-                            "block_reason": _blockReasonController.text.toString(),
+                            "block_reason":
+                                _blockReasonController.text.toString(),
                             "block_req_date": formattedDateTime,
                             "block_request_status": "string",
                             "updated_by": userDetails.id,
-                            "id_driving_license_no": _licenseController.text.toString(),
+                            "id_driving_license_no":
+                                _licenseController.text.toString(),
                             "property_id": userDetails.propertyId,
                             "rec_status": userDetails.recStatus,
                             "remarks_by_mgmt_guardhse": "string",
                             "user_id_req_greylist": userDetails.id,
                             "user_type_id_req_block": userDetails.userType,
                             "vehicle_img": "string",
-                            "vehicle_plate_no": _vehiclePlateController.text.toString(),
+                            "vehicle_plate_no":
+                                _vehiclePlateController.text.toString(),
                             "visit_type_id": visitTypeId,
                             "visitor_checkin_date": formattedDateTime,
-                            "visitor_mobile_no": _numberController.text.toString(),
+                            "visitor_mobile_no":
+                                _numberController.text.toString(),
                             "visitor_name": _nameController.text.toString(),
                             "visitor_transport_mode": transportModeId
                           };
-                          greylistVM.updateGreyListForm( items.id! ,data, context).then((value) {
+                          greylistVM
+                              .updateGreyListForm(items.id!, data, context)
+                              .then((value) {
                             if (value.data!.status == 201) {
                               print('msg = ${value.data!.mobMessage}');
-                              Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
-
+                              Utils.flushBarErrorMessage(
+                                  "${value.data!.mobMessage}", context);
                             } else {
-                              Utils.flushBarErrorMessage(" Registration Failed".toString(), context);
+                              Utils.flushBarErrorMessage(
+                                  " Registration Failed".toString(), context);
                             }
                           }).onError((error, stackTrace) {
                             if (kDebugMode) {
-                              Utils.flushBarErrorMessage(error.toString(), context);
+                              Utils.flushBarErrorMessage(
+                                  error.toString(), context);
                               print(error.toString());
                             }
                           });
-                        //   Provider.of<GreyListFormScreenViewModel>(context,
-                        //       listen: false)
-                        //       .updateGreyListForm(items.id, data, context);
+                          //   Provider.of<GreyListFormScreenViewModel>(context,
+                          //       listen: false)
+                          //       .updateGreyListForm(items.id, data, context);
                         }
-
                       }),
                 )
               ],
@@ -333,8 +342,10 @@ var greylistVM = GreyListFormScreenViewModel();
 
       if (selectedTime != null) {
         setState(() {
-          _selectedDateTime = DateTime(selected.year, selected.month, selected.day, selectedTime.hour, selectedTime.minute);
-          controller.text = DateFormat('yyyy-MM-dd hh:mm a').format(_selectedDateTime!);
+          _selectedDateTime = DateTime(selected.year, selected.month,
+              selected.day, selectedTime.hour, selectedTime.minute);
+          controller.text =
+              DateFormat('yyyy-MM-dd hh:mm a').format(_selectedDateTime!);
         });
       }
     }

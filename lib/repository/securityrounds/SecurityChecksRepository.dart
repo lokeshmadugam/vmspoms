@@ -26,7 +26,7 @@ class SecurityChecksRepository {
       var url = (AppUrl.securityCheckPoint);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = SecurityCheckPoint.fromJson(response);
       return jsonData;
@@ -44,7 +44,8 @@ class SecurityChecksRepository {
       final url = (AppUrl.mediaUpload);
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
-      final image = await http.MultipartFile.fromPath('fileToUpload', imagePath);
+      final image =
+          await http.MultipartFile.fromPath('fileToUpload', imagePath);
       request.files.add(image);
 
       dynamic response = await request.send();
@@ -54,14 +55,12 @@ class SecurityChecksRepository {
 
       final jsonData = MediaUpload.fromJson(responseJson);
       return jsonData;
-
     } catch (e) {
       rethrow;
     }
   }
 
   Future<dynamic> submitSecurityChecks(var data) async {
-
     var json = data.map((e) => e.toJson()).toList();
 
     try {
@@ -72,7 +71,7 @@ class SecurityChecksRepository {
       var url = (AppUrl.securityRoundLogs);
 
       dynamic response =
-      await apiServices.postApiResponsewithtoken(url, token, json);
+          await apiServices.postApiResponsewithtoken(url, token, json);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -82,7 +81,6 @@ class SecurityChecksRepository {
   }
 
   Future<dynamic> submitSecurityChecksTemp(var data) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -91,7 +89,7 @@ class SecurityChecksRepository {
       var url = (AppUrl.securityRoundLogsTemp);
 
       dynamic response =
-      await apiServices.postApiResponsewithtoken(url, token, data);
+          await apiServices.postApiResponsewithtoken(url, token, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -114,7 +112,7 @@ class SecurityChecksRepository {
       var url = (AppUrl.securityRoundLogsTemp);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = SecurityViewDetails.fromJson(response);
       return jsonData;
@@ -122,7 +120,4 @@ class SecurityChecksRepository {
       rethrow;
     }
   }
-
-
-
 }

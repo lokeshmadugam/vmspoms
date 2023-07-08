@@ -8,8 +8,9 @@ class PackageStatus {
   PackageStatus.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    result =
-    json['result'] != null ? new PackageResult.fromJson(json['result']) : null;
+    result = json['result'] != null
+        ? new PackageResult.fromJson(json['result'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +36,13 @@ class PackageResult {
 
   PackageResult(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   PackageResult.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -92,18 +93,18 @@ class PackageItems {
 
   PackageItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.configKeyId,
-        this.appUsage,
-        this.configKey,
-        this.keyValue,
-        this.description,
-        this.seqNo,
-        this.isDefault,
-        this.recStatus,
-        this.displayName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.configKeyId,
+      this.appUsage,
+      this.configKey,
+      this.keyValue,
+      this.description,
+      this.seqNo,
+      this.isDefault,
+      this.recStatus,
+      this.displayName,
+      this.recStatusname});
 
   PackageItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];

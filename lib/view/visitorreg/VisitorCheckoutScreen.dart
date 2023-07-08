@@ -21,16 +21,15 @@ class VisitorCheckoutScreen extends StatefulWidget {
   @override
   State<VisitorCheckoutScreen> createState() => _VisitorCheckoutScreenState();
 }
+
 class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
-
-
   var viewModel = InviteVisitorViewModel();
   var userVM = UserViewModel();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController carPlateNumberController = TextEditingController();
   TextEditingController drivingLicenceNumberController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController visitReasonController = TextEditingController();
   TextEditingController numberofvistorsController = TextEditingController();
   TextEditingController arrivalDateController = TextEditingController();
@@ -69,6 +68,7 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
   int id = 0;
   VisitorResult? visitorData;
   String? checkinDate;
+
   @override
   void initState() {
     super.initState();
@@ -90,7 +90,8 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
     super.didChangeDependencies();
     arrivalDateController.text = DateFormat.yMd().format(DateTime.now());
     arrivalTimeController.text = TimeOfDay.now().format(context);
-    checkoutDateController.text =  DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now());
+    checkoutDateController.text =
+        DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now());
   }
 
   Future<void> _initializeScanner() async {
@@ -110,48 +111,49 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
 
   //Favorite Visitors
   void fetchFavoriteVisitorList() async {
-    viewModel..getVisitorDetails(id).then((response) {
-      if (response.data?.status == 200) {
-        if (response.data?.result != null) {
-          var data = response.data!.result;
-          if (data != null) {
-            setState(() {
-              visitorData = data;
-              if (visitorData != null ){
-                nameController.text = visitorData?.visitorName ?? " ";
-                mobilenumberController.text = visitorData?.visitorMobileNo ?? "";
-                carPlateNumberController.text =
-                    visitorData?.vehiclePlateNo ?? '';
-                drivingLicenceNumberController.text =
-                    visitorData?.idDrivingLicenseNo ?? '';
-                numberofvistorsController.text =
-                    visitorData?.noOfVisitor.toString() ?? '';
-                unitNumberController.text =
-                    visitorData?.unitNumber ?? '';
-                String? visitTypeValue =   visitorData?.visitTypeName ?? '';
-                if(visitorData?.parkingRequired.toString() == 'Yes' || visitorData?.isParkingRequired ==1 ){
-
-                  isParkingRequired = true;
-                }
-                if(visitorData?.visitorCheckInOutDate != null){
-                  var data = visitorData?.visitorCheckInOutDate ?? [];
-                  for (var i in data){
-                   checkinDate = i.visitorCheckinDate.toString();
-                   checkinDateController.text = checkinDate.toString();
+    viewModel
+      ..getVisitorDetails(id).then((response) {
+        if (response.data?.status == 200) {
+          if (response.data?.result != null) {
+            var data = response.data!.result;
+            if (data != null) {
+              setState(() {
+                visitorData = data;
+                if (visitorData != null) {
+                  nameController.text = visitorData?.visitorName ?? " ";
+                  mobilenumberController.text =
+                      visitorData?.visitorMobileNo ?? "";
+                  carPlateNumberController.text =
+                      visitorData?.vehiclePlateNo ?? '';
+                  drivingLicenceNumberController.text =
+                      visitorData?.idDrivingLicenseNo ?? '';
+                  numberofvistorsController.text =
+                      visitorData?.noOfVisitor.toString() ?? '';
+                  unitNumberController.text = visitorData?.unitNumber ?? '';
+                  String? visitTypeValue = visitorData?.visitTypeName ?? '';
+                  if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                      visitorData?.isParkingRequired == 1) {
+                    isParkingRequired = true;
                   }
+                  if (visitorData?.visitorCheckInOutDate != null) {
+                    var data = visitorData?.visitorCheckInOutDate ?? [];
+                    for (var i in data) {
+                      checkinDate = i.visitorCheckinDate.toString();
+                      checkinDateController.text = checkinDate.toString();
+                    }
+                  }
+                  // isParkingRequired =   visitorData?.parkingRequired.toString() == 'Yes';
+                  // isParkingRequired = qrData?['Parking Required']?.toString() == 'Yes';
                 }
-                // isParkingRequired =   visitorData?.parkingRequired.toString() == 'Yes';
-                // isParkingRequired = qrData?['Parking Required']?.toString() == 'Yes';
-
-              }
-            });
+              });
+            }
           }
         }
-      }
-    }).catchError((error) {
-      Utils.flushBarErrorMessage("failed", context);
-    });
+      }).catchError((error) {
+        Utils.flushBarErrorMessage("failed", context);
+      });
   }
+
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final userid = value.userDetails?.id;
@@ -313,7 +315,7 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                   id = int.parse(qrData?['Id'] ?? '0');
                   // updateIsParkingRequired(qrData);
                   print('id = $id');
-                  if (id != 0){
+                  if (id != 0) {
                     fetchFavoriteVisitorList();
                   }
                 },
@@ -416,21 +418,21 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
         "visitor_mobile_no": mobilenumberController.text,
         "visitor_name": nameController.text,
         "visitor_registr_date":
-        DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
+            DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
         "visitor_registrstion_status_id": 228,
         "visitor_stay_duration_hours": 0,
         "visitor_stay_enddate":
-        entryType == "One Time" || entryType == "overnight stay"
-            ? DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now())
-            : null,
+            entryType == "One Time" || entryType == "overnight stay"
+                ? DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now())
+                : null,
         "visitor_stay_startdate":
-        entryType == "One Time" || entryType == "overnight stay"
-            ? formattedDate
-            : null,
+            entryType == "One Time" || entryType == "overnight stay"
+                ? formattedDate
+                : null,
         "visitor_transport_mode": vehicleTypeId
       };
 
-      viewModel.updateVisitorRegistration( data,id, context).then((value) {
+      viewModel.updateVisitorRegistration(data, id, context).then((value) {
         if (value.data!.status == 200) {
           print('msg = ${value.data!.mobMessage}');
           Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
@@ -497,10 +499,8 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
@@ -515,7 +515,8 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
+          padding:
+              EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
           child: Column(
             children: [
               Column(
@@ -558,7 +559,8 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                     hintText: 'Car Plate No.',
                     controller: carPlateNumberController,
                     textInputType: TextInputType.text,
-                    preffixIcon: CupertinoIcons.car,),
+                    preffixIcon: CupertinoIcons.car,
+                  ),
                   // SizedBox(
                   //   height: MediaQuery.of(context).size.height * 0.01,
                   // ),
@@ -577,40 +579,40 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         Consumer<InviteVisitorViewModel>(
                             builder: (context, viewModel, _) {
-                              if (viewModel.visitTypeResponse.status ==
-                                  Status.loading) {
-                                return Center(
-                                  // child: CircularProgressIndicator(
-                                  //   valueColor:
-                                  //   AlwaysStoppedAnimation<Color>(Colors.amber),
-                                  // ),
+                          if (viewModel.visitTypeResponse.status ==
+                              Status.loading) {
+                            return Center(
+                                // child: CircularProgressIndicator(
+                                //   valueColor:
+                                //   AlwaysStoppedAnimation<Color>(Colors.amber),
+                                // ),
                                 );
-                              } else if (viewModel.visitTypeResponse.status ==
-                                  Status.error) {
-                                return Center(
-                                  child: Text(viewModel.visitTypeResponse.message
-                                      .toString()),
-                                );
-                              } else if (viewModel.visitTypeResponse.status ==
-                                  Status.success) {
-                                List<DropdownMenuItem<String>>
+                          } else if (viewModel.visitTypeResponse.status ==
+                              Status.error) {
+                            return Center(
+                              child: Text(viewModel.visitTypeResponse.message
+                                  .toString()),
+                            );
+                          } else if (viewModel.visitTypeResponse.status ==
+                              Status.success) {
+                            List<DropdownMenuItem<String>>
                                 dataTypedropdownItems = [];
 
-                                if (viewModel
+                            if (viewModel
                                     .visitTypeResponse.data?.result?.items !=
-                                    null) {
-                                  Set<String> enterprisecategoryNames = Set();
-                                  viewModel.visitTypeResponse.data!.result!.items!
-                                      .forEach((item) {
-                                    if (item.visitType != null) {
-                                      enterprisecategoryNames.add(item.visitType!);
-                                    }
-                                  });
+                                null) {
+                              Set<String> enterprisecategoryNames = Set();
+                              viewModel.visitTypeResponse.data!.result!.items!
+                                  .forEach((item) {
+                                if (item.visitType != null) {
+                                  enterprisecategoryNames.add(item.visitType!);
+                                }
+                              });
 
-                                  dataTypedropdownItems.addAll(
-                                    enterprisecategoryNames
-                                        .map(
-                                          (visitType) => DropdownMenuItem<String>(
+                              dataTypedropdownItems.addAll(
+                                enterprisecategoryNames
+                                    .map(
+                                      (visitType) => DropdownMenuItem<String>(
                                         value: visitType,
                                         child: Text(
                                           visitType,
@@ -618,57 +620,57 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                                         ),
                                       ),
                                     )
-                                        .toList(),
-                                  );
-                                }
+                                    .toList(),
+                              );
+                            }
 
-                                if (dataTypedropdownItems.length == 1) {
-                                  dataTypedropdownItems.add(
-                                    DropdownMenuItem<String>(
-                                      value: 'no_item',
-                                      child: Text('No item'),
-                                    ),
-                                  );
-                                }
-                                String? visitTypeValue =
-                                    visitorData?.visitTypeName ?? '';
-                                entryType = visitTypeValue ?? '';
-                                if (visitTypeValue.isEmpty) {
-                                  visitTypeValue =
-                                      dataTypedropdownItems.first.value;
-                                }
-                                return MyDropDown(
-                                  hintText: 'Select Entry Type',
-                                  value: visitTypeValue,
-                                  // Set the initial value from qrData
-                                  labelText: 'Entry Type',
-                                  items: dataTypedropdownItems,
-                                  onchanged: (value) {
-                                    setState(() {
-                                      // Update the selected value and perform any other necessary actions
-                                      finalvalue = value.toString();
+                            if (dataTypedropdownItems.length == 1) {
+                              dataTypedropdownItems.add(
+                                DropdownMenuItem<String>(
+                                  value: 'no_item',
+                                  child: Text('No item'),
+                                ),
+                              );
+                            }
+                            String? visitTypeValue =
+                                visitorData?.visitTypeName ?? '';
+                            entryType = visitTypeValue ?? '';
+                            if (visitTypeValue.isEmpty) {
+                              visitTypeValue =
+                                  dataTypedropdownItems.first.value;
+                            }
+                            return MyDropDown(
+                              hintText: 'Select Entry Type',
+                              value: visitTypeValue,
+                              // Set the initial value from qrData
+                              labelText: 'Entry Type',
+                              items: dataTypedropdownItems,
+                              onchanged: (value) {
+                                setState(() {
+                                  // Update the selected value and perform any other necessary actions
+                                  finalvalue = value.toString();
 
-                                      visitTypeId = 0;
-                                      for (int i = 0;
+                                  visitTypeId = 0;
+                                  for (int i = 0;
                                       i <
                                           viewModel.visitTypeResponse.data!
                                               .result!.items!.length;
                                       i++) {
-                                        if (value ==
-                                            viewModel.visitTypeResponse.data!
-                                                .result!.items![i].visitType) {
-                                          visitTypeId = viewModel.visitTypeResponse
-                                              .data!.result!.items![i].id!;
-                                          break;
-                                        }
-                                      }
-                                    });
-                                  },
-                                );
-                              }
+                                    if (value ==
+                                        viewModel.visitTypeResponse.data!
+                                            .result!.items![i].visitType) {
+                                      visitTypeId = viewModel.visitTypeResponse
+                                          .data!.result!.items![i].id!;
+                                      break;
+                                    }
+                                  }
+                                });
+                              },
+                            );
+                          }
 
-                              return Text("");
-                            }),
+                          return Text("");
+                        }),
                       ])),
                   // VisitReasonDropdown
                   ChangeNotifierProvider.value(
@@ -676,41 +678,41 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         Consumer<InviteVisitorViewModel>(
                             builder: (context, viewModel, _) {
-                              if (viewModel.visitReasonResponse.status ==
-                                  Status.loading) {
-                                return Center(
-                                  // child: CircularProgressIndicator(
-                                  //   valueColor:
-                                  //   AlwaysStoppedAnimation<Color>(Colors.amber),
-                                  // ),
+                          if (viewModel.visitReasonResponse.status ==
+                              Status.loading) {
+                            return Center(
+                                // child: CircularProgressIndicator(
+                                //   valueColor:
+                                //   AlwaysStoppedAnimation<Color>(Colors.amber),
+                                // ),
                                 );
-                              } else if (viewModel.visitReasonResponse.status ==
-                                  Status.error) {
-                                return Center(
-                                  child: Text(viewModel.visitReasonResponse.message
-                                      .toString()),
-                                );
-                              } else if (viewModel.visitReasonResponse.status ==
-                                  Status.success) {
-                                List<DropdownMenuItem<String>>
+                          } else if (viewModel.visitReasonResponse.status ==
+                              Status.error) {
+                            return Center(
+                              child: Text(viewModel.visitReasonResponse.message
+                                  .toString()),
+                            );
+                          } else if (viewModel.visitReasonResponse.status ==
+                              Status.success) {
+                            List<DropdownMenuItem<String>>
                                 dataTypedropdownItems = [];
 
-                                if (viewModel
+                            if (viewModel
                                     .visitReasonResponse.data?.result?.items !=
-                                    null) {
-                                  Set<String> enterprisecategoryNames = Set();
-                                  viewModel.visitReasonResponse.data!.result!.items!
-                                      .forEach((item) {
-                                    if (item.visitReason != null) {
-                                      enterprisecategoryNames
-                                          .add(item.visitReason!);
-                                    }
-                                  });
+                                null) {
+                              Set<String> enterprisecategoryNames = Set();
+                              viewModel.visitReasonResponse.data!.result!.items!
+                                  .forEach((item) {
+                                if (item.visitReason != null) {
+                                  enterprisecategoryNames
+                                      .add(item.visitReason!);
+                                }
+                              });
 
-                                  dataTypedropdownItems.addAll(
-                                    enterprisecategoryNames
-                                        .map(
-                                          (visitType) => DropdownMenuItem<String>(
+                              dataTypedropdownItems.addAll(
+                                enterprisecategoryNames
+                                    .map(
+                                      (visitType) => DropdownMenuItem<String>(
                                         value: visitType,
                                         child: Text(
                                           visitType,
@@ -718,154 +720,154 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                                         ),
                                       ),
                                     )
-                                        .toList(),
-                                  );
-                                }
+                                    .toList(),
+                              );
+                            }
 
-                                if (dataTypedropdownItems.length == 1) {
-                                  dataTypedropdownItems.add(
-                                    DropdownMenuItem<String>(
-                                      value: 'no_item',
-                                      child: Text('No item'),
-                                    ),
-                                  );
-                                }
-                                String? visitReasonValue =
-                                    visitorData?.vistReason ?? '';
-                                if (visitReasonValue.isEmpty) {
-                                  visitReasonValue =
-                                      dataTypedropdownItems.first.value;
-                                }
-                                return MyDropDown(
-                                  hintText: 'Select Purpose of Visit Reason',
-                                  // value: qrData?['Visit Reason'] != null ? qrData ??['Visit Reason']! : '',
-                                  value: visitReasonValue,
-                                  // qrData?['Visit Reason'],
-                                  labelText: 'Purpose of Visit  ',
-                                  items: dataTypedropdownItems,
-                                  onchanged: (value) {
-                                    setState(() {
-                                      finalvalue1 = value.toString();
+                            if (dataTypedropdownItems.length == 1) {
+                              dataTypedropdownItems.add(
+                                DropdownMenuItem<String>(
+                                  value: 'no_item',
+                                  child: Text('No item'),
+                                ),
+                              );
+                            }
+                            String? visitReasonValue =
+                                visitorData?.vistReason ?? '';
+                            if (visitReasonValue.isEmpty) {
+                              visitReasonValue =
+                                  dataTypedropdownItems.first.value;
+                            }
+                            return MyDropDown(
+                              hintText: 'Select Purpose of Visit Reason',
+                              // value: qrData?['Visit Reason'] != null ? qrData ??['Visit Reason']! : '',
+                              value: visitReasonValue,
+                              // qrData?['Visit Reason'],
+                              labelText: 'Purpose of Visit  ',
+                              items: dataTypedropdownItems,
+                              onchanged: (value) {
+                                setState(() {
+                                  finalvalue1 = value.toString();
 
-                                      visitReasonId = 0;
-                                      for (int i = 0;
+                                  visitReasonId = 0;
+                                  for (int i = 0;
                                       i <
                                           viewModel.visitReasonResponse.data!
                                               .result!.items!.length;
                                       i++) {
-                                        if (value ==
-                                            viewModel.visitReasonResponse.data!
-                                                .result!.items![i].visitReason) {
-                                          visitReasonId = viewModel
-                                              .visitReasonResponse
-                                              .data!
-                                              .result!
-                                              .items![i]
-                                              .id!;
-                                          break;
-                                        }
-                                      }
-                                    });
-                                  },
-                                );
-                              }
+                                    if (value ==
+                                        viewModel.visitReasonResponse.data!
+                                            .result!.items![i].visitReason) {
+                                      visitReasonId = viewModel
+                                          .visitReasonResponse
+                                          .data!
+                                          .result!
+                                          .items![i]
+                                          .id!;
+                                      break;
+                                    }
+                                  }
+                                });
+                              },
+                            );
+                          }
 
-                              return Text("");
-                            }),
+                          return Text("");
+                        }),
                       ])),
 
                   // VehicleTypeDropdown
                   Row(
                     children: [
                       Expanded(
-                        child:
-                        ChangeNotifierProvider.value(
+                        child: ChangeNotifierProvider.value(
                             value: viewModel,
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Consumer<InviteVisitorViewModel>(
                                       builder: (context, viewModel, _) {
-                                        if (viewModel.vehicleTypeResponse.status ==
-                                            Status.loading) {
-                                          return Center(
-                                            // child: CircularProgressIndicator(
-                                            //   valueColor:
-                                            //   AlwaysStoppedAnimation<Color>(Colors.amber),
-                                            // ),
+                                    if (viewModel.vehicleTypeResponse.status ==
+                                        Status.loading) {
+                                      return Center(
+                                          // child: CircularProgressIndicator(
+                                          //   valueColor:
+                                          //   AlwaysStoppedAnimation<Color>(Colors.amber),
+                                          // ),
                                           );
-                                        } else if (viewModel
+                                    } else if (viewModel
                                             .vehicleTypeResponse.status ==
-                                            Status.error) {
-                                          return Center(
-                                            child: Text(viewModel
-                                                .vehicleTypeResponse.message
-                                                .toString()),
-                                          );
-                                        } else if (viewModel
+                                        Status.error) {
+                                      return Center(
+                                        child: Text(viewModel
+                                            .vehicleTypeResponse.message
+                                            .toString()),
+                                      );
+                                    } else if (viewModel
                                             .vehicleTypeResponse.status ==
-                                            Status.success) {
-                                          List<DropdownMenuItem<String>>
+                                        Status.success) {
+                                      List<DropdownMenuItem<String>>
                                           dataTypedropdownItems = [];
 
-                                          if (viewModel.vehicleTypeResponse.data
+                                      if (viewModel.vehicleTypeResponse.data
                                               ?.result?.items !=
-                                              null) {
-                                            Set<String> enterprisecategoryNames =
+                                          null) {
+                                        Set<String> enterprisecategoryNames =
                                             Set();
-                                            viewModel.vehicleTypeResponse.data!
-                                                .result!.items!
-                                                .forEach((item) {
-                                              if (item.vehicleType != null) {
-                                                enterprisecategoryNames
-                                                    .add(item.vehicleType!);
-                                              }
-                                            });
+                                        viewModel.vehicleTypeResponse.data!
+                                            .result!.items!
+                                            .forEach((item) {
+                                          if (item.vehicleType != null) {
+                                            enterprisecategoryNames
+                                                .add(item.vehicleType!);
+                                          }
+                                        });
 
-                                            dataTypedropdownItems.addAll(
-                                              enterprisecategoryNames
-                                                  .map(
-                                                    (vehicleType) =>
+                                        dataTypedropdownItems.addAll(
+                                          enterprisecategoryNames
+                                              .map(
+                                                (vehicleType) =>
                                                     DropdownMenuItem<String>(
-                                                      value: vehicleType,
-                                                      child: Text(
-                                                        vehicleType,
-                                                        style:
+                                                  value: vehicleType,
+                                                  child: Text(
+                                                    vehicleType,
+                                                    style:
                                                         TextStyle(fontSize: 14),
-                                                      ),
-                                                    ),
+                                                  ),
+                                                ),
                                               )
-                                                  .toList(),
-                                            );
-                                          }
+                                              .toList(),
+                                        );
+                                      }
 
-                                          if (dataTypedropdownItems.length == 1) {
-                                            dataTypedropdownItems.add(
-                                              DropdownMenuItem<String>(
-                                                value: 'no_item',
-                                                child: Text('No item'),
-                                              ),
-                                            );
-                                          }
-                                          String? vehicleTypeValue =
-                                              visitorData?.vehicleType ?? '';;
-                                          if (vehicleTypeValue.isEmpty) {
-                                            vehicleTypeValue =
-                                                dataTypedropdownItems.first.value;
-                                          }
-                                          return MyDropDown(
-                                            hintText: 'Select Vehicle Type',
-                                            // value: qrData?['Vehicle Type'] != null ? qrData ??['Vehicle Type']! : '',
-                                            value: vehicleTypeValue,
-                                            // qrData?['Vehicle Type'],
-                                            labelText: 'Vehicle Type',
-                                            items: dataTypedropdownItems,
-                                            onchanged: (value) {
-                                              setState(() {
-                                                finalvalue2 = value.toString();
+                                      if (dataTypedropdownItems.length == 1) {
+                                        dataTypedropdownItems.add(
+                                          DropdownMenuItem<String>(
+                                            value: 'no_item',
+                                            child: Text('No item'),
+                                          ),
+                                        );
+                                      }
+                                      String? vehicleTypeValue =
+                                          visitorData?.vehicleType ?? '';
+                                      ;
+                                      if (vehicleTypeValue.isEmpty) {
+                                        vehicleTypeValue =
+                                            dataTypedropdownItems.first.value;
+                                      }
+                                      return MyDropDown(
+                                        hintText: 'Select Vehicle Type',
+                                        // value: qrData?['Vehicle Type'] != null ? qrData ??['Vehicle Type']! : '',
+                                        value: vehicleTypeValue,
+                                        // qrData?['Vehicle Type'],
+                                        labelText: 'Vehicle Type',
+                                        items: dataTypedropdownItems,
+                                        onchanged: (value) {
+                                          setState(() {
+                                            finalvalue2 = value.toString();
 
-                                                vehicleTypeId = 0;
-                                                for (int i = 0;
+                                            vehicleTypeId = 0;
+                                            for (int i = 0;
                                                 i <
                                                     viewModel
                                                         .vehicleTypeResponse
@@ -874,29 +876,29 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                                                         .items!
                                                         .length;
                                                 i++) {
-                                                  if (value ==
-                                                      viewModel
-                                                          .vehicleTypeResponse
-                                                          .data!
-                                                          .result!
-                                                          .items![i]
-                                                          .vehicleType) {
-                                                    vehicleTypeId = viewModel
-                                                        .vehicleTypeResponse
-                                                        .data!
-                                                        .result!
-                                                        .items![i]
-                                                        .id!;
-                                                    break;
-                                                  }
-                                                }
-                                              });
-                                            },
-                                          );
-                                        }
+                                              if (value ==
+                                                  viewModel
+                                                      .vehicleTypeResponse
+                                                      .data!
+                                                      .result!
+                                                      .items![i]
+                                                      .vehicleType) {
+                                                vehicleTypeId = viewModel
+                                                    .vehicleTypeResponse
+                                                    .data!
+                                                    .result!
+                                                    .items![i]
+                                                    .id!;
+                                                break;
+                                              }
+                                            }
+                                          });
+                                        },
+                                      );
+                                    }
 
-                                        return Text("");
-                                      }),
+                                    return Text("");
+                                  }),
                                 ])),
                       ),
                       SizedBox(
@@ -965,7 +967,6 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                               hintText: 'Arrival Date',
                               prefixIcon: Icon(
                                 Icons.calendar_today,
-
                               ),
                             ),
                           ),
@@ -997,7 +998,6 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                                 hintText: 'Arrival Time',
                                 suffixIcon: Icon(
                                   Icons.access_time,
-
                                 ),
                               ),
                             ),
@@ -1010,10 +1010,9 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.005,
                   ),
-                  if(checkinDate != null || checkinDate.toString().isNotEmpty)
-                  Row(
-                    children: [
-
+                  if (checkinDate != null || checkinDate.toString().isNotEmpty)
+                    Row(
+                      children: [
                         Expanded(
                           child: MyDateField(
                             onPressed: () async {
@@ -1034,34 +1033,33 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                             hintText: 'Checkin Date',
                             labelText: 'Checkin Date',
                             preffixIcon: Icons.calendar_today,
-                            enabled:  false,
+                            enabled: false,
                           ),
                         ),
-                      Expanded(
-                        child: MyDateField(
-                          onPressed: () async {
-                            final DateTime? picked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime(2100),
-                            );
-                            // if (picked != null) {
-                            //   setState(() {
-                            //     checkoutDateController.text =
-                            //         DateFormat.yMd().format(picked);
-                            //   });
-                            // }
-                          },
-                          controller: checkoutDateController,
-                          hintText: 'Checkout Date',
-                          labelText: 'Checkout Date',
-                          preffixIcon: Icons.calendar_today,
+                        Expanded(
+                          child: MyDateField(
+                            onPressed: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100),
+                              );
+                              // if (picked != null) {
+                              //   setState(() {
+                              //     checkoutDateController.text =
+                              //         DateFormat.yMd().format(picked);
+                              //   });
+                              // }
+                            },
+                            controller: checkoutDateController,
+                            hintText: 'Checkout Date',
+                            labelText: 'Checkout Date',
+                            preffixIcon: Icons.calendar_today,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-
+                      ],
+                    ),
 
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.005,
@@ -1108,10 +1106,7 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
                               finalvalue2 = null;
                             });
                           },
-                          text: "Submit"
-
-
-                      ),
+                          text: "Submit"),
                     ),
                   )
                 ],
@@ -1122,8 +1117,4 @@ class _VisitorCheckoutScreenState extends State<VisitorCheckoutScreen> {
       ),
     );
   }
-
-
 }
-
-

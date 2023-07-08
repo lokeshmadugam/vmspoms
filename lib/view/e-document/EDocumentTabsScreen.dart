@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:poms_app/view/e-document/EFormsListingScreen.dart';
-import 'package:poms_app/view/e-document/EPollsListingScreen.dart';
+import '/view/e-document/EFormsListingScreen.dart';
+import '/view/e-document/EPollsListingScreen.dart';
 
 import '../../model/SignInModel.dart';
 
 class EDocumentTabsScreen extends StatefulWidget {
   var data;
- EDocumentTabsScreen({Key? key,required this.data}) : super(key: key);
+
+  EDocumentTabsScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<EDocumentTabsScreen> createState() => _EDocumentTabsScreenState();
@@ -20,45 +21,48 @@ class _EDocumentTabsScreenState extends State<EDocumentTabsScreen> {
   bool eforms = false;
   bool epolling = false;
   var submenu;
+
   @override
   void initState() {
     super.initState();
 
     permissions = widget.data;
-    actionPermissions ();
+    actionPermissions();
   }
 
-  void actionPermissions () async {
-
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "e-Document") && (item.parentSubMenu != null && item.parentSubMenu!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "e-Document") &&
+            (item.parentSubMenu != null && item.parentSubMenu!.isNotEmpty)) {
           submenu = item.parentSubMenu ?? [];
           for (var item in submenu) {
-           if(item.moduleDisplayNameMobile == "EForms" || item.moduleId == 126 ) {
-             eforms = true;
-             // if(item.moduleDisplayNameMobile == "EForms" || item.moduleId == 126 )
-             print("eforms = $eforms");
-           }
-          else if (item.moduleDisplayNameMobile == "EPolling" || item.moduleId == 127){
-             epolling = true;
-             print("efpoll = $epolling");
-
-           }
+            if (item.moduleDisplayNameMobile == "EForms" ||
+                item.moduleId == 126) {
+              eforms = true;
+              // if(item.moduleDisplayNameMobile == "EForms" || item.moduleId == 126 )
+              print("eforms = $eforms");
+            } else if (item.moduleDisplayNameMobile == "EPolling" ||
+                item.moduleId == 127) {
+              epolling = true;
+              print("efpoll = $epolling");
+            }
           }
         }
       }
     });
   }
+
   Widget _getSelectedScreen() {
     switch (_selectedButton) {
       case 'e Forms':
-        return
-
-          EFormsListingScreen(permisssions: submenu,);
+        return EFormsListingScreen(
+          permisssions: submenu,
+        );
       case 'e Polls':
-        return EPollsListingScreen(permisssions: submenu,);
+        return EPollsListingScreen(
+          permisssions: submenu,
+        );
 
       default:
         return Container(); // Return a default screen
@@ -72,12 +76,10 @@ class _EDocumentTabsScreenState extends State<EDocumentTabsScreen> {
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 14;
-
-    }else {
+    } else {
       fontSize = 16;
-
     }
 
     return Scaffold(
@@ -133,86 +135,86 @@ class _EDocumentTabsScreenState extends State<EDocumentTabsScreen> {
           backgroundColor: Color(0xFF036CB2),
         ),
         body: Column(children: [
-          if(eforms && epolling)
-          Container(
-              alignment: Alignment.bottomCenter,
-              color: Color(0xFF036CB2),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                     SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _selectedButton == 'e Forms'
-                                ? Colors.white
-                                : Color(0xFF1883BD),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(35),
-                                    bottomLeft: Radius.circular(0.0))),
-                            // side: BorderSide(width: 1.0,color: Colors.grey),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              _selectedButton = 'e Forms';
-                            });
-                          },
-                          child: Text(
-                            "e Forms",
-                            softWrap: true,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                    fontSize: fontSize,
-                                    color: _selectedButton == "e Forms"
-                                        ? Colors.black
-                                        : Colors.white)),
-                          ),
-                        ),
-                      ),
-                   Expanded(
-                        child: SizedBox(
+          if (eforms && epolling)
+            Container(
+                alignment: Alignment.bottomCenter,
+                color: Color(0xFF036CB2),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
                           height: MediaQuery.of(context).size.height * 0.06,
                           width: MediaQuery.of(context).size.width / 2,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedButton == 'e Polls'
+                              backgroundColor: _selectedButton == 'e Forms'
                                   ? Colors.white
                                   : Color(0xFF1883BD),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0.0),
-                                bottomLeft: Radius.circular(0.0),
-                                topRight: Radius.circular(35.0),
-                                bottomRight: Radius.circular(0.0),
-                              )),
+                                      topLeft: Radius.circular(35),
+                                      bottomLeft: Radius.circular(0.0))),
                               // side: BorderSide(width: 1.0,color: Colors.grey),
                             ),
                             onPressed: () async {
                               setState(() {
-                                _selectedButton = 'e Polls';
+                                _selectedButton = 'e Forms';
                               });
                             },
                             child: Text(
-                              "e Polls",
+                              "e Forms",
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: GoogleFonts.roboto(
                                   textStyle: TextStyle(
                                       fontSize: fontSize,
-                                      color: _selectedButton == "e Polls"
+                                      color: _selectedButton == "e Forms"
                                           ? Colors.black
                                           : Colors.white)),
                             ),
                           ),
                         ),
-                      )
-                    ]),
-              )),
+                        Expanded(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _selectedButton == 'e Polls'
+                                    ? Colors.white
+                                    : Color(0xFF1883BD),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0.0),
+                                  bottomLeft: Radius.circular(0.0),
+                                  topRight: Radius.circular(35.0),
+                                  bottomRight: Radius.circular(0.0),
+                                )),
+                                // side: BorderSide(width: 1.0,color: Colors.grey),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  _selectedButton = 'e Polls';
+                                });
+                              },
+                              child: Text(
+                                "e Polls",
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: fontSize,
+                                        color: _selectedButton == "e Polls"
+                                            ? Colors.black
+                                            : Colors.white)),
+                              ),
+                            ),
+                          ),
+                        )
+                      ]),
+                )),
           Expanded(child: _getSelectedScreen()),
         ]));
   }

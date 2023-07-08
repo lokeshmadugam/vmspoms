@@ -3,14 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/utils/MyTextField.dart';
+import '../../utils/MyTextField.dart';
 import '../../model/visitorreg/VisitorDetailsModel.dart';
 import '../../utils/MyDateField.dart';
 import '../../utils/MyDropdown.dart';
 import '../../utils/positiveButton.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 
 import '../../viewmodel/UserViewModel.dart';
 import '../../viewmodel/visitorregistration/InviteVisitorViewModel.dart';
@@ -29,15 +29,13 @@ class ScanQrcodeScreen extends StatefulWidget {
 }
 
 class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
-
-
   var viewModel = InviteVisitorViewModel();
   var userVM = UserViewModel();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController carPlateNumberController = TextEditingController();
   TextEditingController drivingLicenceNumberController =
-      TextEditingController();
+  TextEditingController();
   TextEditingController visitReasonController = TextEditingController();
   TextEditingController numberofvistorsController = TextEditingController();
   TextEditingController arrivalDateController = TextEditingController();
@@ -76,17 +74,18 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
   int id = 0;
   VisitorResult? visitorData;
   DateTime? arrivalDate;
+  bool ischeckindate = false;
+  DateTime? preregstartDate;
+  DateTime? preregendDate;
+  bool ischeckoutDate = false;
+  bool checkinoutbutton = false;
   @override
   void initState() {
     super.initState();
-    // Call the method to set the values of the text form fields
-    // getqrData();
+
     getUserDetails();
     _initializeScanner();
-    // String? parkingRequired = qrData?['Parking Required']?.toString();
-    // if (parkingRequired == 'Yes') {
-    //   isParkingRequired = true;
-    // }
+
     fetchVisitType();
     fetchVisitReasons();
     fetchVehicleType();
@@ -95,8 +94,13 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    arrivalDateController.text = DateFormat.yMd().format(DateTime.now());
+    DateTime currentDate = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+
+    arrivalDateController.text = formattedDate;
     arrivalTimeController.text = TimeOfDay.now().format(context);
+
+
   }
 
   Future<void> _initializeScanner() async {
@@ -113,7 +117,6 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
       });
     }
   }
-
 
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
@@ -172,6 +175,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
     try {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return Dialog(
             child: Container(
@@ -240,7 +244,10 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                SizedBox(width: 130, child: Text(key ?? '')),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.30,
+                                    child: Text(key ?? '')),
                                 Text(": "),
                                 Expanded(child: Text(value ?? '')),
                               ],
@@ -260,30 +267,19 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                   Navigator.pop(context);
                   Navigator.pop(context);
 
-                  // nameController.text = qrData?['Visitor Name'] ?? '';
-                  // mobilenumberController.text = qrData?['Mobile Number'] ?? '';
-                  // carPlateNumberController.text =
-                  //     qrData?['Vehicle Number'] ?? '';
-                  // drivingLicenceNumberController.text =
-                  //     qrData?['Driving Licence No'] ?? '';
-                  // numberofvistorsController.text =
-                  //     qrData?['Number of Visitors'] ?? '';
-                  // unitNumberController.text =
-                  //     qrData?['Number of Visitors'] ?? '';
-                  // String? visitTypeValue = qrData?['Unit No.'] ?? '';
-                  // isParkingRequired = qrData?['Parking Required']?.toString() == 'Yes';
-                  // isParkingRequired = qrData?['Parking Required']?.toString() == 'Yes';
                   id = int.parse(qrData?['Id'] ?? '0');
-                  // updateIsParkingRequired(qrData);
-                  print('id = $id');
-                  if (id != 0){
-                    setState(() {
-                      fetchFavoriteVisitorList();
-                    });
 
+                  print('id = $id');
+                  if (id != 0) {
+                    setState(() {
+                      fetchVisitorList();
+                    });
                   }
+                  // Navigator.pop(context);
+
                 },
                 child: Text('OK'),
+
               ),
             ],
           );
@@ -310,117 +306,338 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
 
     return data;
   }
+
   // Visitors
-  void fetchFavoriteVisitorList() async {
-    viewModel..getVisitorDetails(id).then((response) {
-      if (response.data?.status == 200) {
-        if (response.data?.result != null) {
-          var data = response.data!.result;
-          if (data != null) {
-            setState(() {
-              visitorData = data;
-              if (visitorData != null ) {
+  void fetchVisitorList() async {
+    viewModel
+      ..getVisitorDetails(id).then((response) {
+        if (response.data?.status == 200) {
+          if (response.data?.result != null) {
+            var data = response.data!.result;
+            if (data != null) {
+              setState(() {
+                visitorData = data;
 
-                DateTime currentDate = DateTime.now();
-                DateTime? visitorArrivalDate = visitorData?.visitorArrivalDate != null
-                    ? DateTime.parse(visitorData!.visitorArrivalDate.toString())
-                    : null;
-                arrivalDate = visitorArrivalDate ;
-                DateTime? date = visitorData?.preregStartDate != null ? DateTime.parse(visitorData!.preregStartDate.toString()): null;
-                DateTime? date1 = visitorData?.preregEndDate != null ? DateTime.parse(visitorData!.preregEndDate.toString()): null;
-                String? visitType =  visitorData?.visitTypeName ?? '';
-                if (visitorArrivalDate != null) {
+                if (visitorData != null) {
+                  // String? visitType = visitorData?.visitTypeName ?? '';
+                  // Get the current date and time
+                  String currentDateTimeString = DateFormat("yyyy-MM-dd").format(DateTime.now()); // Format the current date and time as a string
 
+                  DateFormat dateformatter = DateFormat("yyyy-MM-dd");
+                  DateTime currentDateTime = dateformatter.parse(currentDateTimeString);
+                  String? visitorArrivalDateString = visitorData?.visitorArrivalDate;
 
+                  DateTime? visitorArrivalDate =
+                  visitorArrivalDateString != null ? DateFormat('yyyy-MM-dd').parse(visitorArrivalDateString) : null;
 
-                  if(visitType == "One Time" || visitorData?.visitTypeId == 1) {
-                    nameController.text = visitorData?.visitorName ?? " ";
-                    mobilenumberController.text = visitorData?.visitorMobileNo ?? "";
-                    carPlateNumberController.text =
-                        visitorData?.vehiclePlateNo ?? '';
-                    drivingLicenceNumberController.text =
-                        visitorData?.idDrivingLicenseNo ?? '';
-                    numberofvistorsController.text =
-                        visitorData?.noOfVisitor.toString() ?? '';
-                    unitNumberController.text =
-                        visitorData?.unitNumber ?? '';
-                    String? visitTypeValue = visitorData?.visitTypeName ?? '';
-                    if (visitorData?.parkingRequired.toString() == 'Yes' ||
-                        visitorData?.isParkingRequired == 1) {
-                      isParkingRequired = true;
-                    }
-                  }else {
-                    // Show error messages
-                    if (date != null && currentDate.isBefore(date)) {
-                      Utils.flushBarErrorMessage("Arrival date is tomorrow. Please come tomorrow.", context);
+                  arrivalDate = visitorArrivalDate;
+                  print("arr = $visitorArrivalDate");
+                  print("current = $currentDateTime");
+                  String? preregStartDate = visitorData?.preregStartDate;
+                  String? preregEndDate = visitorData?.preregEndDate;
+                  DateTime? date =   preregStartDate != null ? DateFormat('yyyy-MM-dd').parse(preregStartDate) : null;
+
+                  DateTime? date1 =  preregEndDate != null ? DateFormat('yyyy-MM-dd').parse(preregEndDate) : null;
+
+                  // preregstartDate = date1;
+                  //
+                  // preregendDate = date;
+                  // if(visitorData?.visitorCheckInOutDate == null)
+                  if ((visitorData?.visitTypeName == "One Time" ||
+                      visitorData?.visitTypeId == 1) &&
+                      visitorData?.visitorCheckInOutDate == null) {
+
+                    if ((visitorArrivalDate != null) &&
+                        (visitorArrivalDate == currentDateTime)) {
+                      ischeckindate = true;
+                      nameController.text = visitorData?.visitorName ?? " ";
+                      mobilenumberController.text =
+                          visitorData?.visitorMobileNo ?? "";
+                      carPlateNumberController.text =
+                          visitorData?.vehiclePlateNo ?? '';
+                      drivingLicenceNumberController.text =
+                          visitorData?.idDrivingLicenseNo ?? '';
+                      numberofvistorsController.text =
+                          visitorData?.noOfVisitor.toString() ?? '';
+                      unitNumberController.text = visitorData?.unitNumber ?? '';
+                      notesController.text = visitorData?.remarks ?? " ";
+                      finalvalue = visitorData?.visitTypeName ?? '';
+                      finalvalue1 = visitorData?.vistReason ?? "";
+                      finalvalue2 = visitorData?.vehicleType ?? '';
+                      visitTypeId = visitorData?.visitTypeId ?? 0;
+                      visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                      vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+                      if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                          visitorData?.isParkingRequired == 1) {
+                        isParkingRequired = true;
+                      }
+                      checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
                     } else {
-                      Utils.flushBarErrorMessage("QR code is expired.", context);
+                      // Show error messages
+                      if (visitorArrivalDate != null &&
+                          currentDateTime.isBefore(visitorArrivalDate)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else if (visitorArrivalDate != null &&
+                          currentDateTime.isAfter(visitorArrivalDate)) {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
                     }
                   }
-                  if(visitType == "Overnight Stay" || visitorData?.visitTypeId == 7) {
-                    nameController.text = visitorData?.visitorName ?? " ";
-                    mobilenumberController.text = visitorData?.visitorMobileNo ?? "";
-                    carPlateNumberController.text =
-                        visitorData?.vehiclePlateNo ?? '';
-                    drivingLicenceNumberController.text =
-                        visitorData?.idDrivingLicenseNo ?? '';
-                    numberofvistorsController.text =
-                        visitorData?.noOfVisitor.toString() ?? '';
-                    unitNumberController.text =
-                        visitorData?.unitNumber ?? '';
-                    String? visitTypeValue = visitorData?.visitTypeName ?? '';
-                    if (visitorData?.parkingRequired.toString() == 'Yes' ||
-                        visitorData?.isParkingRequired == 1) {
-                      isParkingRequired = true;
+                  else if ((visitorData?.visitTypeName == "One Time" ||
+                      visitorData?.visitTypeId == 1) &&
+                      visitorData?.visitorCheckInOutDate != null) {
+                    List<VisitorCheckInOutDate>? visitorCheckInOutDates = visitorData?.visitorCheckInOutDate;
+                    String? checkinDate;
+
+                    if (visitorCheckInOutDates != null && visitorCheckInOutDates.isNotEmpty) {
+                      checkinDate =
+                          visitorCheckInOutDates.last.visitorCheckinDate
+                              .toString();
+                      if ((visitorArrivalDate != null) &&
+                          (visitorArrivalDate == currentDateTime)) {
+                        ischeckindate = true;
+                        ischeckoutDate = true;
+                        nameController.text = visitorData?.visitorName ?? " ";
+                        mobilenumberController.text =
+                            visitorData?.visitorMobileNo ?? "";
+                        carPlateNumberController.text =
+                            visitorData?.vehiclePlateNo ?? '';
+                        drivingLicenceNumberController.text =
+                            visitorData?.idDrivingLicenseNo ?? '';
+                        numberofvistorsController.text =
+                            visitorData?.noOfVisitor.toString() ?? '';
+                        unitNumberController.text = visitorData?.unitNumber ?? '';
+                        notesController.text = visitorData?.remarks ?? " ";
+                        finalvalue = visitorData?.visitTypeName ?? '';
+                        finalvalue1 = visitorData?.vistReason ?? "";
+                        finalvalue2 = visitorData?.vehicleType ?? '';
+                        visitTypeId = visitorData?.visitTypeId ?? 0;
+                        visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                        vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+                        if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                            visitorData?.isParkingRequired == 1) {
+                          isParkingRequired = true;
+                        }
+                        checkinDateController.text = checkinDate;
+                        checkoutDateController.text =
+                            DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
+                      } }
+                    else {
+                      // Show error messages
+                      if (visitorArrivalDate != null &&
+                          currentDateTime.isBefore(visitorArrivalDate)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else if (visitorArrivalDate != null &&
+                          currentDateTime.isAfter(visitorArrivalDate)) {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
                     }
+                  }
 
-                    // Show toast message: "Your checkout date is tomorrow."
-                    Utils.flushBarErrorMessage("Your checkout date is tomorrow.", context);
+                  else if ((visitorData?.visitTypeName == "Multiple Entry" ||
+                      visitorData?.visitTypeId == 2) &&
+                      visitorData?.visitorCheckInOutDate == null) {
 
-                  }else {
-                    // Show error messages
-                    if (date != null && currentDate.isBefore(date)) {
-                      Utils.flushBarErrorMessage("Arrival date is tomorrow. Please come tomorrow.", context);
+                    if ((date != null &&
+                        date1 != null &&
+                        currentDate.isAfter(date) &&
+                        currentDate.isBefore(date1))) {
+                      ischeckindate = true;
+                      nameController.text = visitorData?.visitorName ?? " ";
+                      mobilenumberController.text =
+                          visitorData?.visitorMobileNo ?? "";
+                      carPlateNumberController.text =
+                          visitorData?.vehiclePlateNo ?? '';
+                      drivingLicenceNumberController.text =
+                          visitorData?.idDrivingLicenseNo ?? '';
+                      numberofvistorsController.text =
+                          visitorData?.noOfVisitor.toString() ?? '';
+                      unitNumberController.text = visitorData?.unitNumber ?? '';
+                      notesController.text = visitorData?.remarks ?? " ";
+                      finalvalue = visitorData?.visitTypeName ?? '';
+                      finalvalue1 = visitorData?.vistReason ?? "";
+                      finalvalue2 = visitorData?.vehicleType ?? '';
+                      visitTypeId = visitorData?.visitTypeId ?? 0;
+                      visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                      vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+                      checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
+                      if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                          visitorData?.isParkingRequired == 1) {
+                        isParkingRequired = true;
+                      }
                     } else {
-                      Utils.flushBarErrorMessage("QR code is expired.", context);
+                      // Show error messages
+                      if (date != null && currentDateTime.isBefore(date)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else if (date1 != null && currentDateTime.isAfter(date1)) {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
+                    }
+                  }
+                  else if ((visitorData?.visitTypeName == "Multiple Entry" ||
+                      visitorData?.visitTypeId == 2) &&
+                      visitorData?.visitorCheckInOutDate != null) {
+                    List<VisitorCheckInOutDate>? visitorCheckInOutDates = visitorData?.visitorCheckInOutDate;
+                    String? checkinDate;
+                    if ((date != null &&
+                        date1 != null &&
+                        currentDate.isAfter(date) &&
+                        currentDate.isBefore(date1))) {
+                      if (visitorCheckInOutDates != null && visitorCheckInOutDates.isNotEmpty) {
+                        checkinDate =
+                            visitorCheckInOutDates.last.visitorCheckinDate
+                                .toString();
+                        ischeckindate = true;
+                        ischeckoutDate = true;
+
+                        nameController.text = visitorData?.visitorName ?? " ";
+                        mobilenumberController.text =
+                            visitorData?.visitorMobileNo ?? "";
+                        carPlateNumberController.text =
+                            visitorData?.vehiclePlateNo ?? '';
+                        drivingLicenceNumberController.text =
+                            visitorData?.idDrivingLicenseNo ?? '';
+                        numberofvistorsController.text =
+                            visitorData?.noOfVisitor.toString() ?? '';
+                        unitNumberController.text = visitorData?.unitNumber ?? '';
+                        notesController.text = visitorData?.remarks ?? " ";
+                        checkinDateController.text = checkinDate;
+                        finalvalue = visitorData?.visitTypeName ?? '';
+                        finalvalue1 = visitorData?.vistReason ?? "";
+                        finalvalue2 = visitorData?.vehicleType ?? '';
+                        visitTypeId = visitorData?.visitTypeId ?? 0;
+                        visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                        vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+                        checkoutDateController.text =
+                            DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
+                        if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                            visitorData?.isParkingRequired == 1) {
+                          isParkingRequired = true;
+                        }
+                      }
+                    }else {
+                      // Show error messages
+                      if (date != null && currentDateTime.isBefore(date)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else if (date1 != null && currentDateTime.isAfter(date1)) {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
                     }
                   }
 
-                }else{
-                  Utils.flushBarErrorMessage("Visitor Arrival Date is Empty ", context);
-                }
+                  else if ((visitorData?.visitTypeName == "Overnight Stay" ||
+                      visitorData?.visitTypeId == 7) &&
+                      visitorData?.visitorCheckInOutDate == null) {
 
-                if ((visitType == "Multiple Entry" || visitorData?.visitTypeId == 2) &&(date != null && date1 != null && currentDate.isAfter(date) && currentDate.isBefore(date1))) {
-                  // Display the details
-                  nameController.text = visitorData?.visitorName ?? " ";
-                  mobilenumberController.text = visitorData?.visitorMobileNo ?? "";
-                  carPlateNumberController.text = visitorData?.vehiclePlateNo ?? '';
-                  drivingLicenceNumberController.text = visitorData?.idDrivingLicenseNo ?? '';
-                  numberofvistorsController.text = visitorData?.noOfVisitor.toString() ?? '';
-                  unitNumberController.text = visitorData?.unitNumber ?? '';
-
-
-                  if (visitorData?.parkingRequired.toString() == 'Yes' ||
-                      visitorData?.isParkingRequired == 1) {
-                    isParkingRequired = true;
+                    if ((visitorArrivalDate != null) &&
+                        (visitorArrivalDate == currentDateTime)) {
+                      ischeckindate = true;
+                      nameController.text = visitorData?.visitorName ?? " ";
+                      mobilenumberController.text = visitorData?.visitorMobileNo ?? "";
+                      carPlateNumberController.text = visitorData?.vehiclePlateNo ?? '';
+                      drivingLicenceNumberController.text = visitorData?.idDrivingLicenseNo ?? '';
+                      numberofvistorsController.text = visitorData?.noOfVisitor.toString() ?? '';
+                      unitNumberController.text = visitorData?.unitNumber ?? '';
+                      notesController.text = visitorData?.remarks ?? " ";
+                      finalvalue = visitorData?.visitTypeName ?? '';
+                      finalvalue1 = visitorData?.vistReason ?? "";
+                      finalvalue2 = visitorData?.vehicleType ?? '';
+                      visitTypeId = visitorData?.visitTypeId ?? 0;
+                      visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                      vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+                      if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                          visitorData?.isParkingRequired == 1) {
+                        isParkingRequired = true;
+                      }
+                      checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
+                      Utils.flushBarErrorMessage(
+                          "Your checkout date is tomorrow.", context);
+                    } else {
+                      if (visitorArrivalDate != null &&
+                          currentDateTime.isBefore(visitorArrivalDate)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
+                    }
                   }
-                } else {
-                  // Show error messages
-                  if (date != null && currentDate.isBefore(date)) {
-                    Utils.flushBarErrorMessage("Arrival date is tomorrow. Please come tomorrow.", context);
-                  } else {
-                    Utils.flushBarErrorMessage("QR code is expired.", context);
+                  else if ((visitorData?.visitTypeName == "Overnight Stay" ||
+                      visitorData?.visitTypeId == 7) &&
+                      visitorData?.visitorCheckInOutDate != null) {
+                    List<VisitorCheckInOutDate>? visitorCheckInOutDates = visitorData?.visitorCheckInOutDate;
+                    String? checkinDate;
+                    if ((visitorArrivalDate != null) &&
+                        (visitorArrivalDate == currentDateTime)) {
+                      if (visitorCheckInOutDates != null && visitorCheckInOutDates.isNotEmpty) {
+                        checkinDate =
+                            visitorCheckInOutDates.last.visitorCheckinDate
+                                .toString();
+                        ischeckindate = true;
+                        ischeckoutDate = true;
+
+                        nameController.text = visitorData?.visitorName ?? " ";
+                        mobilenumberController.text =
+                            visitorData?.visitorMobileNo ?? "";
+                        carPlateNumberController.text =
+                            visitorData?.vehiclePlateNo ?? '';
+                        drivingLicenceNumberController.text =
+                            visitorData?.idDrivingLicenseNo ?? '';
+                        numberofvistorsController.text =
+                            visitorData?.noOfVisitor.toString() ?? '';
+                        unitNumberController.text = visitorData?.unitNumber ?? '';
+                        notesController.text = visitorData?.remarks ?? " ";
+                        finalvalue = visitorData?.visitTypeName ?? '';
+                        finalvalue1 = visitorData?.vistReason ?? "";
+                        finalvalue2 = visitorData?.vehicleType ?? '';
+                        visitTypeId = visitorData?.visitTypeId ?? 0;
+                        visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                        vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+                        checkinDateController.text = checkinDate;
+                        checkoutDateController.text =
+                            DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
+                        if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                            visitorData?.isParkingRequired == 1) {
+                          isParkingRequired = true;
+                        }
+                      }
+                    }else {
+                      if (visitorArrivalDate != null &&
+                          currentDateTime.isBefore(visitorArrivalDate)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
+                    }
                   }
+
                 }
-              }
-            });
+              });
+            }
           }
         }
-      }
-    }).catchError((error) {
-      Utils.flushBarErrorMessage("failed", context);
-    });
+      }).catchError((error) {
+        Utils.flushBarErrorMessage("failed", context);
+      });
   }
+
   void submitRegisterDetails() async {
     if (nameController.text.isEmpty) {
       Utils.flushBarErrorMessage('Name can\'t be empty', context);
@@ -460,22 +677,41 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
       // if (entryType == "One Time" || entryType == "overnight stay"){
       //
       // }
-      DateTime date = DateFormat.yMd().parse(arrivalDateController.text);
-      DateFormat formatter = DateFormat('yyyy-MM-dd');
+      //
+      String? arrivaldate;
+      String? checkinFormatteddate;
+      String? checkoutFormatteddate;
+      if (arrivalDateController.text.isNotEmpty) {
+        DateTime dateTime1 = DateFormat('yyyy-MM-dd')
+            .parse(arrivalDateController.text.toString());
+        arrivaldate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime1);
+      }
 
-      String formattedDate = formatter.format(date);
-      DateTime checkindate = DateFormat.yMd().parse(arrivalDateController.text);
-      DateFormat checkinformatter = DateFormat("yyyy-MM-ddTHH:mm:ss");
-      String checkinFormatteddate = checkinformatter.format(checkindate);
+
+      if (checkinDateController.text.isNotEmpty) {
+        DateTime checkinformatter = DateFormat('yyyy-MM-dd hh:mm a')
+            .parse(checkinDateController.text.toString());
+        checkinFormatteddate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(checkinformatter);
+        print(" checkindate= $checkinFormatteddate");
+      }
+      // checkoutdate
+
+      if (checkoutDateController.text.isNotEmpty) {
+        DateTime checkoutformatter = DateFormat('yyyy-MM-dd hh:mm a')
+            .parse(checkoutDateController.text.toString());
+        checkoutFormatteddate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(checkoutformatter);
+        print("checkout =$checkoutFormatteddate");
+      }
+
       Map<String, dynamic> data = {
         "block_name": blockName,
         "id_driving_license_no": drivingLicenceNumberController.text,
         "is_parking_required": isParkingRequired ? 1 : 0,
         "is_preregistered": registeredid,
         "no_of_visitor": numberofvisitors,
-        "prereg_end_date": "2023-05-09T09:41:42.224Z",
+        "prereg_end_date": visitorData?.preregEndDate,
         "prereg_reqdate_mgmt_approve_status": 0,
-        "prereg_start_date": "2023-05-09T09:41:42.224Z",
+        "prereg_start_date": visitorData?.preregStartDate,
         "property_id": 10000002,
         "rec_status": "8",
         "registration_qrcode": "string",
@@ -489,26 +725,23 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
         "vehicle_plate_no": carPlateNumberController.text,
         "visit_reason_id": visitReasonId,
         "visit_type_id": visitTypeId,
-        "visitor_arrival_date": formattedDate,
+        "visitor_arrival_date": arrivaldate,
         "visitor_arrival_time": arrivalTimeController.text,
         "visitor_mobile_no": mobilenumberController.text,
         "visitor_name": nameController.text,
         "visitor_registr_date":
-            DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
+        DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
         "visitor_registrstion_status_id": 228,
         "visitor_stay_duration_hours": 0,
         "visitor_stay_enddate":
-            entryType == "One Time" || entryType == "overnight stay"
-                ? DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now())
-                : null,
-        "visitor_stay_startdate":checkinFormatteddate,
-            // entryType == "One Time" || entryType == "overnight stay"
-            //     ? formattedDate
-            //     : null,
+        checkoutFormatteddate ,
+        "visitor_stay_startdate":
+        checkinFormatteddate ,
+
         "visitor_transport_mode": vehicleTypeId
       };
 
-      viewModel.updateVisitorRegistration( data,id, context).then((value) {
+      viewModel.updateVisitorRegistration(data, id, context).then((value) {
         if (value.data!.status == 200) {
           print('msg = ${value.data!.mobMessage}');
           Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
@@ -536,7 +769,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
     arrivalDateController.dispose();
     arrivalTimeController.dispose();
     durationController.dispose();
-   checkinDateController.dispose();
+    checkinDateController.dispose();
     checkoutDateController.dispose();
     mobilenumberController.dispose();
     notesController.dispose();
@@ -548,7 +781,8 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
+          padding:
+          EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 8.0),
           child: Column(
             children: [
               Column(
@@ -568,7 +802,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                   //   height: MediaQuery.of(context).size.height * 0.01,
                   // ),
                   MyTextField(
-                    labelText: 'Unit No.',
+                      labelText: 'Unit No.',
                       hintText: 'Unit No.',
                       controller: unitNumberController,
                       textInputType: TextInputType.text,
@@ -588,120 +822,112 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                   ),
                   MyTextField(
                     labelText: 'Car Plate No.',
-                      hintText: 'Car Plate No.',
-                      controller: carPlateNumberController,
-                      textInputType: TextInputType.text,
-                      preffixIcon: CupertinoIcons.car,),
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.height * 0.01,
-                  // ),
+                    hintText: 'Car Plate No.',
+                    controller: carPlateNumberController,
+                    textInputType: TextInputType.text,
+                    preffixIcon: CupertinoIcons.car,
+                  ),
+
                   MyTextField(
-                    labelText: 'ID/Driving License No',
+                      labelText: 'ID/Driving License No',
                       hintText: 'ID/Driving License No',
                       controller: drivingLicenceNumberController,
                       textInputType: TextInputType.text,
                       preffixIcon: Icons.credit_card_rounded),
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.height * 0.01,
-                  // ),
+
                   // VisitTypeDropdown
                   ChangeNotifierProvider.value(
                       value: viewModel,
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         Consumer<InviteVisitorViewModel>(
                             builder: (context, viewModel, _) {
-                          if (viewModel.visitTypeResponse.status ==
-                              Status.loading) {
-                            return Center(
-                                // child: CircularProgressIndicator(
-                                //   valueColor:
-                                //   AlwaysStoppedAnimation<Color>(Colors.amber),
-                                // ),
+                              if (viewModel.visitTypeResponse.status ==
+                                  Status.loading) {
+
+                              } else if (viewModel.visitTypeResponse.status ==
+                                  Status.error) {
+                                return Center(
+                                  child: Text(viewModel.visitTypeResponse.message
+                                      .toString()),
                                 );
-                          } else if (viewModel.visitTypeResponse.status ==
-                              Status.error) {
-                            return Center(
-                              child: Text(viewModel.visitTypeResponse.message
-                                  .toString()),
-                            );
-                          } else if (viewModel.visitTypeResponse.status ==
-                              Status.success) {
-                            List<DropdownMenuItem<String>>
+                              } else if (viewModel.visitTypeResponse.status ==
+                                  Status.success) {
+                                List<DropdownMenuItem<String>>
                                 dataTypedropdownItems = [];
 
-                            if (viewModel
+                                if (viewModel
                                     .visitTypeResponse.data?.result?.items !=
-                                null) {
-                              Set<String> enterprisecategoryNames = Set();
-                              viewModel.visitTypeResponse.data!.result!.items!
-                                  .forEach((item) {
-                                if (item.visitType != null) {
-                                  enterprisecategoryNames.add(item.visitType!);
-                                }
-                              });
+                                    null) {
+                                  Set<String> enterprisecategoryNames = Set();
+                                  viewModel.visitTypeResponse.data!.result!.items!
+                                      .forEach((item) {
+                                    if (item.visitType != null) {
+                                      enterprisecategoryNames.add(item.visitType!);
+                                    }
+                                  });
 
-                              dataTypedropdownItems.addAll(
-                                enterprisecategoryNames
-                                    .map(
-                                      (visitType) => DropdownMenuItem<String>(
+                                  dataTypedropdownItems.addAll(
+                                    enterprisecategoryNames
+                                        .map(
+                                          (visitType) => DropdownMenuItem<String>(
                                         value: visitType,
                                         child: Text(
                                           visitType,
-                                          style: TextStyle(fontSize: 14),
+                                          style: Theme.of(context).textTheme.bodySmall,
                                         ),
                                       ),
                                     )
-                                    .toList(),
-                              );
-                            }
+                                        .toList(),
+                                  );
+                                }
 
-                            if (dataTypedropdownItems.length == 1) {
-                              dataTypedropdownItems.add(
-                                DropdownMenuItem<String>(
-                                  value: 'no_item',
-                                  child: Text('No item'),
-                                ),
-                              );
-                            }
-                            String? visitTypeValue =
-                                visitorData?.visitTypeName ?? '';
-                            entryType = visitTypeValue ?? '';
-                            if (visitTypeValue.isEmpty) {
-                              visitTypeValue =
-                                  dataTypedropdownItems.first.value;
-                            }
-                            return MyDropDown(
-                              hintText: 'Select Entry Type',
-                              value: visitTypeValue,
-                              // Set the initial value from qrData
-                              labelText: 'Entry Type',
-                              items: dataTypedropdownItems,
-                              onchanged: (value) {
-                                setState(() {
-                                  // Update the selected value and perform any other necessary actions
-                                  finalvalue = value.toString();
+                                if (dataTypedropdownItems.length == 1) {
+                                  dataTypedropdownItems.add(
+                                    DropdownMenuItem<String>(
+                                      value: 'no_item',
+                                      child: Text('No item'),
+                                    ),
+                                  );
+                                }
+                                String? visitTypeValue =
+                                    visitorData?.visitTypeName ?? '';
+                                entryType = visitTypeValue ?? '';
+                                if (visitTypeValue.isEmpty) {
+                                  visitTypeValue =
+                                      dataTypedropdownItems.first.value;
+                                }
+                                return MyDropDown(
+                                  hintText: 'Select Entry Type',
+                                  value: visitTypeValue,
+                                  // Set the initial value from qrData
+                                  labelText: 'Entry Type',
+                                  items: dataTypedropdownItems,
+                                  onchanged: (value) {
+                                    setState(() {
+                                      // Update the selected value and perform any other necessary actions
+                                      finalvalue = value.toString();
 
-                                  visitTypeId = 0;
-                                  for (int i = 0;
+                                      visitTypeId = 0;
+                                      for (int i = 0;
                                       i <
                                           viewModel.visitTypeResponse.data!
                                               .result!.items!.length;
                                       i++) {
-                                    if (value ==
-                                        viewModel.visitTypeResponse.data!
-                                            .result!.items![i].visitType) {
-                                      visitTypeId = viewModel.visitTypeResponse
-                                          .data!.result!.items![i].id!;
-                                      break;
-                                    }
-                                  }
-                                });
-                              },
-                            );
-                          }
+                                        if (value ==
+                                            viewModel.visitTypeResponse.data!
+                                                .result!.items![i].visitType) {
+                                          visitTypeId = viewModel.visitTypeResponse
+                                              .data!.result!.items![i].id!;
+                                          break;
+                                        }
+                                      }
+                                    });
+                                  },
+                                );
+                              }
 
-                          return Text("");
-                        }),
+                              return Text("");
+                            }),
                       ])),
                   // VisitReasonDropdown
                   ChangeNotifierProvider.value(
@@ -709,196 +935,194 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         Consumer<InviteVisitorViewModel>(
                             builder: (context, viewModel, _) {
-                          if (viewModel.visitReasonResponse.status ==
-                              Status.loading) {
-                            return Center(
-                                // child: CircularProgressIndicator(
-                                //   valueColor:
-                                //   AlwaysStoppedAnimation<Color>(Colors.amber),
-                                // ),
+                              if (viewModel.visitReasonResponse.status ==
+                                  Status.loading) {
+                                return Center(
+
                                 );
-                          } else if (viewModel.visitReasonResponse.status ==
-                              Status.error) {
-                            return Center(
-                              child: Text(viewModel.visitReasonResponse.message
-                                  .toString()),
-                            );
-                          } else if (viewModel.visitReasonResponse.status ==
-                              Status.success) {
-                            List<DropdownMenuItem<String>>
+                              } else if (viewModel.visitReasonResponse.status ==
+                                  Status.error) {
+                                return Center(
+                                  child: Text(viewModel.visitReasonResponse.message
+                                      .toString()),
+                                );
+                              } else if (viewModel.visitReasonResponse.status ==
+                                  Status.success) {
+                                List<DropdownMenuItem<String>>
                                 dataTypedropdownItems = [];
 
-                            if (viewModel
+                                if (viewModel
                                     .visitReasonResponse.data?.result?.items !=
-                                null) {
-                              Set<String> enterprisecategoryNames = Set();
-                              viewModel.visitReasonResponse.data!.result!.items!
-                                  .forEach((item) {
-                                if (item.visitReason != null) {
-                                  enterprisecategoryNames
-                                      .add(item.visitReason!);
-                                }
-                              });
+                                    null) {
+                                  Set<String> enterprisecategoryNames = Set();
+                                  viewModel.visitReasonResponse.data!.result!.items!
+                                      .forEach((item) {
+                                    if (item.visitReason != null) {
+                                      enterprisecategoryNames
+                                          .add(item.visitReason!);
+                                    }
+                                  });
 
-                              dataTypedropdownItems.addAll(
-                                enterprisecategoryNames
-                                    .map(
-                                      (visitType) => DropdownMenuItem<String>(
+                                  dataTypedropdownItems.addAll(
+                                    enterprisecategoryNames
+                                        .map(
+                                          (visitType) => DropdownMenuItem<String>(
                                         value: visitType,
                                         child: Text(
                                           visitType,
-                                          style: TextStyle(fontSize: 14),
+                                          style: Theme.of(context).textTheme.bodySmall,
                                         ),
                                       ),
                                     )
-                                    .toList(),
-                              );
-                            }
+                                        .toList(),
+                                  );
+                                }
 
-                            if (dataTypedropdownItems.length == 1) {
-                              dataTypedropdownItems.add(
-                                DropdownMenuItem<String>(
-                                  value: 'no_item',
-                                  child: Text('No item'),
-                                ),
-                              );
-                            }
-                            String? visitReasonValue =
-                                visitorData?.vistReason ?? '';
-                            if (visitReasonValue.isEmpty) {
-                              visitReasonValue =
-                                  dataTypedropdownItems.first.value;
-                            }
-                            return MyDropDown(
-                              hintText: 'Select Purpose of Visit Reason',
-                              // value: qrData?['Visit Reason'] != null ? qrData ??['Visit Reason']! : '',
-                              value: visitReasonValue,
-                              // qrData?['Visit Reason'],
-                              labelText: 'Purpose of Visit  ',
-                              items: dataTypedropdownItems,
-                              onchanged: (value) {
-                                setState(() {
-                                  finalvalue1 = value.toString();
+                                if (dataTypedropdownItems.length == 1) {
+                                  dataTypedropdownItems.add(
+                                    DropdownMenuItem<String>(
+                                      value: 'no_item',
+                                      child: Text('No item'),
+                                    ),
+                                  );
+                                }
+                                String? visitReasonValue =
+                                    visitorData?.vistReason ?? '';
+                                if (visitReasonValue.isEmpty) {
+                                  visitReasonValue =
+                                      dataTypedropdownItems.first.value;
+                                }
+                                return MyDropDown(
+                                  hintText: 'Select Purpose of Visit Reason',
+                                  // value: qrData?['Visit Reason'] != null ? qrData ??['Visit Reason']! : '',
+                                  value: visitReasonValue,
+                                  // qrData?['Visit Reason'],
+                                  labelText: 'Purpose of Visit  ',
+                                  items: dataTypedropdownItems,
+                                  onchanged: (value) {
+                                    setState(() {
+                                      finalvalue1 = value.toString();
 
-                                  visitReasonId = 0;
-                                  for (int i = 0;
+                                      visitReasonId = 0;
+                                      for (int i = 0;
                                       i <
                                           viewModel.visitReasonResponse.data!
                                               .result!.items!.length;
                                       i++) {
-                                    if (value ==
-                                        viewModel.visitReasonResponse.data!
-                                            .result!.items![i].visitReason) {
-                                      visitReasonId = viewModel
-                                          .visitReasonResponse
-                                          .data!
-                                          .result!
-                                          .items![i]
-                                          .id!;
-                                      break;
-                                    }
-                                  }
-                                });
-                              },
-                            );
-                          }
+                                        if (value ==
+                                            viewModel.visitReasonResponse.data!
+                                                .result!.items![i].visitReason) {
+                                          visitReasonId = viewModel
+                                              .visitReasonResponse
+                                              .data!
+                                              .result!
+                                              .items![i]
+                                              .id!;
+                                          break;
+                                        }
+                                      }
+                                    });
+                                  },
+                                );
+                              }
 
-                          return Text("");
-                        }),
+                              return Text("");
+                            }),
                       ])),
 
                   // VehicleTypeDropdown
                   Row(
                     children: [
                       Expanded(
-                        child: 
-                        ChangeNotifierProvider.value(
+                        child: ChangeNotifierProvider.value(
                             value: viewModel,
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Consumer<InviteVisitorViewModel>(
                                       builder: (context, viewModel, _) {
-                                    if (viewModel.vehicleTypeResponse.status ==
-                                        Status.loading) {
-                                      return Center(
-                                          // child: CircularProgressIndicator(
-                                          //   valueColor:
-                                          //   AlwaysStoppedAnimation<Color>(Colors.amber),
-                                          // ),
+                                        if (viewModel.vehicleTypeResponse.status ==
+                                            Status.loading) {
+                                          return Center(
+                                            // child: CircularProgressIndicator(
+                                            //   valueColor:
+                                            //   AlwaysStoppedAnimation<Color>(Colors.amber),
+                                            // ),
                                           );
-                                    } else if (viewModel
+                                        } else if (viewModel
                                             .vehicleTypeResponse.status ==
-                                        Status.error) {
-                                      return Center(
-                                        child: Text(viewModel
-                                            .vehicleTypeResponse.message
-                                            .toString()),
-                                      );
-                                    } else if (viewModel
+                                            Status.error) {
+                                          return Center(
+                                            child: Text(viewModel
+                                                .vehicleTypeResponse.message
+                                                .toString()),
+                                          );
+                                        } else if (viewModel
                                             .vehicleTypeResponse.status ==
-                                        Status.success) {
-                                      List<DropdownMenuItem<String>>
+                                            Status.success) {
+                                          List<DropdownMenuItem<String>>
                                           dataTypedropdownItems = [];
 
-                                      if (viewModel.vehicleTypeResponse.data
+                                          if (viewModel.vehicleTypeResponse.data
                                               ?.result?.items !=
-                                          null) {
-                                        Set<String> enterprisecategoryNames =
+                                              null) {
+                                            Set<String> enterprisecategoryNames =
                                             Set();
-                                        viewModel.vehicleTypeResponse.data!
-                                            .result!.items!
-                                            .forEach((item) {
-                                          if (item.vehicleType != null) {
-                                            enterprisecategoryNames
-                                                .add(item.vehicleType!);
-                                          }
-                                        });
+                                            viewModel.vehicleTypeResponse.data!
+                                                .result!.items!
+                                                .forEach((item) {
+                                              if (item.vehicleType != null) {
+                                                enterprisecategoryNames
+                                                    .add(item.vehicleType!);
+                                              }
+                                            });
 
-                                        dataTypedropdownItems.addAll(
-                                          enterprisecategoryNames
-                                              .map(
-                                                (vehicleType) =>
+                                            dataTypedropdownItems.addAll(
+                                              enterprisecategoryNames
+                                                  .map(
+                                                    (vehicleType) =>
                                                     DropdownMenuItem<String>(
-                                                  value: vehicleType,
-                                                  child: Text(
-                                                    vehicleType,
-                                                    style:
-                                                        TextStyle(fontSize: 14),
-                                                  ),
-                                                ),
+                                                      value: vehicleType,
+                                                      child: Text(
+                                                        vehicleType,
+                                                        style:
+                                                        Theme.of(context).textTheme.bodySmall,
+                                                      ),
+                                                    ),
                                               )
-                                              .toList(),
-                                        );
-                                      }
+                                                  .toList(),
+                                            );
+                                          }
 
-                                      if (dataTypedropdownItems.length == 1) {
-                                        dataTypedropdownItems.add(
-                                          DropdownMenuItem<String>(
-                                            value: 'no_item',
-                                            child: Text('No item'),
-                                          ),
-                                        );
-                                      }
-                                      String? vehicleTypeValue =
-                                          visitorData?.vehicleType ?? '';;
-                                      if (vehicleTypeValue.isEmpty) {
-                                        vehicleTypeValue =
-                                            dataTypedropdownItems.first.value;
-                                      }
-                                      return MyDropDown(
-                                        hintText: 'Select Vehicle Type',
-                                        // value: qrData?['Vehicle Type'] != null ? qrData ??['Vehicle Type']! : '',
-                                        value: vehicleTypeValue,
-                                        // qrData?['Vehicle Type'],
-                                        labelText: 'Vehicle Type',
-                                        items: dataTypedropdownItems,
-                                        onchanged: (value) {
-                                          setState(() {
-                                            finalvalue2 = value.toString();
+                                          if (dataTypedropdownItems.length == 1) {
+                                            dataTypedropdownItems.add(
+                                              DropdownMenuItem<String>(
+                                                value: 'no_item',
+                                                child: Text('No item'),
+                                              ),
+                                            );
+                                          }
+                                          String? vehicleTypeValue =
+                                              visitorData?.vehicleType ?? '';
+                                          ;
+                                          if (vehicleTypeValue.isEmpty) {
+                                            vehicleTypeValue =
+                                                dataTypedropdownItems.first.value;
+                                          }
+                                          return MyDropDown(
+                                            hintText: 'Select Vehicle Type',
+                                            // value: qrData?['Vehicle Type'] != null ? qrData ??['Vehicle Type']! : '',
+                                            value: vehicleTypeValue,
+                                            // qrData?['Vehicle Type'],
 
-                                            vehicleTypeId = 0;
-                                            for (int i = 0;
+                                            labelText: 'Vehicle Type',
+                                            items: dataTypedropdownItems,
+                                            onchanged: (value) {
+                                              setState(() {
+                                                finalvalue2 = value.toString();
+
+                                                vehicleTypeId = 0;
+                                                for (int i = 0;
                                                 i <
                                                     viewModel
                                                         .vehicleTypeResponse
@@ -907,29 +1131,29 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                                                         .items!
                                                         .length;
                                                 i++) {
-                                              if (value ==
-                                                  viewModel
-                                                      .vehicleTypeResponse
-                                                      .data!
-                                                      .result!
-                                                      .items![i]
-                                                      .vehicleType) {
-                                                vehicleTypeId = viewModel
-                                                    .vehicleTypeResponse
-                                                    .data!
-                                                    .result!
-                                                    .items![i]
-                                                    .id!;
-                                                break;
-                                              }
-                                            }
-                                          });
-                                        },
-                                      );
-                                    }
+                                                  if (value ==
+                                                      viewModel
+                                                          .vehicleTypeResponse
+                                                          .data!
+                                                          .result!
+                                                          .items![i]
+                                                          .vehicleType) {
+                                                    vehicleTypeId = viewModel
+                                                        .vehicleTypeResponse
+                                                        .data!
+                                                        .result!
+                                                        .items![i]
+                                                        .id!;
+                                                    break;
+                                                  }
+                                                }
+                                              });
+                                            },
+                                          );
+                                        }
 
-                                    return Text("");
-                                  }),
+                                        return Text("");
+                                      }),
                                 ])),
                       ),
                       SizedBox(
@@ -937,9 +1161,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                         child: Row(
                           children: [
                             Text('Parking Req.',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                )),
+                                style: Theme.of(context).textTheme.bodySmall),
                             Checkbox(
                               activeColor: Colors.orange.shade900,
                               checkColor: Colors.white,
@@ -960,7 +1182,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                   //   height: MediaQuery.of(context).size.height * 0.01,
                   // ),
                   MyTextField(
-                    labelText: 'No.of Visitors',
+                      labelText: 'No.of Visitors',
                       hintText: 'No.of Visitors',
                       controller: numberofvistorsController,
                       textInputType: TextInputType.text,
@@ -978,6 +1200,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                           child: TextFormField(
                             controller: arrivalDateController,
                             keyboardType: TextInputType.text,
+                            style: Theme.of(context).textTheme.bodySmall,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -996,9 +1219,9 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                               ),
                               prefixText: ' ',
                               hintText: 'Arrival Date',
+
                               prefixIcon: Icon(
                                 Icons.calendar_today,
-
                               ),
                             ),
                           ),
@@ -1011,6 +1234,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                             child: TextFormField(
                               controller: arrivalTimeController,
                               keyboardType: TextInputType.text,
+                              style: Theme.of(context).textTheme.bodySmall,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -1030,7 +1254,6 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                                 hintText: 'Arrival Time',
                                 suffixIcon: Icon(
                                   Icons.access_time,
-
                                 ),
                               ),
                             ),
@@ -1043,30 +1266,52 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.005,
                   ),
-                  if(visitorData?.visitorCheckInOutDate == null)
-                  MyDateField(
-                    onPressed: () async {
-                      final DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                      );
-                      if (picked != null) {
-                        setState(() {
-                          checkinDateController.text =
-                              DateFormat.yMd().format(picked);
-                        });
-                      }
-                    },
-                    controller: checkinDateController,
-                    hintText: 'Checkin Date',
-                    labelText: 'Checkin Date',
-                    preffixIcon: Icons.calendar_today,
+
+                  Visibility(
+                    visible: ischeckindate,
+                    child: MyDateField(
+                      onPressed: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+
+                      },
+                      // enabled: ischeckindate ? true : false,
+                      controller: checkinDateController,
+                      hintText: 'Checkin Date',
+                      labelText: 'Checkin Date',
+                      preffixIcon: Icons.calendar_today,
+                    ),
                   ),
+                  if(ischeckindate == true && ischeckoutDate == true)
+                    MyTextField(
+                      labelText: 'Checkin Date',
+                      hintText: 'Checkin Date',
+                      controller: checkinDateController,
+                      textInputType: TextInputType.text,
+                      preffixIcon: Icons.calendar_today,
+                    ),
+                  Visibility(
+                    visible: ischeckoutDate,
+                    child: MyDateField(
+                      onPressed: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
 
-
-
+                      },
+                      controller: checkoutDateController,
+                      hintText: 'Checkout Date',
+                      labelText: 'Checkout Date',
+                      preffixIcon: Icons.calendar_today,
+                    ),
+                  ),
                   MyTextField(
                     labelText: "Remarks",
                     hintText: 'Remarks',
@@ -1079,43 +1324,87 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   // if (arrivalDate != null && (arrivalDate.isBefore(currentDate) || arrivalDate.isAfter(currentDate)))
-                    Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      // height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.70,
-                      child: PositiveButton(
-                        onPressed: () async {
-                          setState(() {
-                            submitRegisterDetails();
-                          });
-                          nameController.clear();
+                  Visibility(
+                    visible: ischeckindate,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        // height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.70,
+                        child: PositiveButton(
+                          onPressed: () async {
+                            setState(() {
+                              submitRegisterDetails();
+                            });
+                            nameController.clear();
 
-                          carPlateNumberController.clear();
-                          drivingLicenceNumberController.clear();
-                          visitReasonController.clear();
-                          unitNumberController.clear();
-                          numberofvistorsController.clear();
-                          arrivalDateController.clear();
-                          arrivalTimeController.clear();
-                          durationController.clear();
-                          mobilenumberController.clear();
-                          notesController.clear();
-                          checkinDateController.clear();
-                          checkoutDateController.clear();
-                          setState(() {
-                            isParkingRequired = false;
-                            finalvalue = null;
-                            finalvalue1 = null;
-                            finalvalue2 = null;
-                          });
-                        },
-                        text: "Submit"
+                            carPlateNumberController.clear();
+                            drivingLicenceNumberController.clear();
+                            visitReasonController.clear();
+                            unitNumberController.clear();
+                            numberofvistorsController.clear();
+                            arrivalDateController.clear();
+                            arrivalTimeController.clear();
+                            durationController.clear();
+                            mobilenumberController.clear();
+                            notesController.clear();
+                            checkinDateController.clear();
+                            checkoutDateController.clear();
+                            setState(() {
+                              isParkingRequired = false;
+                              finalvalue = null;
+                              finalvalue1 = null;
+                              finalvalue2 = null;
+                              ischeckindate = false;
+                            });
+                          },
 
-
+                          // text: ischeckindate ? "CheckIn" : "Checkout"
+                          // ischeckindate && ischeckoutDate ? "Checkout" :
+                          text:  "CheckIn",
+                        ),
                       ),
                     ),
-                  )
+                  ),
+                  Visibility(
+                    visible: ischeckindate && ischeckoutDate,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.70,
+                        child: PositiveButton(
+                          onPressed: () async {
+                            setState(() {
+                              submitRegisterDetails();
+                            });
+                            nameController.clear();
+
+                            carPlateNumberController.clear();
+                            drivingLicenceNumberController.clear();
+                            visitReasonController.clear();
+                            unitNumberController.clear();
+                            numberofvistorsController.clear();
+                            arrivalDateController.clear();
+                            arrivalTimeController.clear();
+                            durationController.clear();
+                            mobilenumberController.clear();
+                            notesController.clear();
+                            checkinDateController.clear();
+                            checkoutDateController.clear();
+                            setState(() {
+                              isParkingRequired = false;
+                              finalvalue = null;
+                              finalvalue1 = null;
+                              finalvalue2 = null;
+                              ischeckindate = false;
+                              ischeckoutDate = false;
+                            });
+                          },
+                          text: "Checkout",
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -1124,6 +1413,4 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
       ),
     );
   }
-
-
 }

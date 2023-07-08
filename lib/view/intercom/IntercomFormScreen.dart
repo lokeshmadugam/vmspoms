@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:poms_app/data/respose/Status.dart';
-
+import '/data/respose/Status.dart';
 
 import '../../model/intercom/IntercomListingModel.dart';
 import '../../utils/MyTextField.dart';
@@ -15,16 +14,19 @@ import 'IntercomContactsScreen.dart';
 class IntercomFormScreen extends StatefulWidget {
   var data;
   final Contact inetrcomcontact;
+
   // final Value priorty;
 
- IntercomFormScreen({super.key, required this.data,required this.inetrcomcontact,});
+  IntercomFormScreen({
+    super.key,
+    required this.data,
+    required this.inetrcomcontact,
+  });
+
   //required this.priorty,
   @override
   State<IntercomFormScreen> createState() => _IntercomFormScreenState();
 }
-
-
-
 
 class _IntercomFormScreenState extends State<IntercomFormScreen> {
   var userVM = UserViewModel();
@@ -32,9 +34,9 @@ class _IntercomFormScreenState extends State<IntercomFormScreen> {
   String firstName = "";
   String lastName = "";
   int propertyId = 0;
- String userTypeName = "";
- int userId = 0;
- String countryId = "";
+  String userTypeName = "";
+  int userId = 0;
+  String countryId = "";
 
   TextEditingController _firstnameController = TextEditingController();
   TextEditingController _lastnamerController = TextEditingController();
@@ -50,6 +52,7 @@ class _IntercomFormScreenState extends State<IntercomFormScreen> {
   int priorityCounter = 0;
   String unitNumber = " ";
   int highestPriority = 0;
+
   void initState() {
     super.initState();
     print('name = ${widget.inetrcomcontact.displayName}');
@@ -65,14 +68,13 @@ class _IntercomFormScreenState extends State<IntercomFormScreen> {
 
     _firstnameController = TextEditingController(text: firstName);
     _lastnamerController = TextEditingController(text: lastName);
-    if (selectedPhone.isNotEmpty){
+    if (selectedPhone.isNotEmpty) {
       _phoneNumberController = TextEditingController(text: selectedPhone);
-    }else{
+    } else {
       _phoneNumberController = TextEditingController(text: phoneNumber);
     }
 
-
-    if(widget.data == null){
+    if (widget.data == null) {
       updatedBy = 0;
     } else {
       // _intercomList = widget.data;
@@ -84,7 +86,6 @@ class _IntercomFormScreenState extends State<IntercomFormScreen> {
 // final name = widget.data.p
     }
     getUserDetails();
-
   }
 
   void dispose() {
@@ -94,7 +95,7 @@ class _IntercomFormScreenState extends State<IntercomFormScreen> {
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final userid = value.userDetails?.id;
-      userId =userid ?? 0;
+      userId = userid ?? 0;
       final country = value.userDetails?.countryCode ?? '';
       countryId = country ?? '';
       final appusage = value.userDetails?.appUsageTypeName ?? '';
@@ -104,8 +105,8 @@ class _IntercomFormScreenState extends State<IntercomFormScreen> {
 
       final lastname = value.userDetails?.lastName;
       lastName = lastname ?? '';
-final propertyid = value.userDetails?.propertyId ?? 0;
-propertyId = propertyid ?? 0;
+      final propertyid = value.userDetails?.propertyId ?? 0;
+      propertyId = propertyid ?? 0;
       final unitnmb = value.userDetails?.unitNumber;
       unitNumber = unitnmb ?? " ";
       fetchIntercomList();
@@ -114,7 +115,7 @@ propertyId = propertyid ?? 0;
 
   Future<void> fetchIntercomList() async {
     intercomViewModel
-        .getIntercomList( "ASC", "id", 1, 500, propertyId,unitNumber)
+        .getIntercomList("ASC", "id", 1, 500, propertyId, unitNumber)
         .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
@@ -129,7 +130,6 @@ propertyId = propertyid ?? 0;
                 }
               }
             });
-
           }
         }
       }
@@ -145,34 +145,31 @@ propertyId = propertyid ?? 0;
       Utils.flushBarErrorMessage('Name can\'t be empty', context);
     } else if (_phoneNumberController.text.isEmpty) {
       Utils.flushBarErrorMessage('Mobile Number can\'t be empty', context);
-    }
-
-    else {
+    } else {
       // if (priorityCounter == null) {
       //   setState(() {
       //
       //   });
       // }
-      if(widget.data == null){
-      Map<String, dynamic> data = {
-        "country_code": countryId,
-        "created_by": userId,
-        "first_name": _firstnameController.text,
-        "last_name": _lastnamerController.text,
-        "phone_number": _phoneNumberController.text,
-        "priority": newPriority,
-        "property_id": propertyId,
-        "rec_status": 8,
-        "unit_number": unitNumber,
-        "user_id": userId
-
-      };
+      if (widget.data == null) {
+        Map<String, dynamic> data = {
+          "country_code": countryId,
+          "created_by": userId,
+          "first_name": _firstnameController.text,
+          "last_name": _lastnamerController.text,
+          "phone_number": _phoneNumberController.text,
+          "priority": newPriority,
+          "property_id": propertyId,
+          "rec_status": 8,
+          "unit_number": unitNumber,
+          "user_id": userId
+        };
 
         intercomViewModel.intercomRegistration(data, context).then((value) {
           if (value.data!.status == 201) {
             print('msg = ${value.data!.mobMessage}');
             Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
-          }else {
+          } else {
             Utils.flushBarErrorMessage(" ${value.data!.mobMessage}", context);
           }
         }).onError((error, stackTrace) {
@@ -181,29 +178,28 @@ propertyId = propertyid ?? 0;
             print(error.toString());
           }
         });
-      }
-      else{
+      } else {
         Map<String, dynamic> data = {
           "country_code": widget.data.country_code,
-    "first_name": _firstnameController,
-    "last_name": _lastnamerController,
-    "phone_number": _phoneNumberController,
-    "priority": widget.data.priority ?? 0,
-    "property_id": propertyId,
-    "rec_status": 8,
-    "unit_number": unitNumber,
-    "updated_by": userId,
-    "user_id": userId
-  };
+          "first_name": _firstnameController,
+          "last_name": _lastnamerController,
+          "phone_number": _phoneNumberController,
+          "priority": widget.data.priority ?? 0,
+          "property_id": propertyId,
+          "rec_status": 8,
+          "unit_number": unitNumber,
+          "updated_by": userId,
+          "user_id": userId
+        };
 
         //items.id
-        intercomViewModel.updateIntercom( data,widget.data.id, context).then((value) {
+        intercomViewModel
+            .updateIntercom(data, widget.data.id, context)
+            .then((value) {
           if (value.data!.status == 200) {
             print('msg = ${value.data!.mobMessage}');
             Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
-
-          }
-          else {
+          } else {
             Utils.flushBarErrorMessage(" ${value.data!.mobMessage}", context);
           }
         }).onError((error, stackTrace) {
@@ -213,13 +209,11 @@ propertyId = propertyid ?? 0;
           }
         });
       }
-
-
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 90,
@@ -259,31 +253,27 @@ propertyId = propertyid ?? 0;
                     //           builder: (context) => IntercomListingScreen(  )));
                     // });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Intercom',
-          style:
-          Theme.of(context).textTheme.headlineLarge
-        ),
+        title:
+            Text('Intercom', style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
         actions: [
-
-            IconButton(onPressed: (){
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => IntercomContactsScreen()),
-              );
-
-            }, icon: Icon(Icons.contact_phone_rounded))
+          IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => IntercomContactsScreen()),
+                );
+              },
+              icon: Icon(Icons.contact_phone_rounded))
         ],
       ),
       body: SingleChildScrollView(
@@ -351,12 +341,12 @@ propertyId = propertyid ?? 0;
                 child: Column(
                   children: [
                     MyTextField(
-                      preffixIcon: Icons.person,
+                        preffixIcon: Icons.person,
                         controller: _firstnameController,
                         labelText: 'First Name',
                         textInputType: TextInputType.text),
                     MyTextField(
-                      preffixIcon: Icons.library_add_sharp,
+                        preffixIcon: Icons.library_add_sharp,
                         controller: _lastnamerController,
                         labelText: 'Last Name',
                         textInputType: TextInputType.number),
@@ -385,8 +375,6 @@ propertyId = propertyid ?? 0;
                             _firstnameController.clear();
                             _lastnamerController.clear();
                             _phoneNumberController.clear();
-
-
                           }),
                     )
                   ],

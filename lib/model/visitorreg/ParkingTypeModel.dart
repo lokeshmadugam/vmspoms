@@ -9,7 +9,7 @@ class ParkingType {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -91,17 +91,17 @@ class ParkingTypeItems {
 
   ParkingTypeItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.unitNo,
-        this.bayLocation,
-        this.bayNumber,
-        this.bayType,
-        this.bayUrlImg,
-        this.recStatus,
-        this.recStatusname,
-        this.bayTypeName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.unitNo,
+      this.bayLocation,
+      this.bayNumber,
+      this.bayType,
+      this.bayUrlImg,
+      this.recStatus,
+      this.recStatusname,
+      this.bayTypeName});
 
   ParkingTypeItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -135,4 +135,3 @@ class ParkingTypeItems {
     return data;
   }
 }
-

@@ -19,7 +19,8 @@ class LostDetailsFormRepository {
       final url = (AppUrl.mediaUpload);
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
-      final image = await http.MultipartFile.fromPath('fileToUpload', imagePath);
+      final image =
+          await http.MultipartFile.fromPath('fileToUpload', imagePath);
       request.files.add(image);
 
       dynamic response = await request.send();
@@ -29,14 +30,12 @@ class LostDetailsFormRepository {
 
       final jsonData = MediaUpload.fromJson(responseJson);
       return jsonData;
-
     } catch (e) {
       rethrow;
     }
   }
 
   Future<dynamic> submitLostDetailsForm(var data) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -45,7 +44,7 @@ class LostDetailsFormRepository {
       var url = (AppUrl.submitLostItems);
 
       dynamic response =
-      await apiServices.postApiResponsewithtoken(url, token, data);
+          await apiServices.postApiResponsewithtoken(url, token, data);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;

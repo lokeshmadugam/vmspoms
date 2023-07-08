@@ -9,9 +9,8 @@ import '../../resources/AppUrl.dart';
 class AttendanceListingsRepository {
   BaseApiServices apiServices = NetworkApiService();
 
-  Future<dynamic> getAttendanceListings(var employeeId, var startDate, var endDate,
-      var propertyId) async {
-
+  Future<dynamic> getAttendanceListings(
+      var employeeId, var startDate, var endDate, var propertyId) async {
     try {
       Map<String, String> queryParameters = {
         'employee_id': employeeId.toString(),
@@ -27,7 +26,7 @@ class AttendanceListingsRepository {
       var url = (AppUrl.submitClockIn);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = AttendanceListings.fromJson(response);
       return jsonData;
@@ -35,6 +34,7 @@ class AttendanceListingsRepository {
       rethrow;
     }
   }
+
   // Delete Visitor Data
   Future<dynamic> deleteAttendanceDetails(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -46,7 +46,7 @@ class AttendanceListingsRepository {
     // String query = "/$data";
     // var url1 = url+"/$data";
     dynamic response =
-    await apiServices.deleteApiResponsewithtoken(url,token, query);
+        await apiServices.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;

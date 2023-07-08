@@ -10,7 +10,6 @@ import '../../model/securityrounds/SecurityRoundsLogsRequest.dart';
 import '../../utils/Utils.dart';
 
 class SecurityChecksScreenViewModel extends ChangeNotifier {
-
   final _myRepo = SecurityChecksRepository();
 
   ApiResponse<SecurityCheckPoint> checkPoints = ApiResponse.loading();
@@ -32,7 +31,7 @@ class SecurityChecksScreenViewModel extends ChangeNotifier {
         .getSecurityCheckPoints(propertyId)
         .then((value) => _setCheckPoints(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setCheckPoints(ApiResponse.error(error.toString())));
+            _setCheckPoints(ApiResponse.error(error.toString())));
   }
 
   Future<void> _setMediaUpload(ApiResponse<MediaUpload> response, int index,
@@ -53,9 +52,10 @@ class SecurityChecksScreenViewModel extends ChangeNotifier {
       _setMediaUpload(ApiResponse.loading(), index, context);
       _myRepo
           .mediaUpload(logsList[index].checkpointLocationImg)
-          .then((value) => _setMediaUpload(ApiResponse.success(value), index, context))
+          .then((value) =>
+              _setMediaUpload(ApiResponse.success(value), index, context))
           .onError((error, stackTrace) => _setMediaUpload(
-          ApiResponse.error(error.toString()), index, context));
+              ApiResponse.error(error.toString()), index, context));
     }
   }
 
@@ -121,7 +121,8 @@ class SecurityChecksScreenViewModel extends ChangeNotifier {
     ApiResponse<SecurityViewDetails> response = ApiResponse.loading();
     notifyListeners();
     try {
-      SecurityViewDetails value = await _myRepo.getSecurityCheckTempLogs(id, roundsId);
+      SecurityViewDetails value =
+          await _myRepo.getSecurityCheckTempLogs(id, roundsId);
       response = ApiResponse.success(value);
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
@@ -134,8 +135,4 @@ class SecurityChecksScreenViewModel extends ChangeNotifier {
 
     return response;
   }
-
-
-
-
 }

@@ -9,7 +9,7 @@ class ClockInRequestTimeConfigItem {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -92,18 +92,18 @@ class Items {
 
   Items(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.configKeyId,
-        this.appUsage,
-        this.configKey,
-        this.keyValue,
-        this.description,
-        this.seqNo,
-        this.isDefault,
-        this.recStatus,
-        this.displayName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.configKeyId,
+      this.appUsage,
+      this.configKey,
+      this.keyValue,
+      this.description,
+      this.seqNo,
+      this.isDefault,
+      this.recStatus,
+      this.displayName,
+      this.recStatusname});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

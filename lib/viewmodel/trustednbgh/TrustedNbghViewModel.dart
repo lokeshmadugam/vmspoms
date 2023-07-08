@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:poms_app/model/DeleteResponse.dart';
+import '/model/DeleteResponse.dart';
 import '../../data/respose/ApiResponse.dart';
 import '../../model/PostApiResponse.dart';
 import '../../model/trustednbgh/TrustedNbghListModel.dart';
@@ -9,18 +9,22 @@ import '../../repository/trustednbgh/TrustedNbghRepo.dart';
 import '../../utils/utils.dart';
 
 class TrustedNeighbourViewModel with ChangeNotifier {
-
   final _myRepo = TrustedNeighbourRepository();
+
 // Get Trusted Neighbours List
   Future<ApiResponse<TrustedNeighbourListModel>> fetchTrustedNeighboursList(
-       String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId,int userId) async {
-    ApiResponse<TrustedNeighbourListModel> listResponse = ApiResponse
-        .loading();
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      int userId) async {
+    ApiResponse<TrustedNeighbourListModel> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getTrustedNeighbours(orderBy, orderByPropertyName, pageNumber, pageSize, propertyId, userId);
-     listResponse = ApiResponse.success(value);
+      final value = await _myRepo.getTrustedNeighbours(orderBy,
+          orderByPropertyName, pageNumber, pageSize, propertyId, userId);
+      listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
       if (kDebugMode) {
@@ -34,13 +38,17 @@ class TrustedNeighbourViewModel with ChangeNotifier {
 
   // Get All Trusted Neighbours
   Future<ApiResponse<TrustedNeighboursModel>> fetchAllTrustedNeighbours(
-      String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, int propertyId,String search) async {
-    ApiResponse<TrustedNeighboursModel> listResponse = ApiResponse
-        .loading();
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      String search) async {
+    ApiResponse<TrustedNeighboursModel> listResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getAllTrustedNeighbour(orderBy, orderByPropertyName, pageNumber, pageSize, propertyId, search);
+      final value = await _myRepo.getAllTrustedNeighbour(orderBy,
+          orderByPropertyName, pageNumber, pageSize, propertyId, search);
       listResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -54,7 +62,8 @@ class TrustedNeighbourViewModel with ChangeNotifier {
   }
 
   // Add Trusted Neighbours
-  Future<ApiResponse<PostApiResponse>> addTrustedNeighbours(var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> addTrustedNeighbours(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -62,9 +71,8 @@ class TrustedNeighbourViewModel with ChangeNotifier {
       PostApiResponse value = await _myRepo.addTrustedNeighbours(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 201){
+      if (value.status == 201) {
         print('response = ${value.mobMessage}');
-
       } else {
         // Utils.flushBarErrorMessage(" Registration Failed".toString(), context);
       }
@@ -107,7 +115,8 @@ class TrustedNeighbourViewModel with ChangeNotifier {
   //   return response;
   // }
   // Delete Trusted Neighbours Data
-  Future<ApiResponse<DeleteResponse>> deleteTrustedNeighboursData(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deleteTrustedNeighboursData(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -115,9 +124,8 @@ class TrustedNeighbourViewModel with ChangeNotifier {
       DeleteResponse value = await _myRepo.deleteTrustedNeighbours(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);

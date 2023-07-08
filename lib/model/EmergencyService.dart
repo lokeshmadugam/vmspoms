@@ -1,31 +1,37 @@
 class EmergencyService {
-int? status;
-int? megCategory;
-String? webMessage;
-String? mobMessage;
-Result? result;
+  int? status;
+  int? megCategory;
+  String? webMessage;
+  String? mobMessage;
+  Result? result;
 
-EmergencyService({this.status, this.megCategory, this.webMessage, this.mobMessage, this.result});
+  EmergencyService(
+      {this.status,
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
-EmergencyService.fromJson(Map<String, dynamic> json) {
-status = json['status'];
-megCategory = json['megCategory'];
-webMessage = json['webMessage'];
-mobMessage = json['mobMessage'];
-result = json['result'] != null ? new Result.fromJson(json['result']) : null;
-}
-
-Map<String, dynamic> toJson() {
-  final Map<String, dynamic> data = new Map<String, dynamic>();
-  data['status'] = this.status;
-  data['megCategory'] = this.megCategory;
-  data['webMessage'] = this.webMessage;
-  data['mobMessage'] = this.mobMessage;
-  if (this.result != null) {
-    data['result'] = this.result!.toJson();
+  EmergencyService.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    megCategory = json['megCategory'];
+    webMessage = json['webMessage'];
+    mobMessage = json['mobMessage'];
+    result =
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
-  return data;
-}
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['megCategory'] = this.megCategory;
+    data['webMessage'] = this.webMessage;
+    data['mobMessage'] = this.mobMessage;
+    if (this.result != null) {
+      data['result'] = this.result!.toJson();
+    }
+    return data;
+  }
 }
 
 class Result {
@@ -38,7 +44,15 @@ class Result {
   String? orderByPropertyName;
   List<EmergencyItems>? items;
 
-  Result({this.pageNumber, this.pageSize, this.totalPage, this.itemCounts, this.totalItemCounts, this.orderBy, this.orderByPropertyName, this.items});
+  Result(
+      {this.pageNumber,
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -50,7 +64,9 @@ class Result {
     orderByPropertyName = json['orderByPropertyName'];
     if (json['items'] != null) {
       items = <EmergencyItems>[];
-      json['items'].forEach((v) { items!.add(new EmergencyItems.fromJson(v)); });
+      json['items'].forEach((v) {
+        items!.add(new EmergencyItems.fromJson(v));
+      });
     }
   }
 
@@ -88,7 +104,23 @@ class EmergencyItems {
   String? serviceTypeName;
   String? subserviceTypeName;
 
-  EmergencyItems({this.id, this.createdBy, this.createdOn, this.countryCode, this.countryName, this.state, this.serviceType, this.subserviceType, this.serviceName, this.serviceProviderName, this.dialNumber, this.serviceProviderUrl, this.recStatus, this.recStatusname, this.serviceTypeName, this.subserviceTypeName});
+  EmergencyItems(
+      {this.id,
+      this.createdBy,
+      this.createdOn,
+      this.countryCode,
+      this.countryName,
+      this.state,
+      this.serviceType,
+      this.subserviceType,
+      this.serviceName,
+      this.serviceProviderName,
+      this.dialNumber,
+      this.serviceProviderUrl,
+      this.recStatus,
+      this.recStatusname,
+      this.serviceTypeName,
+      this.subserviceTypeName});
 
   EmergencyItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];

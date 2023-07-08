@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/network/BaseApiServices.dart';
@@ -11,12 +10,18 @@ import '../../model/visitorreg/VisitorsStatusModel.dart';
 import '../../resources/AppUrl.dart';
 
 class FacilityBookingRepository {
-
   final BaseApiServices _apiService = NetworkApiService();
+
 // Facility Bookings
-  Future<dynamic> getFacilityBookings(int facilityId,String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,
-      int propertyId,String fromDate,String toDate) async {
+  Future<dynamic> getFacilityBookings(
+      int facilityId,
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      String fromDate,
+      String toDate) async {
     String facilityid = facilityId.toString();
     String orderby = orderBy;
     String orderByPN = orderByPropertyName;
@@ -27,15 +32,14 @@ class FacilityBookingRepository {
     String todate = toDate;
     try {
       Map<String, String> queryParameters = {
-        'facility_id':facilityid,
+        'facility_id': facilityid,
         'orderBy': orderby,
         'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
         'property_id': propertyid,
-        'from_date':fromdate,
-         'to_date':todate
-
+        'from_date': fromdate,
+        'to_date': todate
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,20 +48,19 @@ class FacilityBookingRepository {
 
       var url = AppUrl.facilityBookingUrl;
 
-      dynamic response = await _apiService.getQueryResponse(
-          url, token, queryParameters,'');
+      dynamic response =
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = FacilityBookingModel.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
+
 // FacilityTypes
-  Future<dynamic> getFacilityTypes(String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,
-      int propertyId) async {
+  Future<dynamic> getFacilityTypes(String orderBy, String orderByPropertyName,
+      int pageNumber, int pageSize, int propertyId) async {
     String orderby = orderBy;
     String orderByPN = orderByPropertyName;
     String pagenumber = pageNumber.toString();
@@ -65,14 +68,11 @@ class FacilityBookingRepository {
     String propertyid = propertyId.toString();
     try {
       Map<String, String> queryParameters = {
-
         'orderBy': orderby,
         'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
         'propertyId': propertyid,
-
-
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -81,16 +81,16 @@ class FacilityBookingRepository {
 
       var url = AppUrl.facilityTypeUrl;
 
-      dynamic response = await _apiService.getQueryResponse(
-          url, token, queryParameters,'');
+      dynamic response =
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = FacilityTypeModel.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
+
   // Create Facility Booking
   Future<dynamic> createFacilityBookings(dynamic data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -98,7 +98,7 @@ class FacilityBookingRepository {
     String token = jsonDecode(bearerToken!);
     var url = AppUrl.facilityBookingUrl;
     dynamic response =
-    await _apiService.postApiResponsewithtoken(url,token, data);
+        await _apiService.postApiResponsewithtoken(url, token, data);
     try {
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -117,7 +117,7 @@ class FacilityBookingRepository {
     String query = "/$id";
     var url = AppUrl.facilityBookingUrl;
     dynamic response =
-    await _apiService.deleteApiResponsewithtoken(url,token, query);
+        await _apiService.deleteApiResponsewithtoken(url, token, query);
     try {
       final jsonData = DeleteResponse.fromJson(response);
       return jsonData;
@@ -125,41 +125,38 @@ class FacilityBookingRepository {
       throw e;
     }
   }
+
   // Fee Paid Status
-  Future<dynamic>  getFeePaidStatus(String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,String appUseage,String configKey ) async {
+  Future<dynamic> getFeePaidStatus(String orderBy, String orderByPropertyName,
+      int pageNumber, int pageSize, String appUseage, String configKey) async {
     String appuseage = appUseage;
     String configkey = configKey;
     String orderby = orderBy;
-    String orderByPN= orderByPropertyName;
+    String orderByPN = orderByPropertyName;
     String pagenumber = pageNumber.toString();
     String pagesize = pageSize.toString();
     try {
-      Map<String, String> queryParameters ={
-        'appUseage':appuseage,
-        'configKey':configkey,
-        'orderBy':orderby,
-        'orderByPropertyName':orderByPN,
+      Map<String, String> queryParameters = {
+        'appUseage': appuseage,
+        'configKey': configkey,
+        'orderBy': orderby,
+        'orderByPropertyName': orderByPN,
         'pageNumber': pagenumber,
         'pageSize': pagesize,
-
-
-
       };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
       String token = jsonDecode(bearerToken!);
 
-      var url =   AppUrl.configItemsUrl;
+      var url = AppUrl.configItemsUrl;
 
-      dynamic response = await _apiService.getQueryResponse(
-          url, token, queryParameters,'');
+      dynamic response =
+          await _apiService.getQueryResponse(url, token, queryParameters, '');
 
       final jsonData = VisitorsStatusModel.fromJson(response);
       return jsonData;
-    }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }

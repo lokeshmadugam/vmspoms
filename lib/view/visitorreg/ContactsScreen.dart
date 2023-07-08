@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +19,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
   List<Contact> _contactsFiltered = [];
   List<Permissions> permissions = [];
   TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _getContacts();
-
   }
 
   Future<void> _getContacts() async {
@@ -51,11 +50,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
       }).toList();
     });
   }
+
   String flattenPhoneNumber(String phoneStr) {
     return phoneStr.replaceAllMapped(RegExp(r'^(\+)|\D'), (Match m) {
       return m[0] == "+" ? "+" : "";
     });
   }
+
   filterContacts() {
     String searchTerm = _searchController.text.toLowerCase();
     String searchTermFlatten = flattenPhoneNumber(searchTerm);
@@ -80,8 +81,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
       }).toList();
     });
   }
+
   Contact? _selectedContact;
   bool? select;
+
   void _selectContact(Contact contact, bool? value, String selectedPhone) {
     setState(() {
       if (value == true) {
@@ -99,7 +102,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
             if (phone.value == selectedPhone) {
               contact.selectedPhone = selectedPhone;
               break;
-            }else{
+            } else {
               contact.selectedPhone = '';
             }
           }
@@ -111,6 +114,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
       }
     });
   }
+
   List<String> getDistinctPhones(Contact contact) {
     final phones = contact.phones?.map((phn) => phn.value).toList() ?? [];
     final distinctPhones = <String>[];
@@ -132,11 +136,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
   void _selectPhone(Contact contact, String? phone) {
     setState(() {
       contact.selectedPhone = phone;
-
     });
   }
+
   bool isPhoneSelected(Contact contact, String phone) {
-    return contact.phones?.any((phn) => normalizePhoneNumber(phn.value ?? '') == normalizePhoneNumber(phone)) ?? false;
+    return contact.phones?.any((phn) =>
+            normalizePhoneNumber(phn.value ?? '') ==
+            normalizePhoneNumber(phone)) ??
+        false;
   }
 
   @override
@@ -147,15 +154,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 11;
       print("SmallSize = $fontSize");
-    }else {
+    } else {
       fontSize = 14;
       print("BigSize = $fontSize");
     }
     return Scaffold(
-
       appBar: AppBar(
         leadingWidth: 90,
         leading: Row(
@@ -185,37 +191,30 @@ class _ContactsScreenState extends State<ContactsScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Phone Contacts',
-     style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Phone Contacts',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
-      body:
-      SafeArea(
+      body: SafeArea(
         child: Column(
           children: [
             SizedBox(
               child: Container(
                   child: MyTextField(
-                    hintText: 'Search',
-                    controller: _searchController,
-                    onChanged: (value) {
-
-                    },
-                    textInputType: TextInputType.text,
-                    suffixIcon: Icons.search,
-                  )),
+                hintText: 'Search',
+                controller: _searchController,
+                onChanged: (value) {},
+                textInputType: TextInputType.text,
+                suffixIcon: Icons.search,
+              )),
             ),
 
             SizedBox(
@@ -223,28 +222,39 @@ class _ContactsScreenState extends State<ContactsScreen> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: isSearching == true ? _contactsFiltered.length : _contacts.length,
+                itemCount: isSearching == true
+                    ? _contactsFiltered.length
+                    : _contacts.length,
                 physics: BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final contact = isSearching == true ? _contactsFiltered[index] : _contacts[index];
+                  final contact = isSearching == true
+                      ? _contactsFiltered[index]
+                      : _contacts[index];
                   final distinctPhones = getDistinctPhones(contact);
                   return Container(
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // Add a bottom border to separate contacts
+                          bottom: BorderSide(
+                              color: Colors.grey.shade300,
+                              width:
+                                  1.0), // Add a bottom border to separate contacts
                         ),
                       ),
-                      child:
-                      CheckboxListTile(
-                        title: Text(contact.displayName,style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize), )),
+                      child: CheckboxListTile(
+                        title: Text(contact.displayName,
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(fontSize: fontSize),
+                            )),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (distinctPhones.length == 1)
                               Text(
-                                contact.phones?.isNotEmpty == true ? contact.phones!.first.value ?? '' : '',
+                                contact.phones?.isNotEmpty == true
+                                    ? contact.phones!.first.value ?? ''
+                                    : '',
                               ),
                             if (distinctPhones.length > 1)
                               Column(
@@ -253,22 +263,32 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                     title: Text(phone),
                                     onTap: () {
                                       if (contact.selectedPhone == phone) {
-                                        _selectPhone(contact, ''); // Deselect the phone
+                                        _selectPhone(
+                                            contact, ''); // Deselect the phone
                                       } else {
-                                        _selectPhone(contact, phone); // Select the phone
+                                        _selectPhone(
+                                            contact, phone); // Select the phone
                                       }
                                     },
                                     trailing: Visibility(
                                         visible: contact.isSelected,
-                                        child:Checkbox(
-                                          value: (distinctPhones.indexOf(phone) == 0 && contact.selectedPhone?.isEmpty == true) ||
+                                        child: Checkbox(
+                                          value: (distinctPhones
+                                                          .indexOf(phone) ==
+                                                      0 &&
+                                                  contact.selectedPhone
+                                                          ?.isEmpty ==
+                                                      true) ||
                                               (contact.selectedPhone == phone),
                                           onChanged: (bool? value) {
                                             setState(() {
                                               if (value == true) {
                                                 // Deselect the first phone if it is selected
-                                                if (distinctPhones.indexOf(phone) != 0 &&
-                                                    contact.selectedPhone == distinctPhones[0]) {
+                                                if (distinctPhones
+                                                            .indexOf(phone) !=
+                                                        0 &&
+                                                    contact.selectedPhone ==
+                                                        distinctPhones[0]) {
                                                   _selectPhone(contact, '');
                                                 }
                                                 // Select the current phone
@@ -280,16 +300,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                             });
                                           },
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
                                           ),
-                                        )
-
-                                    ),
-
+                                        )),
                                   );
                                 }).toList(),
                               )
-
                           ],
                         ),
                         value: contact.isSelected,
@@ -301,72 +318,73 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             setState(() {
                               contact.isSelected = true; // Select the contact
                             });
-                            _selectContact(contact, true, contact.selectedPhone ?? '');
+                            _selectContact(
+                                contact, true, contact.selectedPhone ?? '');
                             // _selectPhone(contact, contact.selectedPhone ?? ''); // Select the distinct phone
                           } else {
                             setState(() {
-                              contact.isSelected = false; // Deselect the contact
+                              contact.isSelected =
+                                  false; // Deselect the contact
                             });
                             _selectContact(contact, false, '');
                             _selectPhone(contact, '');
                           }
-
                         },
-
-                        secondary: (contact.avatar != null && contact.avatar!.isNotEmpty)
+                        secondary: (contact.avatar != null &&
+                                contact.avatar!.isNotEmpty)
                             ? CircleAvatar(
-                          backgroundImage: MemoryImage(contact.avatar!),
-                          backgroundColor: Colors.white,
-                        )
+                                backgroundImage: MemoryImage(contact.avatar!),
+                                backgroundColor: Colors.white,
+                              )
                             : CircleAvatar(
-                          child: Text(contact.displayName.isNotEmpty ? contact.displayName[0] : '',style: TextStyle(color: Colors.white),),
-                          backgroundColor: Color(0xFF036CB2),
-                        ),
-                      )
-
-
-
-                  );
+                                child: Text(
+                                  contact.displayName.isNotEmpty
+                                      ? contact.displayName[0]
+                                      : '',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Color(0xFF036CB2),
+                              ),
+                      ));
                 },
               ),
             ),
-    //         SizedBox(
-    //           child: ElevatedButton(
-    //
-    //             style: ElevatedButton.styleFrom(
-    //                 primary:Color(0xFF036CB2),
-    //                 shape: RoundedRectangleBorder(
-    //                     borderRadius: BorderRadius.circular(25))),
-    //
-    //
-    //             child: Text("Select",style: const TextStyle(
-    //                 fontWeight: FontWeight.w500, fontSize: 18,
-    //                 color: Colors.white),),
-    //             onPressed: _selectedContact != null
-    //                 ? () {
-    //               // Navigator.push(
-    //               //   context,
-    //               //   MaterialPageRoute(
-    //               //     builder: (context) => InviteGuestScreen(contact: _selectedContact!,
-    //               //
-    //               //
-    //               //     ),
-    //               //
-    //               //   ),
-    //               // );
-    //               // Navigator.pop(context, {
-    //               //   'contact': _selectedContact,
-    //               // });
-    // Navigator.pop(context, {
-    // 'contact': _selectedContact!,
-    //
-    // });
-    // print(_selectedContact)  ;          }
-    //
-    //                 : null,
-    //           ),
-    //         ),
-
+            //         SizedBox(
+            //           child: ElevatedButton(
+            //
+            //             style: ElevatedButton.styleFrom(
+            //                 primary:Color(0xFF036CB2),
+            //                 shape: RoundedRectangleBorder(
+            //                     borderRadius: BorderRadius.circular(25))),
+            //
+            //
+            //             child: Text("Select",style: const TextStyle(
+            //                 fontWeight: FontWeight.w500, fontSize: 18,
+            //                 color: Colors.white),),
+            //             onPressed: _selectedContact != null
+            //                 ? () {
+            //               // Navigator.push(
+            //               //   context,
+            //               //   MaterialPageRoute(
+            //               //     builder: (context) => InviteGuestScreen(contact: _selectedContact!,
+            //               //
+            //               //
+            //               //     ),
+            //               //
+            //               //   ),
+            //               // );
+            //               // Navigator.pop(context, {
+            //               //   'contact': _selectedContact,
+            //               // });
+            // Navigator.pop(context, {
+            // 'contact': _selectedContact!,
+            //
+            // });
+            // print(_selectedContact)  ;          }
+            //
+            //                 : null,
+            //           ),
+            //         ),
           ],
         ),
       ),
@@ -374,25 +392,26 @@ class _ContactsScreenState extends State<ContactsScreen> {
         height: MediaQuery.of(context).size.height * 0.04,
         width: MediaQuery.of(context).size.width * 0.20,
         child: FloatingActionButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25)),
-          backgroundColor:Color(0xFF036CB2),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          backgroundColor: Color(0xFF036CB2),
           onPressed: _selectedContact != null
               ? () {
-
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => InvitationsScreen(contact: _selectedContact!, data: permissions,)),
-            );
-          }
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InvitationsScreen(
+                              contact: _selectedContact!,
+                              data: permissions,
+                            )),
+                  );
+                }
               : null,
           child: Text('Add'),
         ),
       ),
     );
   }
-
-
 }
 
 class Contact {
@@ -406,7 +425,12 @@ class Contact {
 
   String? selectedPhone;
 
-  Contact({required this.displayName, required this.phones,this.givenName, this.avatar,this.emails,this.postalAddresses,this.selectedPhone});
+  Contact(
+      {required this.displayName,
+      required this.phones,
+      this.givenName,
+      this.avatar,
+      this.emails,
+      this.postalAddresses,
+      this.selectedPhone});
 }
-
-

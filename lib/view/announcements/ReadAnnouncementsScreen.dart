@@ -2,25 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/model/newsbulletin/NewsBulletinModel.dart';
+import '/model/newsbulletin/NewsBulletinModel.dart';
 
 class ReadAnnouncementsScreen extends StatefulWidget {
   var data;
 
-   ReadAnnouncementsScreen({Key? key,required this.data, }) : super(key: key);
+  ReadAnnouncementsScreen({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
-  State<ReadAnnouncementsScreen> createState() => _ReadAnnouncementsScreenState();
+  State<ReadAnnouncementsScreen> createState() =>
+      _ReadAnnouncementsScreenState();
 }
 
 class _ReadAnnouncementsScreenState extends State<ReadAnnouncementsScreen> {
+  NewsBulletinItems _newsItems = NewsBulletinItems();
 
- NewsBulletinItems _newsItems = NewsBulletinItems();
   void initState() {
     super.initState();
 
-_newsItems = widget.data;
+    _newsItems = widget.data;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,21 +58,18 @@ _newsItems = widget.data;
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
             ],
           ),
-          title: Text(
-            '${_newsItems.newsBulletinName}',
-         style: Theme.of(context).textTheme.headlineLarge
-          //   TextStyle(
-          //       fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+          title: Text('${_newsItems.newsBulletinName}',
+              style: Theme.of(context).textTheme.headlineLarge
+              //   TextStyle(
+              //       fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+              ),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
         ),
@@ -77,39 +79,38 @@ _newsItems = widget.data;
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        HtmlWidget(
-                       _newsItems.picDocument ?? " ",
-                        textStyle: GoogleFonts.roboto(textStyle:TextStyle(
-                        color: Colors.black,fontSize: 13
-                      // maxLines: 2, // Specify the maximum number of lines to display
-                    ), )
+                        HtmlWidget(_newsItems.picDocument ?? " ",
+                            textStyle: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                  color: Colors.black, fontSize: 13
+                                  // maxLines: 2, // Specify the maximum number of lines to display
+                                  ),
+                            )),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.10,
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.10,),
-
-            Row(
-              mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Published on: ${_newsItems.announcementDate != null
-        ? DateFormat('yyyy-MM-dd')
-                .format(DateTime.parse(_newsItems.announcementDate
-                .toString()))
-                : ''}",style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,color: Color(
-        0xFF1B248D)))),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.10,),
-                Text("at: ${_newsItems.announcementDate != null
-                    ? DateFormat('hh:mm a')
-                    .format(DateTime.parse(_newsItems.announcementDate
-                    .toString()))
-                    : ''}",style:GoogleFonts.roboto(textStyle: TextStyle(fontSize: 12,color: Color(
-                    0xFF1B248D)))),
-              ],
-            ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                                "Published on: ${_newsItems.announcementDate != null ? DateFormat('yyyy-MM-dd').format(DateTime.parse(_newsItems.announcementDate.toString())) : ''}",
+                                style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF1B248D)))),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.10,
+                            ),
+                            Text(
+                                "at: ${_newsItems.announcementDate != null ? DateFormat('hh:mm a').format(DateTime.parse(_newsItems.announcementDate.toString())) : ''}",
+                                style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF1B248D)))),
+                          ],
+                        ),
                       ],
-
-                    )
-                )
-            )
-        )
-    );;
+                    )))));
+    ;
   }
 }

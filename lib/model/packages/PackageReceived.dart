@@ -9,7 +9,7 @@ class PackageReceived {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -100,26 +100,26 @@ class Items {
 
   Items(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.unitNumber,
-        this.blockName,
-        this.packageTypeId,
-        this.packageFrom,
-        this.packageReceivedBy,
-        this.packageReceiptsStatus,
-        this.packageReceivedDate,
-        this.packageReceiptNotification,
-        this.packageCollectedBy,
-        this.packageCollectedOn,
-        this.packageCollectionAckImg,
-        this.collectionDate,
-        this.packageImg,
-        this.remarks,
-        this.recStatus,
-        this.packageReceiptsStatusName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.unitNumber,
+      this.blockName,
+      this.packageTypeId,
+      this.packageFrom,
+      this.packageReceivedBy,
+      this.packageReceiptsStatus,
+      this.packageReceivedDate,
+      this.packageReceiptNotification,
+      this.packageCollectedBy,
+      this.packageCollectedOn,
+      this.packageCollectionAckImg,
+      this.collectionDate,
+      this.packageImg,
+      this.remarks,
+      this.recStatus,
+      this.packageReceiptsStatusName,
+      this.recStatusname});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

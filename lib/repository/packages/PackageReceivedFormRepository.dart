@@ -56,7 +56,6 @@ class PackageReceivedFormRepository {
   }
 
   Future<dynamic> createReceivedPackage(PackageReceivedRequest request) async {
-
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -64,8 +63,8 @@ class PackageReceivedFormRepository {
 
       var url = (AppUrl.createReceivedPackage);
 
-      dynamic response =
-          await apiServices.postApiResponsewithtoken(url, token, request.toJson());
+      dynamic response = await apiServices.postApiResponsewithtoken(
+          url, token, request.toJson());
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -75,7 +74,6 @@ class PackageReceivedFormRepository {
   }
 
   Future<dynamic> updateReceivedPackage(PackageReceivedRequest request) async {
-
     String packageId = request.id.toString();
     String query = "/$packageId";
 
@@ -86,8 +84,8 @@ class PackageReceivedFormRepository {
 
       var url = (AppUrl.updateReceivedPackage);
 
-      dynamic response =
-      await apiServices.putApiResponsewithtoken(url, token, request.toJson(), query);
+      dynamic response = await apiServices.putApiResponsewithtoken(
+          url, token, request.toJson(), query);
 
       final jsonData = PostApiResponse.fromJson(response);
       return jsonData;
@@ -105,7 +103,8 @@ class PackageReceivedFormRepository {
       final url = (AppUrl.mediaUpload);
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
-      final image = await http.MultipartFile.fromPath('fileToUpload', imagePath);
+      final image =
+          await http.MultipartFile.fromPath('fileToUpload', imagePath);
       request.files.add(image);
 
       dynamic response = await request.send();
@@ -115,13 +114,13 @@ class PackageReceivedFormRepository {
 
       final jsonData = MediaUpload.fromJson(responseJson);
       return jsonData;
-
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<dynamic> getBlockUnitNoList(var blockName, var propertyId, var unitNo) async {
+  Future<dynamic> getBlockUnitNoList(
+      var blockName, var propertyId, var unitNo) async {
     try {
       Map<String, String> queryParameters = {
         'blockName': blockName,
@@ -136,7 +135,7 @@ class PackageReceivedFormRepository {
       var url = (AppUrl.blockUnitNoList);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = BlockUnitNumber.fromJson(response);
       return jsonData;
@@ -147,7 +146,9 @@ class PackageReceivedFormRepository {
 
   Future<dynamic> getPackageStatus() async {
     try {
-      Map<String, String> queryParameters = {'configKey': 'packagereceiptsstatus'};
+      Map<String, String> queryParameters = {
+        'configKey': 'packagereceiptsstatus'
+      };
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? bearerToken = prefs.getString('token');
@@ -156,7 +157,7 @@ class PackageReceivedFormRepository {
       var url = (AppUrl.receiptStatus);
 
       dynamic response =
-      await apiServices.getQueryResponse(url, token, queryParameters, "");
+          await apiServices.getQueryResponse(url, token, queryParameters, "");
 
       final jsonData = PackageStatus.fromJson(response);
       return jsonData;
@@ -164,5 +165,4 @@ class PackageReceivedFormRepository {
       rethrow;
     }
   }
-
 }

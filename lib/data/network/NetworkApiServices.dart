@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -64,13 +62,13 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future getQueryResponse(
-      String url, String token, Map<String, String> queryParameters, String? query) async {
+  Future getQueryResponse(String url, String token,
+      Map<String, String> queryParameters, String? query) async {
     dynamic responseJson;
 
     try {
       final response = await http.get(
-          Uri.parse(url+query!).replace(queryParameters: queryParameters),
+          Uri.parse(url + query!).replace(queryParameters: queryParameters),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -111,7 +109,7 @@ class NetworkApiService extends BaseApiServices {
     try {
       var body = json.encode(query);
 
-      var response = await http.delete(Uri.parse(url+query),
+      var response = await http.delete(Uri.parse(url + query),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -128,22 +126,21 @@ class NetworkApiService extends BaseApiServices {
     return responseJson;
   }
 
-  Future putApiResponsewithtoken(String url,String token,dynamic data, dynamic query) async {
+  Future putApiResponsewithtoken(
+      String url, String token, dynamic data, dynamic query) async {
     dynamic responseJson;
     try {
       var body = json.encode(data);
 
-      var response = await http.put(Uri.parse(url+query),
+      var response = await http.put(Uri.parse(url + query),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           },
-          body: body
-      );
+          body: body);
 
       responseJson = returnResponse(response);
-
     } on SocketException {
       throw FetchDataException(message: "No Internet Conection");
     }

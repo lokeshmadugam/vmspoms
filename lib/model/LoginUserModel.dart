@@ -8,8 +8,9 @@ class LoginUserModel {
   LoginUserModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    result =
-    json['result'] != null ? new LoginDetails.fromJson(json['result']) : null;
+    result = json['result'] != null
+        ? new LoginDetails.fromJson(json['result'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -72,50 +73,50 @@ class LoginDetails {
 
   LoginDetails(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.appUserTypeId,
-        this.appUsageTypeId,
-        this.userType,
-        this.firstName,
-        this.lastName,
-        this.phoneNo,
-        this.emailAddress,
-        this.username,
-        this.roleId,
-        this.mobileNo,
-        this.password,
-        this.passwordStatus,
-        this.toHide,
-        this.blockName,
-        this.propusrQrCodeImg,
-        this.propusrQrCode,
-        this.unitNumber,
-        this.unitDeviceCnt,
-        this.deviceId,
-        this.fcmId,
-        this.gcmId,
-        this.apnId,
-        this.signupRequestDate,
-        this.signupReqStatus,
-        this.otpCommId,
-        this.otp,
-        this.otpValidationStatus,
-        this.activationDate,
-        this.remarks,
-        this.lastLoginDatetime,
-        this.isOnline,
-        this.recStatus,
-        this.recStatusname,
-        this.appUserTypeName,
-        this.appUsageTypeName,
-        this.roleName,
-        this.userTypeName,
-        this.logoImgUrl,
-        this.propertyDispName,
-        this.countryCode,
-        this.countryName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.appUserTypeId,
+      this.appUsageTypeId,
+      this.userType,
+      this.firstName,
+      this.lastName,
+      this.phoneNo,
+      this.emailAddress,
+      this.username,
+      this.roleId,
+      this.mobileNo,
+      this.password,
+      this.passwordStatus,
+      this.toHide,
+      this.blockName,
+      this.propusrQrCodeImg,
+      this.propusrQrCode,
+      this.unitNumber,
+      this.unitDeviceCnt,
+      this.deviceId,
+      this.fcmId,
+      this.gcmId,
+      this.apnId,
+      this.signupRequestDate,
+      this.signupReqStatus,
+      this.otpCommId,
+      this.otp,
+      this.otpValidationStatus,
+      this.activationDate,
+      this.remarks,
+      this.lastLoginDatetime,
+      this.isOnline,
+      this.recStatus,
+      this.recStatusname,
+      this.appUserTypeName,
+      this.appUsageTypeName,
+      this.roleName,
+      this.userTypeName,
+      this.logoImgUrl,
+      this.propertyDispName,
+      this.countryCode,
+      this.countryName});
 
   LoginDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -215,4 +216,3 @@ class LoginDetails {
     return data;
   }
 }
-

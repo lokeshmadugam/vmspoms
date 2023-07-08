@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/utils/PositiveButton.dart';
+import '/utils/PositiveButton.dart';
 
 import '../../data/respose/Status.dart';
 
@@ -18,7 +18,8 @@ import 'TrustedNgbhFormScreen.dart';
 
 class TrustedNeighnourScreen extends StatefulWidget {
   var data;
- TrustedNeighnourScreen({Key? key,required this.data}) : super(key: key);
+
+  TrustedNeighnourScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<TrustedNeighnourScreen> createState() => _TrustedNeighnourScreenState();
@@ -48,11 +49,12 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
   bool isdelete = false;
   bool isview = false;
   bool isupload = false;
+
   void initState() {
     super.initState();
     getUserDetails();
     permissions = widget.data;
-    actionPermissions ();
+    actionPermissions();
   }
 
   void dispose() {
@@ -94,44 +96,36 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
       fetchTrustedNeighbours();
     });
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Trusted Neighbour") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Trusted Neighbour") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   void fetchTrustedNeighbours() async {
     tnViewModel
         .fetchTrustedNeighboursList("ASC", "id", 1, 500, propertyId, userId)
@@ -184,19 +178,15 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style:  Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Trusted Neighbours',
-          style:  Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Trusted Neighbours',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
@@ -216,9 +206,7 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
                         setState(() {
                           if (value.isEmpty) {
                             _filteredNbghs = _trustedNbghs;
-                          }
-
-                          else {
+                          } else {
                             var searchWords = value.toLowerCase().split(' ');
                             _filteredNbghs = _trustedNbghs.where((item) {
                               var nameWords = (item.trustedNegihbourName ?? '')
@@ -231,7 +219,6 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
                                       nameWords[1].contains(searchWord)));
                             }).toList();
                           }
-
                         });
                       },
                       textInputType: TextInputType.text,
@@ -241,33 +228,33 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  if(iscreate)
-                  InkWell(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Color(0xFF036CB2),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TrustedNeighbourFormScreen(
-                            trustedNbgh: items ?? TrustedNbghItems(),
-                            displayMode: DisplayMode.Add,
+                  if (iscreate)
+                    InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xFF036CB2),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TrustedNeighbourFormScreen(
+                              trustedNbgh: items ?? TrustedNbghItems(),
+                              displayMode: DisplayMode.Add,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
@@ -301,119 +288,121 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
                       );
                     }
 
-  return GestureDetector(
-    // onTap: () {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => TrustedNeighbourFormScreen(trustedNbgh: item,displayMode: DisplayMode.Edit,),
-    //   ),
-    // );
-    // },
-    child: Dismissible(
-      key: Key(item.id.toString()),
-      direction: DismissDirection.startToEnd,
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Icon(Icons.delete, color: Colors.white),
-        ),
-      ),
-      onDismissed: (direction) async {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) {
-              return Dialog(
-                  shape:
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius
-                          .circular(
-                          10)),
-                  elevation: 16,
-                  child: Popup(title: 'Trusted Neighbour',
-                    message: ' Are you sure you want to delete this id?',
-                    negativeButtonText: "No",
-                    onNegativePressed: () {
-                      Navigator.pop(context);
-                    },
-                    positiveButtonText: "Yes",
-                    onPositivePressed: () async {
-    if(isdelete) {
-      final response = await tnViewModel
-          .deleteTrustedNeighboursData(item.id, context);
+                    return Dismissible(
+                      key: Key(item.id.toString()),
+                      direction: DismissDirection.startToEnd,
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
+                      ),
+                      onDismissed: (direction) async {
+                        setState(() {
+                          _filteredNbghs.removeAt(index);
+                        });
 
-      if (response.data!.status == 200) {
-        // Update local state of widget
-        setState(() {
-          _trustedNbghs.removeAt(index);
-        });
-      } else if (response.data!.result == Status.error) {
-        // Show error message to user
-        Utils.flushBarErrorMessage(
-            response.message!, context);
-      }
-    }
-                    },)
-              );
-            }
-        );
+                        showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (context) {
+                              return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(10)),
+                                  elevation: 16,
+                                  child: Popup(
+                                    title: 'Trusted Neighbour',
+                                    message:
+                                    ' Are you sure you want to delete this id?',
+                                    negativeButtonText: "No",
+                                    onNegativePressed: () {
+                                      fetchTrustedNeighbours();
+                                      Navigator.pop(context);
+                                    },
+                                    positiveButtonText: "Yes",
+                                    onPositivePressed: () async {
+                                      if (isdelete) {
+                                        final response = await tnViewModel
+                                            .deleteTrustedNeighboursData(
+                                            item.id, context);
 
-      },
-      child: Card(
-        color: Colors.grey.shade100,
-        child: Column(
-          children: [
-            SizedBox(
-              height:
-              MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.01,
-            ),
-            ContainerValue(
-              text: "Name",
-              value: ": ${parts[0]}",
-            ),
-            Divider(
-              color: Colors.grey.shade400,
-            ),
-            ContainerValue(
-              text: "Unit Number",
-              value: ": ${parts[1]}",
-            ),
-            Divider(
-              color: Colors.grey.shade400,
-            ),
-            ContainerValue(
-              text: "Contact No.",
-              value: ": ${parts[3]}",
-            ),
-            Divider(
-              color: Colors.grey.shade400,
-            ),
-            ContainerValue(
-              text: "Date",
-              value:
-              ": ${item.trneigbourAddedDatetime != null ? DateFormat(
-                  'yyyy-MM-dd hh:mm a').format(
-                  DateTime.parse(item.trneigbourAddedDatetime ?? '')) : ''}",
-            ),
-            SizedBox(
-              height:
-              MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.01,
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
+                                        if (response.data!.status ==
+                                            200) {
+                                          setState(() {
+                                            fetchTrustedNeighbours();
+                                            Utils.toastMessage(response
+                                                .data!.mobMessage
+                                                .toString());
 
+                                            Navigator.pop(context);
+                                          });
+                                        } else if (response
+                                            .data!.result ==
+                                            Status.error) {
+                                          setState(() {
+                                            _filteredNbghs.insert(
+                                                index, item);
+                                            Utils.flushBarErrorMessage(
+                                                response.data!.mobMessage
+                                                    .toString(),
+                                                context);
+                                          });
+                                        }
+                                      } else {
+                                        fetchTrustedNeighbours();
+                                        Navigator.pop(context);
+                                        Utils.toastMessage(
+                                            'Do not have access to delete');
+                                      }
+                                    },
+                                  ));
+                            });
+                      },
+                      child: Card(
+                        color: Colors.grey.shade100,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.01,
+                            ),
+                            ContainerValue(
+                              text: "Name",
+                              value: ": ${parts[0]}",
+                            ),
+                            Divider(
+                              color: Colors.grey.shade400,
+                            ),
+                            ContainerValue(
+                              text: "Unit Number",
+                              value: ": ${parts[1]}",
+                            ),
+                            Divider(
+                              color: Colors.grey.shade400,
+                            ),
+                            ContainerValue(
+                              text: "Contact No.",
+                              value: ": ${parts[3]}",
+                            ),
+                            Divider(
+                              color: Colors.grey.shade400,
+                            ),
+                            ContainerValue(
+                              text: "Date",
+                              value:
+                                  ": ${item.trneigbourAddedDatetime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(item.trneigbourAddedDatetime ?? '')) : ''}",
+                            ),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.01,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -423,7 +412,6 @@ class _TrustedNeighnourScreenState extends State<TrustedNeighnourScreen> {
       ),
     );
   }
-
 
   Card buildCard(BuildContext context, TrustedNbghItems item) {
     var name = item.trustedNegihbourName ?? "";

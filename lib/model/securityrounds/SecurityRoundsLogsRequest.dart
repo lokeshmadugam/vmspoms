@@ -12,20 +12,20 @@ class SecurityRoundsLogsRequest {
   String? remarks;
   int? roundsGroupid;
 
-  SecurityRoundsLogsRequest(
-      {this.checkinLatitude,
-        this.checkinLongitude,
-        this.checkinOfficerUserid,
-        this.checkinTime,
-        this.checkpointId,
-        this.checkpointLocationImg,
-        this.checkpointVisitDailyCnt,
-        this.createdBy,
-        this.propertyId,
-        this.recStatus,
-        this.remarks,
-        this.roundsGroupid,
-      });
+  SecurityRoundsLogsRequest({
+    this.checkinLatitude,
+    this.checkinLongitude,
+    this.checkinOfficerUserid,
+    this.checkinTime,
+    this.checkpointId,
+    this.checkpointLocationImg,
+    this.checkpointVisitDailyCnt,
+    this.createdBy,
+    this.propertyId,
+    this.recStatus,
+    this.remarks,
+    this.roundsGroupid,
+  });
 
   SecurityRoundsLogsRequest.fromJson(Map<String, dynamic> json) {
     checkinLatitude = json['checkin_latitude'];

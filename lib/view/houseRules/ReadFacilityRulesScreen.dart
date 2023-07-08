@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,10 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 class ReadFacilityRulesScreen extends StatefulWidget {
   var facilityname;
   var data;
-   ReadFacilityRulesScreen({Key? key,required this.data,required this.facilityname}) : super(key: key);
+
+  ReadFacilityRulesScreen(
+      {Key? key, required this.data, required this.facilityname})
+      : super(key: key);
 
   @override
-  State<ReadFacilityRulesScreen> createState() => _ReadFacilityRulesScreenState();
+  State<ReadFacilityRulesScreen> createState() =>
+      _ReadFacilityRulesScreenState();
 }
 
 class _ReadFacilityRulesScreenState extends State<ReadFacilityRulesScreen> {
@@ -21,14 +23,12 @@ class _ReadFacilityRulesScreenState extends State<ReadFacilityRulesScreen> {
     print("Wid = $width");
     print("hei = $height");
     double? fontSize;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 11;
       print("SmallSize = $fontSize");
-    }else {
+    } else {
       fontSize = 14;
       print("BigSize = $fontSize");
-
-
     }
 
     return Scaffold(
@@ -61,19 +61,15 @@ class _ReadFacilityRulesScreenState extends State<ReadFacilityRulesScreen> {
                         Navigator.pop(context);
                       });
                     },
-                    child: Text(
-                      'Back',
-                      style: Theme.of(context).textTheme.headlineMedium
-                    ),
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
                   ),
                 ),
               ),
             ],
           ),
-          title: Text(
-            '${widget.facilityname}',
-           style: Theme.of(context).textTheme.headlineMedium
-          ),
+          title: Text('${widget.facilityname}',
+              style: Theme.of(context).textTheme.headlineMedium),
           centerTitle: true,
           backgroundColor: Color(0xFF036CB2),
         ),
@@ -85,15 +81,10 @@ class _ReadFacilityRulesScreenState extends State<ReadFacilityRulesScreen> {
                       children: [
                         HtmlWidget(
                           widget.data,
-                          textStyle: GoogleFonts.roboto(textStyle: TextStyle(color: Colors.black)),
+                          textStyle: GoogleFonts.roboto(
+                              textStyle: TextStyle(color: Colors.black)),
                         ),
                       ],
-
-                    )
-                )
-            )
-        )
-    );
+                    )))));
   }
 }
-

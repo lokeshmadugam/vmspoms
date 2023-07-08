@@ -1,4 +1,3 @@
-
 class TrustedNeighbourListModel {
   int? status;
   String? message;
@@ -10,7 +9,7 @@ class TrustedNeighbourListModel {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -36,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -92,17 +91,17 @@ class TrustedNbghItems {
 
   TrustedNbghItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.trneigbAddedPropertyUserid,
-        this.trneigbAddedDeviceId,
-        this.trneigbourPropertyUserId,
-        this.trneigbourAddedDatetime,
-        this.recStatus,
-        this.trustedNegihbourAddedName,
-        this.trustedNegihbourName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.trneigbAddedPropertyUserid,
+      this.trneigbAddedDeviceId,
+      this.trneigbourPropertyUserId,
+      this.trneigbourAddedDatetime,
+      this.recStatus,
+      this.trustedNegihbourAddedName,
+      this.trustedNegihbourName,
+      this.recStatusname});
 
   TrustedNbghItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -137,8 +136,6 @@ class TrustedNbghItems {
   }
 }
 
-
-
 class UpdateTrustedNeighbourModel {
   int? propertyId;
   int? recStatus;
@@ -150,12 +147,12 @@ class UpdateTrustedNeighbourModel {
 
   UpdateTrustedNeighbourModel(
       {this.propertyId,
-        this.recStatus,
-        this.trneigbAddedDeviceId,
-        this.trneigbAddedPropertyUserid,
-        this.trneigbourAddedDatetime,
-        this.trneigbourPropertyUserId,
-        this.updatedBy});
+      this.recStatus,
+      this.trneigbAddedDeviceId,
+      this.trneigbAddedPropertyUserid,
+      this.trneigbourAddedDatetime,
+      this.trneigbourPropertyUserId,
+      this.updatedBy});
 
   UpdateTrustedNeighbourModel.fromJson(Map<String, dynamic> json) {
     propertyId = json['property_id'];
@@ -179,6 +176,3 @@ class UpdateTrustedNeighbourModel {
     return data;
   }
 }
-
-
-

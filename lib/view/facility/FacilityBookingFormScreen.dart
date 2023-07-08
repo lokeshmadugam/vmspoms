@@ -73,6 +73,7 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
   String? endTime;
   int feepaidId = 0;
   List<VisitorStatusItems> visitorStatusItems = [];
+
   void dispose() {
     bookedOnControlller.dispose();
     bookingHoursControlller.dispose();
@@ -135,17 +136,15 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
       });
     });
   }
+
   void fetchFeePaidStatus() async {
-    viewModel.getFeePaidStatus("ASC", "id", 1, 25, "VMS", "PaymentStatus").then((response) {
+    viewModel
+        .getFeePaidStatus("ASC", "id", 1, 25, "VMS", "PaymentStatus")
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
           if (data != null) {
-
-
-
-
-
             setState(() {
               visitorStatusItems = data;
             });
@@ -156,6 +155,7 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   void submitFacilityBookingForm() async {
     if (bookedOnControlller.text.isEmpty) {
       Utils.flushBarErrorMessage('booked date can\'t be empty', context);
@@ -251,10 +251,8 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
@@ -262,19 +260,21 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
         ),
         title: Text(
           'Facility Bookings Form',
-         style: Theme.of(context).textTheme.headlineLarge,
+          style: Theme.of(context).textTheme.headlineLarge,
           // TextStyle(
           //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor:Color(0xFF036CB2),
+        backgroundColor: Color(0xFF036CB2),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -316,9 +316,6 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
                         color: Color(0xFF002449)),
                   ),
 
-
-
-
                   SizedBox(
                     width: 10,
                   ),
@@ -326,63 +323,70 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
                   // Te
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-              MyTextField(controller: facilityNameController, textInputType: TextInputType.text,enabled: false,labelText: "Facility Name",),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              MyTextField(
+                controller: facilityNameController,
+                textInputType: TextInputType.text,
+                enabled: false,
+                labelText: "Facility Name",
+              ),
 
               MyDateField(
                 preffixIcon: Icons.calendar_today,
-                  controller: bookedOnControlller,
-                  labelText: 'Booking Date',
-                  onPressed: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-                    if (picked != null) {
-                      iso8604DateTime = picked.toUtc().toIso8601String();
-                      setState(() {
-                        bookedOnControlller.text =
-                            DateFormat.yMd().format(picked);
-                      });
-                    }
-                  },
+                controller: bookedOnControlller,
+                labelText: 'Booking Date',
+                onPressed: () async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    iso8604DateTime = picked.toUtc().toIso8601String();
+                    setState(() {
+                      bookedOnControlller.text =
+                          DateFormat.yMd().format(picked);
+                    });
+                  }
+                },
               ),
               MyDateField(
                 preffixIcon: Icons.access_time,
-                  controller: usageStartTimeControlller,
-                  labelText: 'from Time',
-                  onPressed: () async {
-                    final TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
+                controller: usageStartTimeControlller,
+                labelText: 'from Time',
+                onPressed: () async {
+                  final TimeOfDay? pickedTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (pickedTime != null) {
+                    final now = DateTime.now();
+                    final pickedDateTime = DateTime(
+                      now.year,
+                      now.month,
+                      now.day,
+                      pickedTime.hour,
+                      pickedTime.minute,
                     );
-                    if (pickedTime != null) {
-                      final now = DateTime.now();
-                      final pickedDateTime = DateTime(
-                        now.year,
-                        now.month,
-                        now.day,
-                        pickedTime.hour,
-                        pickedTime.minute,
-                      );
-                      iso8602DateTime = pickedDateTime.toUtc().toIso8601String();
-                      DateTime dateTime = DateFormat('yyyy-MM-dd HH:mm:ss.SSS')
-                          .parse(pickedDateTime.toString());
-                      startTime =
-                          DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+                    iso8602DateTime = pickedDateTime.toUtc().toIso8601String();
+                    DateTime dateTime = DateFormat('yyyy-MM-dd HH:mm:ss.SSS')
+                        .parse(pickedDateTime.toString());
+                    startTime =
+                        DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
 
-                      setState(() {
-                        usageStartTimeControlller.text =
-                            DateFormat("HH:mm a").format(pickedDateTime);
-                      });
-                      _calculateDuration(); // call the method here
-                    }
-                  },
-                  onChanged: (value) {
-                    _calculateDuration(); // call this method here
-                  },
+                    setState(() {
+                      usageStartTimeControlller.text =
+                          DateFormat("HH:mm a").format(pickedDateTime);
+                    });
+                    _calculateDuration(); // call the method here
+                  }
+                },
+                onChanged: (value) {
+                  _calculateDuration(); // call this method here
+                },
               ),
               MyDateField(
                 preffixIcon: Icons.access_time,
@@ -435,21 +439,19 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
                   hintText: 'Fee Status',
                   items: visitorStatusItems
                       .map((item) => item.keyValue)
-                      .map((feestatus) =>
-                      DropdownMenuItem<String>(
-                        value: feestatus,
-                        child: Text(feestatus!),
-                      ))
+                      .map((feestatus) => DropdownMenuItem<String>(
+                            value: feestatus,
+                            child: Text(feestatus!),
+                          ))
                       .toList(),
                   onchanged: (value) {
-                    for(int i=0;i<visitorStatusItems.length;i++){
-                      if(value==visitorStatusItems[i].keyValue){
+                    for (int i = 0; i < visitorStatusItems.length; i++) {
+                      if (value == visitorStatusItems[i].keyValue) {
                         feepaidId = visitorStatusItems[i].id!;
                         break;
                       }
                     }
-                  }
-              ),
+                  }),
               // MyTextField(
               //   preffixIcon: Icons.rate_review_sharp,
               //   controller: feeStatusControlller,
@@ -458,38 +460,38 @@ class _FacilityBookingFormScreenState extends State<FacilityBookingFormScreen> {
               // ),
               MyDateField(
                 preffixIcon: Icons.access_time,
-                  controller: keyCodeCollectionTimeControlller,
-                  labelText: 'Key Colletion Time',
-                  onPressed: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (picked != null) {
-                      setState(() {
-                        keyCodeCollectionTimeControlller.text =
-                            picked.format(context);
-                      });
-                    }
-                  },
-                 ),
+                controller: keyCodeCollectionTimeControlller,
+                labelText: 'Key Colletion Time',
+                onPressed: () async {
+                  final TimeOfDay? picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      keyCodeCollectionTimeControlller.text =
+                          picked.format(context);
+                    });
+                  }
+                },
+              ),
               MyDateField(
                 preffixIcon: Icons.timer_off_rounded,
-                  controller: keyCodeHandoverTimeControlller,
-                  labelText: 'Key Handover Time',
-                  onPressed: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (picked != null) {
-                      setState(() {
-                        keyCodeHandoverTimeControlller.text =
-                            picked.format(context);
-                      });
-                    }
-                  },
-                  ),
+                controller: keyCodeHandoverTimeControlller,
+                labelText: 'Key Handover Time',
+                onPressed: () async {
+                  final TimeOfDay? picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      keyCodeHandoverTimeControlller.text =
+                          picked.format(context);
+                    });
+                  }
+                },
+              ),
               MyTextField(
                 preffixIcon: Icons.person,
                 controller: keyCodeHandoverbyControlller,

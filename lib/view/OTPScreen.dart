@@ -41,7 +41,6 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   void verifyEmail(var otp) async {
-
     Map<String, dynamic> data = {
       "created_by": 31,
       "email": widget.data,
@@ -116,9 +115,12 @@ class _OTPScreenState extends State<OTPScreen> {
         ),
         title: Text(
           'OTP Verification',
-          style:GoogleFonts.roboto(textStyle:TextStyle(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal), ),
-
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.normal),
+          ),
         ),
         centerTitle: true,
       ),
@@ -130,7 +132,8 @@ class _OTPScreenState extends State<OTPScreen> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(4,
+                children: List.generate(
+                  4,
                   (index) => SizedBox(
                     width: MediaQuery.of(context).size.width * 0.1,
                     child: TextFormField(
@@ -180,9 +183,12 @@ class _OTPScreenState extends State<OTPScreen> {
                     },
                     child: Text(
                       "Verify",
-
-                      style:GoogleFonts.roboto(textStyle:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.normal), ),
-
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal),
+                      ),
                     ),
                   ),
                 ),

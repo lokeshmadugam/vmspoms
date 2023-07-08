@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+
 // import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../view/notifications/SampleDataForNow.dart';
@@ -14,12 +15,10 @@ class NotificationViewScreen extends StatefulWidget {
   NotificationViewScreen({Key? key, required this.data}) : super(key: key);
 
   @override
-  State<NotificationViewScreen> createState() =>
-      _NotificationViewScreenState();
+  State<NotificationViewScreen> createState() => _NotificationViewScreenState();
 }
 
 class _NotificationViewScreenState extends State<NotificationViewScreen> {
-
   SampleDataForNow data = SampleDataForNow();
   String? generatedPdfFilePath;
 
@@ -27,7 +26,7 @@ class _NotificationViewScreenState extends State<NotificationViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.data!=null){
+    if (widget.data != null) {
       data = widget.data;
     }
   }
@@ -36,7 +35,6 @@ class _NotificationViewScreenState extends State<NotificationViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         leadingWidth: 90,
         elevation: 0.0,
         leading: Row(
@@ -87,7 +85,6 @@ class _NotificationViewScreenState extends State<NotificationViewScreen> {
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -112,11 +109,10 @@ class _NotificationViewScreenState extends State<NotificationViewScreen> {
                     child: Text(
                       'View PDF',
                       style: const TextStyle(
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white),
+                          fontWeight: FontWeight.normal, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor:Color(0xFF036CB2),
+                        backgroundColor: Color(0xFF036CB2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25))),
                   ),
@@ -138,16 +134,16 @@ class _NotificationViewScreenState extends State<NotificationViewScreen> {
     final targetPath = appDocDir.path;
     final targetFileName = "notification-pdf";
 
-    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(htmlContent, targetPath, targetFileName);
+    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
+        htmlContent, targetPath, targetFileName);
     generatedPdfFilePath = generatedPdfFile.path;
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PDFScreen(pdfPath: generatedPdfFilePath.toString()),
+        builder: (context) =>
+            PDFScreen(pdfPath: generatedPdfFilePath.toString()),
       ),
     );
-
   }
-
 }

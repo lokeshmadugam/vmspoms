@@ -9,7 +9,7 @@ class TrustedNeighboursModel {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -86,12 +86,12 @@ class NeighboursItems {
 
   NeighboursItems(
       {this.id,
-        this.firstName,
-        this.lastName,
-        this.blockName,
-        this.unitNumber,
-        this.phoneNo,
-        this.mobileNo});
+      this.firstName,
+      this.lastName,
+      this.blockName,
+      this.unitNumber,
+      this.phoneNo,
+      this.mobileNo});
 
   NeighboursItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -115,4 +115,3 @@ class NeighboursItems {
     return data;
   }
 }
-

@@ -9,7 +9,8 @@ import 'RuleBook.dart';
 
 class FacilityScreen extends StatefulWidget {
   var permisssions;
-  FacilityScreen({Key? key,required this.permisssions}) : super(key: key);
+
+  FacilityScreen({Key? key, required this.permisssions}) : super(key: key);
 
   @override
   State<FacilityScreen> createState() => _FacilityScreenState();
@@ -32,7 +33,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
   void initState() {
     super.initState();
     getUserDetails();
-
   }
 
   @override
@@ -67,9 +67,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
       setState(() {
         fetchFacilityType();
       });
-
     });
-
   }
 
   void fetchFacilityType() async {
@@ -115,12 +113,15 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   ),
                 );
               }
-              return buildNewCard(context, item,) ;
-
+              return buildNewCard(
+                context,
+                item,
+              );
             }),
       ),
     );
   }
+
   Card buildNewCard(BuildContext context, FacilityTypes item) {
     return Card(
       color: Colors.grey.shade100,
@@ -130,7 +131,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
           Expanded(
             child: Column(
               children: [
-                
                 SizedBox(
                   // height: MediaQuery.of(context).size.height * 0.14,
                   child: Image.network(
@@ -141,11 +141,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                 SizedBox(
                   // height: 30,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0,bottom: 5.0),
+                    padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                     child: Text(
                       "${item.facilityName ?? ""}",
-                      style:
-    GoogleFonts.roboto(textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                      style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500)),
                     ),
                   ),
                 ),
@@ -157,37 +158,40 @@ class _FacilityScreenState extends State<FacilityScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if(item.facilityRulebook!.isNotEmpty)
-                  Visibility(visible:true,child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RuleBookScreen(
-                                  facilityName: item.facilityRulebook ?? '',
-                                )));
-                      },
-                      icon: Icon(
-                        Icons.info_outline,
-                        color: Color(0xFF036CB2),
-                      )),),
-
-
+                if (item.facilityRulebook!.isNotEmpty)
+                  Visibility(
+                    visible: true,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RuleBookScreen(
+                                        facilityName:
+                                            item.facilityRulebook ?? '',
+                                      )));
+                        },
+                        icon: Icon(
+                          Icons.info_outline,
+                          color: Color(0xFF036CB2),
+                        )),
+                  ),
                 IconButton(
                     onPressed: () {
                       Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BookFacilityScreen(
-                                          facilityName: item.facilityName ?? '',
-                                          facilityId: item.facilityId ?? 0,
-                                          image: item.facilityThumbnailImb ?? '', permisssions: widget.permisssions,)));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => BookFacilityScreen(
+                                    facilityName: item.facilityName ?? '',
+                                    facilityId: item.facilityId ?? 0,
+                                    image: item.facilityThumbnailImb ?? '',
+                                    permisssions: widget.permisssions,
+                                  )));
                     },
                     icon: Icon(
                       Icons.arrow_forward_ios_sharp,
                       color: Color(0xFF036CB2),
                     )),
-
               ],
             ),
           ),
@@ -195,47 +199,45 @@ class _FacilityScreenState extends State<FacilityScreen> {
       ),
     );
   }
-  // Card buildCard(FacilityTypes item, BuildContext context) {
-  //   return Card(
-  //                 color: Colors.white,
-  //                 child: Column(
-  //
-  //
-  //                   children: [
-  //
-  //                     Padding(
-  //                       padding: const EdgeInsets.all(8.0),
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.center,
-  //                         children: [
-  //
-  //                           Column(
-  //                             crossAxisAlignment: CrossAxisAlignment.center,
-  //                             children: [
-  //                               SizedBox(
-  //                                 width: 30,
-  //                                 child: Icon(
-  //                                   Icons.keyboard_arrow_right,
-  //                                   size: 30,
-  //                                   color: Color(0xFF036CB2),
-  //                                 ),
-  //                               ),
-  //                               SizedBox(
-  //                                 width: 30,
-  //                                 child: Icon(
-  //                                   Icons.keyboard_arrow_right,
-  //                                   size: 30,
-  //                                   color: Color(0xFF036CB2),
-  //                                 ),
-  //                               ),
-  //                             ],
-  //                           )
-  //                         ],
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ));
-  // }
-
-
+// Card buildCard(FacilityTypes item, BuildContext context) {
+//   return Card(
+//                 color: Colors.white,
+//                 child: Column(
+//
+//
+//                   children: [
+//
+//                     Padding(
+//                       padding: const EdgeInsets.all(8.0),
+//                       child: Row(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//
+//                           Column(
+//                             crossAxisAlignment: CrossAxisAlignment.center,
+//                             children: [
+//                               SizedBox(
+//                                 width: 30,
+//                                 child: Icon(
+//                                   Icons.keyboard_arrow_right,
+//                                   size: 30,
+//                                   color: Color(0xFF036CB2),
+//                                 ),
+//                               ),
+//                               SizedBox(
+//                                 width: 30,
+//                                 child: Icon(
+//                                   Icons.keyboard_arrow_right,
+//                                   size: 30,
+//                                   color: Color(0xFF036CB2),
+//                                 ),
+//                               ),
+//                             ],
+//                           )
+//                         ],
+//                       ),
+//                     ),
+//                   ],
+//                 ));
+// }
 }

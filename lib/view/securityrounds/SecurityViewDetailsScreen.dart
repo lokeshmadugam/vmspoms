@@ -15,7 +15,6 @@ class SecurityViewDetailsScreen extends StatefulWidget {
 }
 
 class _SecurityViewDetailsScreenState extends State<SecurityViewDetailsScreen> {
-
   GoogleMapController? _controller;
   Set<Marker> _markers = {};
   Set<Polyline> _polylines = {};
@@ -84,10 +83,8 @@ class _SecurityViewDetailsScreenState extends State<SecurityViewDetailsScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
@@ -109,12 +106,14 @@ class _SecurityViewDetailsScreenState extends State<SecurityViewDetailsScreen> {
               child: Consumer<SecurityViewDetailsScreenViewModel>(
                   builder: (context, model, child) {
                 if (model.securityDetails.data?.result?.items != null) {
-                  var data = model.securityDetails.data!.result!.items![0].mapView;
+                  var data =
+                      model.securityDetails.data!.result!.items![0].mapView;
 
                   List<LatLng> pathPoints = [];
 
-                  for(int i=0;i<data!.length;i++){
-                    pathPoints.add(LatLng(double.parse(data[i].checkinLatitude.toString()),
+                  for (int i = 0; i < data!.length; i++) {
+                    pathPoints.add(LatLng(
+                        double.parse(data[i].checkinLatitude.toString()),
                         double.parse(data[i].checkinLongitude.toString())));
                   }
 
@@ -155,13 +154,12 @@ class _SecurityViewDetailsScreenState extends State<SecurityViewDetailsScreen> {
                     },
                     markers: _markers,
                     polylines: _polylines,
-                   // circles: _circles,
+                    // circles: _circles,
                   );
                 }
                 return Container();
               }),
             ),
-
           ],
         ),
       ),

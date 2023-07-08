@@ -14,11 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:poms_app/utils/CardData.dart';
-import 'package:poms_app/utils/MyDateField.dart';
-import 'package:poms_app/utils/MyTextfield.dart';
-import 'package:poms_app/view/visitorreg/ParkingAvailableScreen.dart';
-import 'package:poms_app/viewmodel/visitorregistration/ParkingViewModel.dart';
+import '/utils/CardData.dart';
+import '/utils/MyDateField.dart';
+import '/utils/MyTextfield.dart';
+import '/view/visitorreg/ParkingAvailableScreen.dart';
+import '/viewmodel/visitorregistration/ParkingViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -41,12 +41,10 @@ import '../../utils/utils.dart';
 
 class InviteGuestScreen extends StatefulWidget {
   var contact;
-var favoritevisitor;
-  InviteGuestScreen({
-    Key? key,
-    required this.contact,
-    this.favoritevisitor
-  }) : super(key: key);
+  var favoritevisitor;
+
+  InviteGuestScreen({Key? key, required this.contact, this.favoritevisitor})
+      : super(key: key);
 
   @override
   State<InviteGuestScreen> createState() => _InviteGuestScreenState();
@@ -101,6 +99,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
   var bayNumber;
   Contact? _contact;
   List<FavoriteVisitorsItems> items = [];
+
   @override
   void initState() {
     super.initState();
@@ -118,26 +117,26 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
     nameController = TextEditingController(text: name);
 
     mobilenumberController = TextEditingController(text: phoneNumber);
-    if(widget.favoritevisitor != null){
+    if (widget.favoritevisitor != null) {
       setState(() {
         items = widget.favoritevisitor; // Assign the list to the items variable
         print("object = $items");
         nameController.text = items[0].visitorName.toString();
         mobilenumberController.text = items[0].visitorMobileNo.toString();
-        if(items[0].visitReasonId != 0){
+        if (items[0].visitReasonId != 0) {
           visitReasonId = items[0].visitReasonId ?? 0;
         }
 
         vehicleTypeId = items[0].visitorTransportMode ?? 0;
         carPlateNumberController.text = items[0].vehiclePlateNo.toString();
-        drivingLicenceNumberController.text = items[0].idDrivingLicenseNo.toString();
+        drivingLicenceNumberController.text =
+            items[0].idDrivingLicenseNo.toString();
         numberofvistorsController.text = items[0].noOfVisitor.toString();
         notesController.text = items[0].remarks.toString();
-        if(items[0].isParkingRequired == 1){
-          isParkingRequired =true;
+        if (items[0].isParkingRequired == 1) {
+          isParkingRequired = true;
         }
       });
-
     }
     // fetchVisitType1();
     // fetchVisitReasons1();
@@ -189,8 +188,6 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
     });
   }
 
-
-
   void fetchVisitType() async {
     viewModel.getVisitorType().then((response) {
       if (response.data?.status == 200) {
@@ -215,7 +212,6 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
                 }
               }
             }
-
           }
         }
       }
@@ -279,44 +275,11 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
           if (data != null) {
             setState(() {
               visitReasonsItems = data;
-for(var i in visitReasonsItems){
-
-
-  if(visitReasonId == i.id ){
-    finalvalue1 = i.visitReason.toString();
-    break;
-  }
-
-}
-            });
-          }
-        }
-      }
-    }).catchError((error) {
-      Utils.flushBarErrorMessage("failed", context);
-    });
-  }
-  //
-  void fetchVehicleType() async {
-    viewModel.getVehicleTypes().then((response) {
-      if (response.data?.status == 200) {
-        if (response.data?.result != null) {
-          var data = response.data!.result!.items;
-          if (data != null) {
-            for (var item in data){
-
-            }
-            setState(() {
-
-              vehicleTypeItems = data;
-              for(var i in vehicleTypeItems){
-
-
-                if(vehicleTypeId == i.id ){
-                  finalvalue2 = i.vehicleType.toString();
+              for (var i in visitReasonsItems) {
+                if (visitReasonId == i.id) {
+                  finalvalue1 = i.visitReason.toString();
                   break;
                 }
-
               }
             });
           }
@@ -326,6 +289,32 @@ for(var i in visitReasonsItems){
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
+  //
+  void fetchVehicleType() async {
+    viewModel.getVehicleTypes().then((response) {
+      if (response.data?.status == 200) {
+        if (response.data?.result != null) {
+          var data = response.data!.result!.items;
+          if (data != null) {
+            for (var item in data) {}
+            setState(() {
+              vehicleTypeItems = data;
+              for (var i in vehicleTypeItems) {
+                if (vehicleTypeId == i.id) {
+                  finalvalue2 = i.vehicleType.toString();
+                  break;
+                }
+              }
+            });
+          }
+        }
+      }
+    }).catchError((error) {
+      Utils.flushBarErrorMessage("failed", context);
+    });
+  }
+
   // Function to fetch visitors status and get IDs
   // void fetchVisitorStatus() async {
   //   await viewModel.getVisitorsStatus("ASC", "id", 1, 25, "VMS", "VisitorStatus");
@@ -375,7 +364,8 @@ for(var i in visitReasonsItems){
     String _visitReason = visitorData?.vistReason ?? '';
     String _vehicleType = visitorData?.vehicleType ?? '';
     String _parkingRequired = visitorData?.parkingRequired ?? '';
-    if(visitorData?.visitorArrivalDate != null || visitorData!.visitorArrivalDate.toString().isNotEmpty ) {
+    if (visitorData?.visitorArrivalDate != null ||
+        visitorData!.visitorArrivalDate.toString().isNotEmpty) {
       String _arrivalDate = visitorData?.visitorArrivalDate ?? '';
     }
     // Debug prints
@@ -604,17 +594,19 @@ for(var i in visitReasonsItems){
                 SizedBox(
                     // height: MediaQuery.of(context).size.height * 0.03,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Center(
-                  child: Image.asset(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Center(
+                    child: Image.asset(
                       'assets/images/VMS-POMS_Logo1.png',
                       height: MediaQuery.of(context).size.height * 0.03,
+                    ),
                   ),
-                ),
-                    )),
+                )),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 20),
-                  child: Text('E - Residences', style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15) )),
+                  child: Text('E - Residences',
+                      style: GoogleFonts.roboto(
+                          textStyle: TextStyle(fontSize: 15))),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 5.0, bottom: 5),
@@ -626,30 +618,32 @@ for(var i in visitReasonsItems){
                         children: [
                           Text(
                             firstName,
-                            style: GoogleFonts.roboto(textStyle:TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF002449))),
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF002449))),
                           ),
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            "-",
-                            style:GoogleFonts.roboto(textStyle: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF002449)),
-                          )),
+                          Text("-",
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF002449)),
+                              )),
                           SizedBox(
                             width: 10,
                           ),
                           Text(
                             blockName ?? '',
-                            style: GoogleFonts.roboto(textStyle:TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF002449))),
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF002449))),
                           ),
 
                           SizedBox(
@@ -657,10 +651,11 @@ for(var i in visitReasonsItems){
                           ),
                           Text(
                             unitNumber ?? '',
-                            style: GoogleFonts.roboto(textStyle:TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF002449))),
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF002449))),
                           ),
                           // Text(lastName,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
                         ],
@@ -864,38 +859,34 @@ for(var i in visitReasonsItems){
 
               // VisitTypeDropdown
               if (userTypeName == "Resident User")
-              Visibility(
-                visible:  true,
-                child: MyDropDown(
-                    value: finalvalue,
-                    labelText: 'Entry Type',
-                    hintText: 'Select Entry Type',
-                    items: visitTypeItems
-                        .map((item) => item.visitType)
-                        .map((identityType) =>
-                        DropdownMenuItem<String>(
-                          value: identityType,
-                          child: Text(identityType!),
-                        ))
-                        .toList(),
-                    onchanged: (value) {
+                Visibility(
+                  visible: true,
+                  child: MyDropDown(
+                      value: finalvalue,
+                      labelText: 'Entry Type',
+                      hintText: 'Select Entry Type',
+                      items: visitTypeItems
+                          .map((item) => item.visitType)
+                          .map((identityType) => DropdownMenuItem<String>(
+                                value: identityType,
+                                child: Text(identityType!),
+                              ))
+                          .toList(),
+                      onchanged: (value) {
+                        for (int i = 0; i < visitTypeItems.length; i++) {
+                          if (value == visitTypeItems[i].visitType) {
+                            setState(() {
+                              visitTypeId = visitTypeItems[i].id!;
+                              finalvalue = value.toString();
+                              print('visittype = $visitTypeId');
+                              print('finalvalue = $finalvalue');
+                            });
 
-                      for(int i=0;i<visitTypeItems.length;i++){
-                        if(value==visitTypeItems[i].visitType){
-                          setState(() {
-                            visitTypeId = visitTypeItems[i].id!;
-                            finalvalue = value.toString();
-                            print('visittype = $visitTypeId');
-                            print('finalvalue = $finalvalue');
-                          });
-
-                          break;
+                            break;
+                          }
                         }
-                      }
-                    }
+                      }),
                 ),
-              ),
-
 
               if (userTypeName != "Resident User")
                 Visibility(
@@ -909,64 +900,53 @@ for(var i in visitReasonsItems){
                       enabled: false),
                 ),
 
-
-
               MyDropDown(
                   value: finalvalue1,
                   hintText: 'Select Purpose of Visit Reason',
                   labelText: 'Purpose of Visit Reason',
                   items: visitReasonsItems
                       .map((item) => item.visitReason)
-                      .map((identityType) =>
-                      DropdownMenuItem<String>(
-                        value: identityType,
-                        child: Text(identityType!),
-                      ))
+                      .map((identityType) => DropdownMenuItem<String>(
+                            value: identityType,
+                            child: Text(identityType!),
+                          ))
                       .toList(),
                   onchanged: (value) {
                     finalvalue1 = value.toString();
-                    for(int i=0;i<visitReasonsItems.length;i++){
-                      if(value==visitReasonsItems[i].visitReason){
+                    for (int i = 0; i < visitReasonsItems.length; i++) {
+                      if (value == visitReasonsItems[i].visitReason) {
                         visitReasonId = visitReasonsItems[i].id!;
                         break;
                       }
                     }
-                  }
-              ),
+                  }),
 
               Row(
                 children: [
                   Expanded(
-                    child: MyDropDown(
-    hintText: 'Vehicle Type',
-    value: finalvalue2,
-    labelText: 'Vehicle Type',
-    items: vehicleTypeItems
-        .map((item) => item.vehicleType)
-        .map((identityType) =>
-        DropdownMenuItem<String>(
-          value: identityType,
-          child: Text(identityType!),
-        ))
-        .toList(),
-    onchanged: (value) {
-    setState(() {
-    finalvalue2 = value.toString();
-    for(int i=0;i<vehicleTypeItems.length;i++){
-    if(value==vehicleTypeItems[i].vehicleType){
-    vehicleTypeId = vehicleTypeItems[i].id!;
-    break;
-    }
-    }
-
-
-
-    });
-    },
-    )
-
-
-                  ),
+                      child: MyDropDown(
+                    hintText: 'Vehicle Type',
+                    value: finalvalue2,
+                    labelText: 'Vehicle Type',
+                    items: vehicleTypeItems
+                        .map((item) => item.vehicleType)
+                        .map((identityType) => DropdownMenuItem<String>(
+                              value: identityType,
+                              child: Text(identityType!),
+                            ))
+                        .toList(),
+                    onchanged: (value) {
+                      setState(() {
+                        finalvalue2 = value.toString();
+                        for (int i = 0; i < vehicleTypeItems.length; i++) {
+                          if (value == vehicleTypeItems[i].vehicleType) {
+                            vehicleTypeId = vehicleTypeItems[i].id!;
+                            break;
+                          }
+                        }
+                      });
+                    },
+                  )),
                   SizedBox(
                     child: Row(
                       children: [
@@ -1034,9 +1014,7 @@ for(var i in visitReasonsItems){
                   textInputType: TextInputType.text,
                   preffixIcon: Icons.person_add_rounded),
 
-
-              if (
-                  (finalvalue == "One Time" || visitTypeId == 1) ||
+              if ((finalvalue == "One Time" || visitTypeId == 1) ||
                   (finalvalue == "Overnight Stay" || visitTypeId == 7))
                 Visibility(
                   visible: true,
@@ -1059,9 +1037,9 @@ for(var i in visitReasonsItems){
                               });
                             }
                           },
-                          controller: arrivalDateController, labelText: 'Arrival Date',
+                          controller: arrivalDateController,
+                          labelText: 'Arrival Date',
                           preffixIcon: Icons.calendar_today,
-
                         ),
                       ),
                       SizedBox(
@@ -1085,9 +1063,7 @@ for(var i in visitReasonsItems){
                             controller: arrivalTimeController,
                             hintText: 'Arrival Time',
                             labelText: " Arr.Time",
-
-                                    suffixIcon: Icons.access_time,
-
+                            suffixIcon: Icons.access_time,
                             onPressed: () async {
                               final TimeOfDay? picked = await showTimePicker(
                                 context: context,
@@ -1135,10 +1111,7 @@ for(var i in visitReasonsItems){
                         ),
                       ),
                       SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.01,
+                        width: MediaQuery.of(context).size.width * 0.01,
                       ),
                       Expanded(
                         child: MyDateField(
@@ -1165,7 +1138,7 @@ for(var i in visitReasonsItems){
                     ],
                   ),
                 ),
-              if((userTypeName != "Resident User" && secuvisitTypeId == 1 ))
+              if ((userTypeName != "Resident User" && secuvisitTypeId == 1))
                 Visibility(
                   visible: true,
                   child: Row(
@@ -1187,9 +1160,9 @@ for(var i in visitReasonsItems){
                               });
                             }
                           },
-                          controller: arrivalDateController, labelText: 'Arrival Date',
+                          controller: arrivalDateController,
+                          labelText: 'Arrival Date',
                           preffixIcon: Icons.calendar_today,
-
                         ),
                       ),
                       SizedBox(
@@ -1213,9 +1186,7 @@ for(var i in visitReasonsItems){
                             controller: arrivalTimeController,
                             hintText: 'Arrival Time',
                             labelText: " Arr.Time",
-
                             suffixIcon: Icons.access_time,
-
                             onPressed: () async {
                               final TimeOfDay? picked = await showTimePicker(
                                 context: context,
@@ -1234,7 +1205,6 @@ for(var i in visitReasonsItems){
                     ],
                   ),
                 ),
-
 
               if (userTypeName != "Resident User")
                 Visibility(
@@ -1291,8 +1261,8 @@ for(var i in visitReasonsItems){
                         finalvalue1 = null;
                         finalvalue2 = null;
                       });
-                    }, text: 'Submit',
-
+                    },
+                    text: 'Submit',
                   ),
                 ),
               ),
@@ -1563,7 +1533,6 @@ for(var i in visitReasonsItems){
 //     ])),
 
 // VehicleTypeDropdown
-
 
 // ChangeNotifierProvider.value(
 //     value: viewModel,

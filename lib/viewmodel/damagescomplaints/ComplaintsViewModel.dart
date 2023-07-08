@@ -13,7 +13,8 @@ import '../../utils/Utils.dart';
 class ComplaintsViewModel with ChangeNotifier {
   final _myRepo = ComplaintsRepo();
 
-  Future<ApiResponse<Complaints>> fetchComplaintsList(var propertyId, var userId) async {
+  Future<ApiResponse<Complaints>> fetchComplaintsList(
+      var propertyId, var userId) async {
     ApiResponse<Complaints> complaintsListResponse = ApiResponse.loading();
 
     try {
@@ -47,12 +48,14 @@ class ComplaintsViewModel with ChangeNotifier {
     return serviceListResponse;
   }
 
-  Future<ApiResponse<ManagementOffice>> fetchComplaintAssignedToItems(var appUserTypeId,
-      var propertyId) async {
-    ApiResponse<ManagementOffice> managementOfficeResponse = ApiResponse.loading();
+  Future<ApiResponse<ManagementOffice>> fetchComplaintAssignedToItems(
+      var appUserTypeId, var propertyId) async {
+    ApiResponse<ManagementOffice> managementOfficeResponse =
+        ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getComplaintAssignedToItems(appUserTypeId, propertyId);
+      final value =
+          await _myRepo.getComplaintAssignedToItems(appUserTypeId, propertyId);
       managementOfficeResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -102,8 +105,10 @@ class ComplaintsViewModel with ChangeNotifier {
 
     return response;
   }
+
   // Delete Visitor Data
-  Future<ApiResponse<DeleteResponse>> deletetComplaintDetails(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deletetComplaintDetails(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -111,9 +116,8 @@ class ComplaintsViewModel with ChangeNotifier {
       DeleteResponse value = await _myRepo.deleteComplaintDetails(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);

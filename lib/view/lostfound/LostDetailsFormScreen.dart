@@ -13,15 +13,15 @@ import '../../model/SignInModel.dart';
 
 class LostDetailsFormScreen extends StatefulWidget {
   var data;
-bool upload;
-  LostDetailsFormScreen({super.key, required this.data,required this.upload});
+  bool upload;
+
+  LostDetailsFormScreen({super.key, required this.data, required this.upload});
 
   @override
   State<LostDetailsFormScreen> createState() => _LostDetailsFormScreenState();
 }
 
 class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
-
   final _formKey = GlobalKey<FormState>();
   UserDetails userDetails = UserDetails();
 
@@ -36,11 +36,8 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
   @override
   void initState() {
     super.initState();
-    if(widget.data == null){
-
-    } else {
-
-    }
+    if (widget.data == null) {
+    } else {}
     _getUserDetails();
   }
 
@@ -84,23 +81,18 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Lost / Damaged Items',
-          style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Lost / Damaged Items',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
-        backgroundColor:  Color(0xFF036CB2),
+        backgroundColor: Color(0xFF036CB2),
       ),
-
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -109,7 +101,7 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
             child: Column(
               children: [
                 MyTextField(
-                  preffixIcon: Icons.list_outlined,
+                    preffixIcon: Icons.list_outlined,
                     controller: _itemNameController,
                     labelText: 'Item Name',
                     textInputType: TextInputType.text),
@@ -117,7 +109,7 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
                     preffixIcon: Icons.note,
                     controller: _descriptionController,
                     labelText: 'Description',
-                    textInputType: TextInputType.number),
+                    textInputType: TextInputType.text),
                 MyDateField(
                   preffixIcon: Icons.calendar_today,
                   labelText: 'Lost Date',
@@ -130,8 +122,10 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
                     preffixIcon: Icons.location_on_outlined,
                     controller: _lostLocationController,
                     labelText: 'Lost Location',
-                    textInputType: TextInputType.number),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.007,),
+                    textInputType: TextInputType.text),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.007,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -142,82 +136,89 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
                         child: Text(
                           'Lost item picture :',
                           style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.normal),
+                              fontSize: 15.0, fontWeight: FontWeight.normal),
                         ),
                       ),
                     ),
-                    if(widget.upload)
-                    InkWell(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        decoration: BoxDecoration(
-                            color: Color(0xFF036CB2),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.upload,color: Colors.white,size: 18,),
-                              Text(
-                                'Gallery',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
+                    if (widget.upload)
+                      InkWell(
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          decoration: BoxDecoration(
+                              color: Color(0xFF036CB2),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.upload,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                                Text(
+                                  'Gallery',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      onTap: () {
-                        getImage();
-                      },
-                    )
+                        onTap: () {
+                          getImage();
+                        },
+                      )
                   ],
                 ),
-                if(widget.upload)
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Container(
-                    //width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.20,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                      child: _image == null
-                          ? Text('No image selected')
-                          : Image.file(_image!),
+                if (widget.upload)
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      //width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: _image == null
+                            ? Text('No image selected')
+                            : Image.file(_image!),
+                      ),
                     ),
                   ),
-                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width*0.70,
+                  width: MediaQuery.of(context).size.width * 0.70,
                   child: PositiveButton(
                       text: 'Submit',
                       onPressed: () {
-
-                        DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a').parse(_lostDateController.text.toString());
-                        String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+                        DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
+                            .parse(_lostDateController.text.toString());
+                        String formattedDateTime =
+                            DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
 
                         Map<String, dynamic> data = {
                           "created_by": userDetails.id,
                           "lost_date_time": formattedDateTime,
-                          "lost_description": _descriptionController.text.toString(),
+                          "lost_description":
+                              _descriptionController.text.toString(),
                           "lost_item_img_url": "",
                           "lost_item_name": _itemNameController.text.toString(),
-                          "lost_location": _lostLocationController.text.toString(),
+                          "lost_location":
+                              _lostLocationController.text.toString(),
                           "lost_report_user_id": userDetails.id,
                           "lost_unit_no": userDetails.unitNumber,
                           "property_id": userDetails.propertyId,
                           "rec_status": userDetails.recStatus,
                         };
 
-
                         Provider.of<LostDetailsFormScreenViewModel>(context,
-                            listen: false)
+                                listen: false)
                             .getMediaUpload(_image!.path, data, context);
+
+                        print(_image!.path);
 
                         /*if(widget.data == null){
                           Provider.of<PackageExpectedFormScreenViewModel>(context,
@@ -228,7 +229,6 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
                               listen: false)
                               .updateExpectedPackage(data, items.id, context);
                         }*/
-
                       }),
                 )
               ],
@@ -255,8 +255,10 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
 
       if (selectedTime != null) {
         setState(() {
-          _selectedDateTime = DateTime(selected.year, selected.month, selected.day, selectedTime.hour, selectedTime.minute);
-          controller.text = DateFormat('yyyy-MM-dd hh:mm a').format(_selectedDateTime!);
+          _selectedDateTime = DateTime(selected.year, selected.month,
+              selected.day, selectedTime.hour, selectedTime.minute);
+          controller.text =
+              DateFormat('yyyy-MM-dd hh:mm a').format(_selectedDateTime!);
         });
       }
     }
@@ -264,11 +266,12 @@ class _LostDetailsFormScreenState extends State<LostDetailsFormScreen> {
 
   Future getImage() async {
     final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _image = File(pickedFile!.path);
+      print(_image.toString());
+      //print(_image.path.toString());
     });
   }
-
 }

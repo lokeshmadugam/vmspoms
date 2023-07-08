@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,7 +22,9 @@ import '../../utils/Utils.dart';
 
 class ClockInClockOutScreen extends StatefulWidget {
   var permissions;
- ClockInClockOutScreen({Key? key,required this.permissions}) : super(key: key);
+
+  ClockInClockOutScreen({Key? key, required this.permissions})
+      : super(key: key);
 
   @override
   State<ClockInClockOutScreen> createState() => _ClockInClockOutScreenState();
@@ -104,7 +105,7 @@ class _ClockInClockOutScreenState extends State<ClockInClockOutScreen> {
   fetchById() {
     viewModel
         .fetchClockInClockOutByEmployeeId1(
-        date, userDetails.employeeId, userDetails.propertyId)
+            date, userDetails.employeeId, userDetails.propertyId)
         .then((value) {
       if (value.data != null) {
         clockInClockOutByEmployeeId = value.data!;
@@ -153,8 +154,8 @@ class _ClockInClockOutScreenState extends State<ClockInClockOutScreen> {
 
       isLoading = false;
     });
-print("loca = $locationNameLine1");
-print("loca = $locationNameLine2");
+    print("loca = $locationNameLine1");
+    print("loca = $locationNameLine2");
     _getUserDetails();
   }
 
@@ -204,7 +205,7 @@ print("loca = $locationNameLine2");
                         child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        date.toString() + "  "+ _timeString,
+                        date.toString() + "  " + _timeString,
                         style:
                             TextStyle(fontSize: 14, color: Color(0xFF036CB2)),
                       ),
@@ -212,32 +213,32 @@ print("loca = $locationNameLine2");
                   ],
                 ),
                 //if (pathPoints.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: isLoading
-                        ? CircularProgressIndicator()
-                        : Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: pathPoints.first,
-                          zoom: 15.0,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: isLoading
+                      ? CircularProgressIndicator()
+                      : Container(
+                          height: MediaQuery.of(context).size.height / 5,
+                          child: GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                              target: pathPoints.first,
+                              zoom: 15.0,
+                            ),
+                            onMapCreated: (GoogleMapController controller) {
+                              _controller = controller;
+                              setState(() {
+                                _markers.add(
+                                  Marker(
+                                    markerId: MarkerId('start'),
+                                    position: pathPoints.first,
+                                  ),
+                                );
+                              });
+                            },
+                            markers: _markers,
+                          ),
                         ),
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller = controller;
-                          setState(() {
-                            _markers.add(
-                              Marker(
-                                markerId: MarkerId('start'),
-                                position: pathPoints.first,
-                              ),
-                            );
-                          });
-                        },
-                        markers: _markers,
-                      ),
-                    ),
-                  ),
+                ),
                 if (locationNameLine1.isNotEmpty)
                   Align(
                     alignment: Alignment.centerLeft,
@@ -366,8 +367,8 @@ print("loca = $locationNameLine2");
                                 text: 'Clock Out',
                                 onPressed: () {
                                   if (employeeIdController.text.isNotEmpty) {
-                                    var data =
-                                        viewModel.configItem.data!.result!.items;
+                                    var data = viewModel
+                                        .configItem.data!.result!.items;
 
                                     for (int i = 0; i < data!.length; i++) {
                                       if (data[i].keyValue == 'Attendance') {

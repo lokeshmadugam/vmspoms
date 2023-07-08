@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/utils/MyDropdown.dart';
-import 'package:poms_app/view/facility/ViewFullBookingDetails.dart';
+import '/utils/MyDropdown.dart';
+import '/view/facility/ViewFullBookingDetails.dart';
 import '../../data/respose/Status.dart';
 
 import '../../model/SignInModel.dart';
@@ -15,7 +15,9 @@ import '../../viewmodel/facility/FacilityBookingViewModel.dart';
 
 class ViewMyBookingDetailsScreen extends StatefulWidget {
   var permisssions;
-  ViewMyBookingDetailsScreen({Key? key,required this.permisssions}) : super(key: key);
+
+  ViewMyBookingDetailsScreen({Key? key, required this.permisssions})
+      : super(key: key);
 
   @override
   State<ViewMyBookingDetailsScreen> createState() =>
@@ -33,6 +35,7 @@ class _ViewMyBookingDetailsScreenState
   List<FacilityItems>? _searchResults = [];
   List<FacilityItems> _filteredFacilityBookings = [];
   DateTime? _selectedDateTime;
+
   // DateTime? _selectedFromDate;
   // DateTime? _selectedToDate;
   // DateTime? _fromDate = DateTime.now();
@@ -47,6 +50,7 @@ class _ViewMyBookingDetailsScreenState
   bool isupload = false;
   bool isprint = false;
   bool isdownload = false;
+
   void initState() {
     super.initState();
     getUserDetails();
@@ -78,57 +82,55 @@ class _ViewMyBookingDetailsScreenState
       fetchFacilityBookings(" ", " ");
     });
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Facility Booking") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Facility Booking") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
-            }
-            else if ( act.actionName == "Print" || act.actionId == 5) {
+            } else if (act.actionName == "Print" || act.actionId == 5) {
               isprint = true;
               print("print = $isprint");
-
-            }
-            else if ( act.actionName == "Download files" || act.actionId == 6) {
+            } else if (act.actionName == "Download files" ||
+                act.actionId == 6) {
               isdownload = true;
               print("download = $isdownload");
-
             }
           }
         }
       }
     });
   }
+
   Future<void> fetchFacilityBookings(var fromDate, var toDate) async {
     fBViewModel
-        .fetchFacilityBookingList( 0,"ASC", "id", 1, 500, propertyId,fromDate, toDate,)
+        .fetchFacilityBookingList(
+      0,
+      "ASC",
+      "id",
+      1,
+      500,
+      propertyId,
+      fromDate,
+      toDate,
+    )
         .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
@@ -139,7 +141,6 @@ class _ViewMyBookingDetailsScreenState
               _filteredFacilityBookings = _facilityBookings;
               // _searchResults = _facilityBookings  ;
             });
-
           }
         }
       }
@@ -148,210 +149,214 @@ class _ViewMyBookingDetailsScreenState
     });
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: MyDateField(
-                          preffixIcon: Icons.calendar_today,
-                          labelText: 'From Date',
-
-                          controller: _fromDateController,
-                          onPressed: () {
-                            _pickDateTime(_fromDateController);
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2,
-                      child: MyDateField(
-                        preffixIcon: Icons.calendar_today,
-                        labelText: 'To Date',
-                        controller: _toDateController,
-                        onPressed: () {
-                          if (_fromDateController.text.isNotEmpty) {
-                            _pickDateTime(_toDateController);
-                          } else {
-                            Utils.toastMessage('Select start date');
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
-                  child: ListView.builder(
-                    itemCount: _facilityBookings.length,
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      var item = _facilityBookings[index];
-                      if (item == null) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            left: 5,
-                            right: 5,
-                            bottom: 5,
-                          ),
-                          child: Text(
-                            "No data found",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        );
-                      }
-
-  return Dismissible(
-    key: Key(item.id.toString()),
-    direction: DismissDirection.startToEnd,
-    background: Container(
-      color: Colors.red,
-      alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: Icon(Icons.delete, color: Colors.white),
-      ),
-    ),
-    onDismissed: (direction) async {
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return Dialog(
-                shape:
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius
-                        .circular(
-                        10)),
-                elevation: 16,
-                child: Popup(title: 'Booking Details',
-                  message: ' Are you sure you want to delete this id?',
-                  negativeButtonText: "No",
-                  onNegativePressed: () {
-                    Navigator.pop(context);
-                  },
-                  positiveButtonText: "Yes",
-                  onPositivePressed: () async {
-    if(isdelete) {
-      final response = await fBViewModel.deleteFacilityBookingsData(
-          item.id, context);
-
-      if (response.data!.status == 200) {
-        // Update local state of widget
-        setState(() {
-          _facilityBookings.removeAt(index);
-        });
-      } else if (response.data!.result == Status.error) {
-        // Show error message to user
-        Utils.flushBarErrorMessage(response.message.toString(), context);
-      }
-    }else{
-      Utils.flushBarErrorMessage("Unable to delete the Booking Details", context);
-    }
-                  },)
-            );
-          }
-      );
-
-    },
-    child: buildInkWell(context, item),
-    // child: InkWell(child: buildCard(context, item),,)
-
-  );
-
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: MyDateField(
+                      preffixIcon: Icons.calendar_today,
+                      labelText: 'From Date',
+                      controller: _fromDateController,
+                      onPressed: () {
+                        _pickDateTime(_fromDateController);
+                      },
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: MyDateField(
+                    preffixIcon: Icons.calendar_today,
+                    labelText: 'To Date',
+                    controller: _toDateController,
+                    onPressed: () {
+                      if (_fromDateController.text.isNotEmpty) {
+                        _pickDateTime(_toDateController);
+                      } else {
+                        Utils.toastMessage('Select start date');
+                      }
                     },
                   ),
                 ),
-
               ],
             ),
-          ),
-        ));
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: ListView.builder(
+                itemCount: _facilityBookings.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  var item = _facilityBookings[index];
+                  if (item == null) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                        bottom: 5,
+                      ),
+                      child: Text(
+                        "No data found",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Dismissible(
+                      key: Key(item.id.toString()),
+                      direction: DismissDirection.startToEnd,
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
+                      ),
+                      onDismissed: (direction) async {
+                        setState(() {
+                          _facilityBookings.removeAt(index);
+                        });
+
+                        return showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (context) {
+                              return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(10)),
+                                  elevation: 16,
+                                  child: Popup(
+                                    title: 'Booking Details',
+                                    message:
+                                    ' Are you sure you want to delete this id?',
+                                    negativeButtonText: "No",
+                                    onNegativePressed: () {
+                                      fetchFacilityBookings(" ", " ");
+                                      Navigator.pop(context);
+                                    },
+                                    positiveButtonText: "Yes",
+                                    onPositivePressed: () async {
+                                      if (isdelete) {
+                                        final response = await fBViewModel
+                                            .deleteFacilityBookingsData(
+                                            item.id, context);
+
+                                        if (response.data!.status ==
+                                            200) {
+                                          setState(() {
+                                            fetchFacilityBookings(" ", " ");
+                                            Utils.toastMessage(response
+                                                .data!.mobMessage
+                                                .toString());
+
+                                            Navigator.pop(context);
+                                          });
+                                        } else if (response
+                                            .data!.result ==
+                                            Status.error) {
+                                          setState(() {
+                                            _facilityBookings.insert(
+                                                index, item);
+                                            Utils.flushBarErrorMessage(
+                                                response.data!.mobMessage
+                                                    .toString(),
+                                                context);
+                                          });
+                                        }
+                                      } else {
+                                        fetchFacilityBookings(" ", " ");
+                                        Navigator.pop(context);
+                                        Utils.toastMessage(
+                                            'Do not have access to delete');
+                                      }
+                                    },
+                                  ));
+                            });
+                      },
+                      child: buildInkWell(context, item));
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 
   InkWell buildInkWell(BuildContext context, FacilityItems item) {
     return InkWell(
-child: Card(
-  color: Colors.grey.shade100,
-  child: Column(
-    children: [
-      SizedBox(
-        height: MediaQuery.of(context).size.height * 0.01,
-      ),
-      ContainerValue(
-        text: "Name",
-        value: ": ${item.facilityKeyCodeHandoverBy ?? ""}",
-      ),
-      Divider(
-        color: Colors.grey.shade400,
-      ),
-      ContainerValue(
-        text: "No. of User Guests",
-        value: ": ${item.noOfUsrGuests.toString()}",
-      ),
-      Divider(
-        color: Colors.grey.shade400,
-      ),
-      ContainerValue(
-        text: "Booking Hours",
-        value: ": ${item.bookingHrsDay.toString()}",
-      ),
-      Divider(
-        color: Colors.grey.shade400,
-      ),
-      ContainerValue(
-        text: "Booking Date",
-        value: ": ${item.usageDate != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(item.usageDate ?? '')) : ''}",
-      ),
-
-      Divider(
-        color: Colors.grey.shade400,
-      ),
-      ContainerValue(
-        text: 'End Time',
-        value: ": ${item.usageEndtime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(item.usageEndtime ?? '')) : ''}",
-
-      ),
-      SizedBox(
-        height: MediaQuery.of(context).size.height * 0.01,
-      ),
-    ],
-  ),
-),
-    onTap: (){
-  if(isview) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                BookingDetails(
-                  data: item,
-                )));
+        child: Card(
+          color: Colors.grey.shade100,
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              ContainerValue(
+                text: "Name",
+                value: ": ${item.facilityKeyCodeHandoverBy ?? ""}",
+              ),
+              Divider(
+                color: Colors.grey.shade400,
+              ),
+              ContainerValue(
+                text: "No. of User Guests",
+                value: ": ${item.noOfUsrGuests.toString()}",
+              ),
+              Divider(
+                color: Colors.grey.shade400,
+              ),
+              ContainerValue(
+                text: "Booking Hours",
+                value: ": ${item.bookingHrsDay.toString()}",
+              ),
+              Divider(
+                color: Colors.grey.shade400,
+              ),
+              ContainerValue(
+                text: "Booking Date",
+                value:
+                    ": ${item.usageDate != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(item.usageDate ?? '')) : ''}",
+              ),
+              Divider(
+                color: Colors.grey.shade400,
+              ),
+              ContainerValue(
+                text: 'End Time',
+                value:
+                    ": ${item.usageEndtime != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(item.usageEndtime ?? '')) : ''}",
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+            ],
+          ),
+        ),
+        onTap: () {
+          if (isview) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BookingDetails(
+                          data: item,
+                        )));
+          }
+        });
   }
-  }
-);
-  }
-
-
-
 
   // Container containerValue({required var text, required String value,}) {
   //   return Container(
@@ -400,7 +405,8 @@ child: Card(
 
         if (_fromDateController.text.isNotEmpty ||
             _toDateController.text.toString().isNotEmpty) {
-          fetchFacilityBookings(_fromDateController.text, _toDateController.text);
+          fetchFacilityBookings(
+              _fromDateController.text, _toDateController.text);
         }
       });
     }

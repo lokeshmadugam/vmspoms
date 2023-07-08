@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/model/intercom/IntercomListingModel.dart';
-import 'package:poms_app/utils/Popup.dart';
-import 'package:poms_app/view/intercom/IntercomFormScreen.dart';
+import '/model/intercom/IntercomListingModel.dart';
+import '/utils/Popup.dart';
+import '/view/intercom/IntercomFormScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../data/respose/Status.dart';
 import '../../model/SignInModel.dart';
@@ -16,26 +16,28 @@ import '../intercom/IntercomContactsScreen.dart';
 
 class IntercomListingScreen extends StatefulWidget {
   var data;
-  IntercomListingScreen({Key? key,required this.data}) : super(key: key);
+
+  IntercomListingScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<IntercomListingScreen> createState() => _IntercomListingScreenState();
 }
 
 class _IntercomListingScreenState extends State<IntercomListingScreen> {
-
   var userVM = UserViewModel();
   var intercomViewModel = IntercomViewModel();
   String firstName = "";
   String lastName = "";
   int propertyId = 0;
-  int userId = 0 ;
+  int userId = 0;
+
   String unitNumber = " ";
   List<IntercomItems> _intercomList = [];
   List<IntercomItems> _filteredintercomList = [];
   final _searchController = TextEditingController();
   final contact = Contact(displayName: " ", phones: []);
-  var priorityCounter ;
+  var priorityCounter;
+
   List<Permissions> permissions = [];
 
   bool iscreate = false;
@@ -43,11 +45,12 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
   bool isdelete = false;
   bool isview = false;
   bool isupload = false;
+
   void initState() {
     super.initState();
     getUserDetails();
     permissions = widget.data;
-    actionPermissions ();
+    actionPermissions();
   }
 
   void dispose() {
@@ -57,7 +60,7 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final userid = value.userDetails?.id;
-      userId =userid ?? 0;
+      userId = userid ?? 0;
       final firstname = value.userDetails?.firstName;
 
       firstName = firstname ?? '';
@@ -72,47 +75,39 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
       fetchIntercomList();
     });
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Intercom") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Intercom") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   Future<void> fetchIntercomList() async {
     intercomViewModel
-        .getIntercomList( "ASC", "id", 1, 500, propertyId,unitNumber)
+        .getIntercomList("ASC", "id", 1, 500, propertyId, unitNumber)
         .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
@@ -134,6 +129,7 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   @override
   // void _launchPhoneDialer(String phoneNumber) async {
   //   final Uri phoneUri = Uri(
@@ -154,9 +150,10 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
     );
     await launchUrl(launchUri);
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         leadingWidth: 90,
         elevation: 0.0,
@@ -187,23 +184,20 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Intercom',
-        style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title:
+            Text('Intercom', style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
-        backgroundColor:Color(0xFF036CB2),
+        backgroundColor: Color(0xFF036CB2),
       ),
-      body: SafeArea(child: SingleChildScrollView(
+      body: SafeArea(
+          child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -213,75 +207,76 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
                   Expanded(
                     child: Container(
                         child: MyTextField(
-                          hintText: 'Search',
-                          controller: _searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value.isEmpty) {
-                                _filteredintercomList = _intercomList;
-                              }
-
-                              else {
-                                var searchWords = value.toLowerCase().split(' ');
-                                _filteredintercomList = _intercomList.where((item) {
-                                  var nameWords = (item.firstName ?? '').toLowerCase().split(' ');
-                                  // Search based on first position or second position
-                                  return searchWords.any((searchWord) =>
+                      hintText: 'Search',
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isEmpty) {
+                            _filteredintercomList = _intercomList;
+                          } else {
+                            var searchWords = value.toLowerCase().split(' ');
+                            _filteredintercomList = _intercomList.where((item) {
+                              var nameWords = (item.firstName ?? '')
+                                  .toLowerCase()
+                                  .split(' ');
+                              // Search based on first position or second position
+                              return searchWords.any((searchWord) =>
                                   nameWords[0].contains(searchWord) ||
-                                      (nameWords.length > 1 && nameWords[1].contains(searchWord)));
-                                }).toList();
-                              }
-
-
-                            });
-                          },
-                          textInputType: TextInputType.text,
-                          suffixIcon: Icons.search,
-                        )),
+                                  (nameWords.length > 1 &&
+                                      nameWords[1].contains(searchWord)));
+                            }).toList();
+                          }
+                        });
+                      },
+                      textInputType: TextInputType.text,
+                      suffixIcon: Icons.search,
+                    )),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  if(iscreate)
-                  InkWell(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color:Color(0xFF036CB2),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 20,
+                  if (iscreate)
+                    InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xFF036CB2),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        // popUp();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => IntercomFormScreen(
+                                      data: null,
+                                      inetrcomcontact: contact,
+                                    )));
+                        //   // priorty: priorityCounter,
+                      },
                     ),
-                    onTap: () {
-                      // popUp();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => IntercomFormScreen(  data: null,  inetrcomcontact: contact, )));
-                    //   // priorty: priorityCounter,
-                    },
-                  ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
                 ],
               ),
-
               Padding(
-                padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: ReorderableListView.builder(
                   itemCount: _filteredintercomList.length,
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
 
                   itemBuilder: (BuildContext context, int index) {
-                    _filteredintercomList.sort((a, b) =>
-                        (a.priority ?? 0).compareTo(b.priority ?? 0));
+                    _filteredintercomList.sort(
+                        (a, b) => (a.priority ?? 0).compareTo(b.priority ?? 0));
 
                     var item = _filteredintercomList[index];
 
@@ -300,9 +295,7 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
 
                     int displayedIndex = index + 1;
 
-
-                      return Dismissible(
-
+                    return Dismissible(
                         key: Key(item.id.toString()),
                         direction: DismissDirection.startToEnd,
                         background: Container(
@@ -313,77 +306,96 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
                             child: Icon(Icons.delete, color: Colors.white),
                           ),
                         ),
+                        onDismissed: (direction) async {
+                          setState(() {
+                            _filteredintercomList.removeAt(index);
+                          });
 
-                        confirmDismiss: (direction) async {
-                          showDialog(
+                          return showDialog(
                               context: context,
                               barrierDismissible: true,
                               builder: (context) {
                                 return Dialog(
-                                    shape:
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius
-                                            .circular(
-                                            10)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
                                     elevation: 16,
-                                    child: Popup(title: 'Intercom Details',
-                                      message: 'Are you sure you want to delete this id?',
+                                    child: Popup(
+                                      title: 'Intercom Details',
+                                      message:
+                                      ' Are you sure you want to delete this id?',
                                       negativeButtonText: "No",
                                       onNegativePressed: () {
+                                        fetchIntercomList();
                                         Navigator.pop(context);
                                       },
                                       positiveButtonText: "Yes",
                                       onPositivePressed: () async {
-    if(isdelete) {
-      final response = await intercomViewModel.deletetIntercomDetails(
-          item.id, context);
+                                        if (isdelete) {
+                                          final response = await intercomViewModel
+                                              .deletetIntercomDetails(
+                                              item.id, context);
 
-      if (response.data!.status == 200) {
-        // Update local state of widget
-        setState(() {
-          _filteredintercomList.removeAt(index);
-        });
-      } else if (response.data!.result == Status.error) {
-        // Show error message to user
-        Utils.flushBarErrorMessage(response.message.toString(), context);
-      }
-    }else{
-      Utils.flushBarErrorMessage("unable to delete the listings", context);
-    }
-                                      },)
-                                );
-                              }
+                                          if (response.data!.status ==
+                                              200) {
+                                            setState(() {
+                                              fetchIntercomList();
+                                              Utils.toastMessage(response
+                                                  .data!.mobMessage
+                                                  .toString());
 
-                          );
+                                              Navigator.pop(context);
+                                            });
+                                          } else if (response
+                                              .data!.result ==
+                                              Status.error) {
+                                            setState(() {
+                                              _filteredintercomList.insert(
+                                                  index, item);
+                                              Utils.flushBarErrorMessage(
+                                                  response.data!.mobMessage
+                                                      .toString(),
+                                                  context);
+                                            });
+                                          }
+                                        } else {
+                                          fetchIntercomList();
+                                          Navigator.pop(context);
+                                          Utils.toastMessage(
+                                              'Do not have access to delete');
+                                        }
+                                      },
+                                    ));
+                              });
                         },
-
-                        child: buildInkWell(context, item),
-                      );
+                        child: buildInkWell(context, item));
 
                     // return Container(
                     //   key: UniqueKey(),
                     // );
                   },
 
-                    onReorder: (oldIndex, newIndex) {
+                  onReorder: (oldIndex, newIndex) {
                     setState(() {
-                    final adjustedOldIndex = oldIndex + 1; // Adjust old index by adding 1
-                    var adjustedNewIndex = newIndex + 1; // Adjust new index by adding 1
+                      final adjustedOldIndex =
+                          oldIndex + 1; // Adjust old index by adding 1
+                      var adjustedNewIndex =
+                          newIndex + 1; // Adjust new index by adding 1
 
-                    if (adjustedNewIndex > adjustedOldIndex) {
-                    adjustedNewIndex -= 1;
-                    }
+                      if (adjustedNewIndex > adjustedOldIndex) {
+                        adjustedNewIndex -= 1;
+                      }
 
-                    final item = _filteredintercomList.removeAt(adjustedOldIndex - 1);
-                    _filteredintercomList.insert(adjustedNewIndex - 1, item);
+                      final item =
+                          _filteredintercomList.removeAt(adjustedOldIndex - 1);
+                      _filteredintercomList.insert(adjustedNewIndex - 1, item);
 
-                    // Update the priority based on the new order
-                    if(isupdate) {
-                      updatePriorities();
-                    }
+                      // Update the priority based on the new order
+                      if (isupdate) {
+                        updatePriorities();
+                      }
                     });
-
-                    },
+                  },
 
                   // onReorder: (oldIndex, newIndex) {
                   //   setState(() {
@@ -403,9 +415,7 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
                   //     _filteredintercomList.insert(adjustedNewIndex - 1, item);
                   //   });
                   // },
-
                 ),
-
               ),
             ],
           ),
@@ -416,72 +426,69 @@ class _IntercomListingScreenState extends State<IntercomListingScreen> {
 
   InkWell buildInkWell(BuildContext context, IntercomItems item) {
     return InkWell(
-                      child: Card(
-                        color: Colors.grey.shade100,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                                  ContainerValue(
-                                    text: "First Name",
-                                    value: ": ${item.firstName ?? ""}",
-                                  ),
-                                  Divider(color: Colors.grey.shade400),
-                                  ContainerValue(
-                                    text: "Last Name",
-                                    value: ": ${item.lastName ?? ''}",
-                                  ),
-                                  Divider(color: Colors.grey.shade400),
-                                  ContainerValue(
-                                    text: "Mobile Number",
-                                    value: ": ${item.phoneNumber ?? ''}",
-                                  ),
-                                  Divider(color: Colors.grey.shade400),
-                                  ContainerValue(
-                                    text: "Priority",
-                                    value: ": ${item.priority.toString()}",
-                                  ),
-                                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      _launchPhoneDialer(item.phoneNumber ?? '');
-                                    },
-                                    icon: Icon(Icons.phone_forwarded, color: Color(0xFF036CB2)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                       if(isupdate || isview) {
-                         Navigator.push(
-                           context,
-                           MaterialPageRoute(
-                             builder: (context) =>
-                                 IntercomFormScreen(
-                                     data: item, inetrcomcontact: contact),
-                           ),
-                         );
-                       }
-                      },
-                    );
+      child: Card(
+        color: Colors.grey.shade100,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                  ContainerValue(
+                    text: "First Name",
+                    value: ": ${item.firstName ?? ""}",
+                  ),
+                  Divider(color: Colors.grey.shade400),
+                  ContainerValue(
+                    text: "Last Name",
+                    value: ": ${item.lastName ?? ''}",
+                  ),
+                  Divider(color: Colors.grey.shade400),
+                  ContainerValue(
+                    text: "Mobile Number",
+                    value: ": ${item.phoneNumber ?? ''}",
+                  ),
+                  Divider(color: Colors.grey.shade400),
+                  ContainerValue(
+                    text: "Priority",
+                    value: ": ${item.priority.toString()}",
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                ],
+              ),
+            ),
+            SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      _launchPhoneDialer(item.phoneNumber ?? '');
+                    },
+                    icon: Icon(Icons.phone_forwarded, color: Color(0xFF036CB2)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        if (isupdate || isview) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  IntercomFormScreen(data: item, inetrcomcontact: contact),
+            ),
+          );
+        }
+      },
+    );
   }
 
-
-
-void updatePriorities() {
+  void updatePriorities() {
     for (int i = 0; i < _filteredintercomList.length; i++) {
       var item = _filteredintercomList[i];
       item.priority = i + 1;
@@ -516,38 +523,35 @@ void updatePriorities() {
   }
 
 // void updatePriorities() {
-  //   for (int i = 1; i < _filteredintercomList.length; i++) {
-  //     var item = _filteredintercomList[i];
-  //     item.priority = i;
-  //     Map<String, dynamic> data = {
-  //       "country_code": item.countryCode,
-  //       "first_name": item.firstName,
-  //       "last_name": item.lastName,
-  //       "phone_number": item.phoneNumber,
-  //       "priority": item.priority,
-  //       "property_id": item.propertyId,
-  //       "rec_status": 8,
-  //       "updated_by": userId,
-  //       "user_id": userId,
-  //
-  //     };
-  //
-  //     intercomViewModel.updateIntercom( data,item.id!, context).then((value) {
-  //       if (value.data!.status == 200) {
-  //         print('msg = ${value.data!.mobMessage}');
-  //         Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
-  //       } else {
-  //         Utils.flushBarErrorMessage("Registration Failed".toString(), context);
-  //       }
-  //     }).onError((error, stackTrace) {
-  //       if (kDebugMode) {
-  //         Utils.flushBarErrorMessage(error.toString(), context);
-  //         print(error.toString());
-  //       }
-  //     });
-  //   }
-  // }
-
-
-
+//   for (int i = 1; i < _filteredintercomList.length; i++) {
+//     var item = _filteredintercomList[i];
+//     item.priority = i;
+//     Map<String, dynamic> data = {
+//       "country_code": item.countryCode,
+//       "first_name": item.firstName,
+//       "last_name": item.lastName,
+//       "phone_number": item.phoneNumber,
+//       "priority": item.priority,
+//       "property_id": item.propertyId,
+//       "rec_status": 8,
+//       "updated_by": userId,
+//       "user_id": userId,
+//
+//     };
+//
+//     intercomViewModel.updateIntercom( data,item.id!, context).then((value) {
+//       if (value.data!.status == 200) {
+//         print('msg = ${value.data!.mobMessage}');
+//         Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
+//       } else {
+//         Utils.flushBarErrorMessage("Registration Failed".toString(), context);
+//       }
+//     }).onError((error, stackTrace) {
+//       if (kDebugMode) {
+//         Utils.flushBarErrorMessage(error.toString(), context);
+//         print(error.toString());
+//       }
+//     });
+//   }
+// }
 }

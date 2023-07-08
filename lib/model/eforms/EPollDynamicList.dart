@@ -7,10 +7,10 @@ class EPollDynamicList {
 
   EPollDynamicList(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   EPollDynamicList.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class EPollDynamicList {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -49,16 +49,16 @@ class Result {
 
   Result(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.epollingCategoryName,
-        this.description,
-        this.iconUrl,
-        this.isDefault,
-        this.recStatus,
-        this.recStatusname,
-        this.propertyEpollingRest});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.epollingCategoryName,
+      this.description,
+      this.iconUrl,
+      this.isDefault,
+      this.recStatus,
+      this.recStatusname,
+      this.propertyEpollingRest});
 
   Result.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -119,21 +119,21 @@ class PropertyEpollingRest {
 
   PropertyEpollingRest(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.admModuleId,
-        this.epollingName,
-        this.epollingDispName,
-        this.epollingCategoryId,
-        this.displaySeqno,
-        this.iconUrl,
-        this.isDefault,
-        this.recStatus,
-        this.moduleName,
-        this.recStatusname,
-        this.propertyEpollingCategoryFieldsRest,
-        this.epollingCategoryName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.admModuleId,
+      this.epollingName,
+      this.epollingDispName,
+      this.epollingCategoryId,
+      this.displaySeqno,
+      this.iconUrl,
+      this.isDefault,
+      this.recStatus,
+      this.moduleName,
+      this.recStatusname,
+      this.propertyEpollingCategoryFieldsRest,
+      this.epollingCategoryName});
 
   PropertyEpollingRest.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -152,7 +152,7 @@ class PropertyEpollingRest {
     recStatusname = json['recStatusname'];
     if (json['propertyEpollingCategoryFieldsRest'] != null) {
       propertyEpollingCategoryFieldsRest =
-      <PropertyEpollingCategoryFieldsRest>[];
+          <PropertyEpollingCategoryFieldsRest>[];
       json['propertyEpollingCategoryFieldsRest'].forEach((v) {
         propertyEpollingCategoryFieldsRest!
             .add(new PropertyEpollingCategoryFieldsRest.fromJson(v));
@@ -213,26 +213,26 @@ class PropertyEpollingCategoryFieldsRest {
 
   PropertyEpollingCategoryFieldsRest(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.epollingcatGroupId,
-        this.admModuleId,
-        this.epollingId,
-        this.fieldId,
-        this.fieldDispName,
-        this.isMandatory,
-        this.displaySeqno,
-        this.isList,
-        this.isDefault,
-        this.recStatus,
-        this.categoryName,
-        this.fieldKeyValue,
-        this.moduleName,
-        this.epollingName,
-        this.fieldTypeName,
-        this.recStatusname,
-        this.propertyEpollingDropdownFieldsRest});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.epollingcatGroupId,
+      this.admModuleId,
+      this.epollingId,
+      this.fieldId,
+      this.fieldDispName,
+      this.isMandatory,
+      this.displaySeqno,
+      this.isList,
+      this.isDefault,
+      this.recStatus,
+      this.categoryName,
+      this.fieldKeyValue,
+      this.moduleName,
+      this.epollingName,
+      this.fieldTypeName,
+      this.recStatusname,
+      this.propertyEpollingDropdownFieldsRest});
 
   PropertyEpollingCategoryFieldsRest.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -257,7 +257,7 @@ class PropertyEpollingCategoryFieldsRest {
     recStatusname = json['recStatusname'];
     if (json['propertyEpollingDropdownFieldsRest'] != null) {
       propertyEpollingDropdownFieldsRest =
-      <PropertyEpollingDropdownFieldsRest>[];
+          <PropertyEpollingDropdownFieldsRest>[];
       json['propertyEpollingDropdownFieldsRest'].forEach((v) {
         propertyEpollingDropdownFieldsRest!
             .add(new PropertyEpollingDropdownFieldsRest.fromJson(v));
@@ -315,19 +315,19 @@ class PropertyEpollingDropdownFieldsRest {
 
   PropertyEpollingDropdownFieldsRest(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.epollingCatfieldId,
-        this.fieldType,
-        this.fieldDispName,
-        this.displaySeqno,
-        this.isDefault,
-        this.recStatus,
-        this.fieldTypeName,
-        this.fieldTypeNameconfigKeyValue,
-        this.dropdownMenufieldName,
-        this.checked,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.epollingCatfieldId,
+      this.fieldType,
+      this.fieldDispName,
+      this.displaySeqno,
+      this.isDefault,
+      this.recStatus,
+      this.fieldTypeName,
+      this.fieldTypeNameconfigKeyValue,
+      this.dropdownMenufieldName,
+      this.checked,
+      this.recStatusname});
 
   PropertyEpollingDropdownFieldsRest.fromJson(Map<String, dynamic> json) {
     id = json['id'];

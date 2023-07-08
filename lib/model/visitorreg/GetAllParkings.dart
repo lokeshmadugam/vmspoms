@@ -53,17 +53,17 @@ class UnOccupied {
 
   UnOccupied(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.unitNo,
-        this.bayLocation,
-        this.bayNumber,
-        this.bayType,
-        this.bayUrlImg,
-        this.recStatus,
-        this.recStatusname,
-        this.bayTypeName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.unitNo,
+      this.bayLocation,
+      this.bayNumber,
+      this.bayType,
+      this.bayUrlImg,
+      this.recStatus,
+      this.recStatusname,
+      this.bayTypeName});
 
   UnOccupied.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -119,22 +119,22 @@ class Occupied {
 
   Occupied(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.visitorId,
-        this.unitShopId,
-        this.bayType,
-        this.lotNumber,
-        this.bayStatus,
-        this.usageDate,
-        this.usageFrTime,
-        this.usageToTime,
-        this.recStatus,
-        this.recStatusname,
-        this.bayStatusName,
-        this.bayTypeName,
-        this.unitNo});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.visitorId,
+      this.unitShopId,
+      this.bayType,
+      this.lotNumber,
+      this.bayStatus,
+      this.usageDate,
+      this.usageFrTime,
+      this.usageToTime,
+      this.recStatus,
+      this.recStatusname,
+      this.bayStatusName,
+      this.bayTypeName,
+      this.unitNo});
 
   Occupied.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -178,8 +178,3 @@ class Occupied {
     return data;
   }
 }
-
-
-
-
-

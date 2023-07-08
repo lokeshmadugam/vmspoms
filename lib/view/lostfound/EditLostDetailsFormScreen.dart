@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
@@ -22,7 +21,8 @@ import '../../viewmodel/lostfound/EditLostDetailsFormScreenViewModel.dart';
 
 class EditLostDetailsFormScreen extends StatefulWidget {
   var data;
-bool upload;
+  bool upload;
+
   EditLostDetailsFormScreen({super.key, required this.data,required this.upload});
 
   @override
@@ -69,11 +69,12 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
   String? signatureUrl;
   List<String>? pickedImageUrls;
 
-  List<dynamic>? decodedList;
-  List<String>? imageUrls;
-  List<dynamic>? lostitemdecodedList;
-  List<String>? lostitemimageUrls;
-  var imageUrl;
+  QRViewController? qrViewController;
+  late String qrCode;
+  GlobalKey qrKey = GlobalKey();
+  Map<String, String>? qrData;
+
+
   @override
   void initState() {
     super.initState();
@@ -90,8 +91,7 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
       _isCollectionDetailsExpanded = true;
 
       _foundByController.text = items.foundBy.toString();
-      _dateFoundController.text = DateFormat('yyyy-MM-dd hh:mm a').format(
-          DateTime.parse(items.foundDateTime.toString() ?? ''));
+      _dateFoundController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.foundDateTime.toString() ?? ''));
       _foundItemNameController.text = items.foundItemName.toString();
       _foundDescriptionController.text = items.foundDescription.toString();
       _foundLostLocationController.text = items.foundLocation.toString();
@@ -101,22 +101,11 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
 
     } else {
       _collectedByController.text = items.collectedBy.toString();
-      _collectedDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(
-          DateTime.parse(items.collectedDateTime.toString() ?? ''));
+      _collectedDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.collectedDateTime.toString() ?? ''));
       _remarksController.text = items.collectedRemarks.toString();
     }
-    if (items.foundByItemPic.toString().isNotEmpty && items.foundByItemPic is List<String>){
-      decodedList = jsonDecode(items.foundByItemPic ?? "[]");
 
-      imageUrls = decodedList?.map((item) => item.toString()).toList();
-    }
-    if (items.lostItemImgUrl.toString().isNotEmpty && items.lostItemImgUrl is List<String>){
-      lostitemdecodedList = jsonDecode(items.foundByItemPic ?? "[]");
-
-      lostitemimageUrls = decodedList?.map((item) => item.toString()).toList();
-    }
-    _dateLostController.text = DateFormat('yyyy-MM-dd hh:mm a').format(
-        DateTime.parse(items.lostDateTime.toString() ?? ''));
+    _dateLostController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(items.lostDateTime.toString() ?? ''));
     _itemNameController.text = items.lostItemName.toString();
     _descriptionController.text = items.lostDescription.toString();
     _lostLocationController.text = items.lostLocation.toString();
@@ -127,45 +116,43 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
     final prefs = await SharedPreferences.getInstance();
     String? details = prefs.getString('userDetails');
     Map<String, dynamic> jsonData = jsonDecode(details!);
-    userDetails = SignInModel
-        .fromJson(jsonData)
-        .userDetails!;
-    token = SignInModel
-        .fromJson(jsonData)
-        .accessToken!;
+    userDetails = SignInModel.fromJson(jsonData).userDetails!;
+    token = SignInModel.fromJson(jsonData).accessToken!;
   }
-
-  Future<void> _createFile(List<String> imagePaths,
-      BuildContext context) async {
+  Future<void> _createFile(BuildContext context, List<String> imagePaths) async {
     if (_signatureImagePath.isNotEmpty && pickedImagePaths.isEmpty) {
       imagePaths.add(_signatureImagePath);
-    } else if (_signatureImagePath.isEmpty && pickedImagePaths.isNotEmpty) {
+    }  else if (_signatureImagePath.isEmpty && pickedImagePaths.isNotEmpty) {
       imagePaths.addAll(pickedImagePaths);
+
     } else if (_signatureImagePath.isNotEmpty && pickedImagePaths.isNotEmpty) {
       imagePaths.add(_signatureImagePath);
       imagePaths.addAll(pickedImagePaths);
+      // .map((file) => file.path)
     } else {
       return;
     }
 
-    if (imagePaths.isNotEmpty) {
-      fileStgVM.getMediaUpload(imagePaths, context).then((response) {
-        print(" resp = $response");
-        if (response!.isNotEmpty) {
-          List<String> _pickedImageUrls = [];
+    try {
+      if (imagePaths.isNotEmpty) {
+        final qrcode = await fileStgVM.getMediaUpload(imagePaths, context);
+        if (qrcode!.isNotEmpty) {
+          List<String> _pickedImageUrls = []; // Initialize the list here
           String? _signatureUrl;
 
-          for (int i = 0; i < response.length; i += 2) {
-            String originalName = response[i].trim();
-            String url = response[i + 1].trim();
+          for (int i = 0; i < qrcode!.length; i += 2) {
+            String originalName = qrcode![i].trim();
+            String url = qrcode![i + 1].trim();
             String originalNameWithUrl = '$originalName:$url';
 
-            if (originalName == 'signature.png') {
-              _signatureUrl = originalNameWithUrl;
-              signatureUrl = _signatureUrl.toString();
-            } else {
-              _pickedImageUrls.add(url);
-              pickedImageUrls = _pickedImageUrls;
+            if (originalName != null) {
+              if (originalName == 'signature.png') {
+                _signatureUrl = originalNameWithUrl;
+                signatureUrl = _signatureUrl;
+              } else {
+                _pickedImageUrls?.add(url);
+                pickedImageUrls = _pickedImageUrls;
+              }
             }
           }
 
@@ -173,34 +160,26 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
           print('Picked Image URLs: $_pickedImageUrls');
           print('Signature URL: $signatureUrl');
           print('Picked Image URLs: $pickedImageUrls');
-
-          if (_signatureUrl != null || _pickedImageUrls.isNotEmpty) {
+          if ((_signatureUrl != null || _pickedImageUrls != null ) ||(_signatureUrl != null && _pickedImageUrls != null)) {
             createLostItems();
-          } else {
-            print('Error: No signature URL or picked image URLs');
+          }else{
+            'error';
           }
-        }
-        else {
+        } else {
           throw Exception('Invalid QR code response');
         }
-      });
+
+
+
+      }
+
+    }catch (e) {
+      print('Error occurred: $e');
+      throw Exception('Failed to generate QR code');
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-    print("Wid = $width");
-    print("hei = $height");
-    double? fontSize;
-    if(width < 411 || height < 707){
-      fontSize = 14;
-      print("SmallSize = $fontSize");
-    }else {
-      fontSize = 16;
-      print("BigSize = $fontSize");
-    }
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 90,
@@ -234,7 +213,11 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                   },
                   child: Text(
                     'Back',
-                        style: Theme.of(context).textTheme.headlineMedium
+                    style: TextStyle(
+                      fontSize: 16, // reduce the font size
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -243,10 +226,11 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
         ),
         title: Text(
           'Lost Details Form',
-            style: Theme.of(context).textTheme.headlineLarge
+          style: TextStyle(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xFF036CB2),
+        backgroundColor:  Color(0xFF036CB2),
       ),
 
       body: SingleChildScrollView(
@@ -257,10 +241,7 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
             child: Column(
               children: [
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.01,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 InkWell(
                   onTap: () {
@@ -279,9 +260,9 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                         Container(
                           child: Text(
                             "Lost Details",
-                            style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
+                            style: TextStyle(fontSize: 18, color: Colors.white
                               // fontWeight: FontWeight.bold,
-                            ), )
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -325,171 +306,69 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                             controller: _lostLocationController,
                             labelText: 'Lost Location',
                             textInputType: TextInputType.text),
-                        SizedBox(height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.007,),
                         if(widget.upload)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Lost item pictute :',
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ),
-                            ),
-
-                            InkWell(
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF036CB2),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.upload, color: Colors.white,
-                                        size: 18,),
-                                      Text(
-                                        'Gallery',
-                                          style: GoogleFonts.roboto(textStyle:TextStyle(fontSize:15, color: Colors.white
-                                            // fontWeight: FontWeight.bold,
-                                          ), )
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                getImage();
-                              },
-                            )
-                          ],
-                        ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(12.0),
-                        //   child: Container(
-                        //     //width: MediaQuery.of(context).size.width,
-                        //     height: MediaQuery
-                        //         .of(context)
-                        //         .size
-                        //         .height * 0.20,
-                        //     decoration: BoxDecoration(
-                        //         border: Border.all(color: Colors.grey),
-                        //         borderRadius: BorderRadius.circular(5)),
-                        //     child: Center(
-                        //       child: _image == null
-                        //           ? Text('No Image Selected')
-                        //           : Image.file(_image!),
-                        //     ),
-                        //   ),
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child:
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              if (items.lostItemImgUrl != null && items.lostItemImgUrl!.isNotEmpty && items.lostItemImgUrl is List<String> )
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: lostitemdecodedList!.length,
-                                      itemBuilder: (context, index) {
-
-                                        if (index < lostitemimageUrls!.length) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Image.network(
-                                              lostitemimageUrls![index],
-                                              fit: BoxFit.cover,
-                                              // Add any additional properties for the image widget
-                                            ),
-                                          );
-                                        }
-                                        return Container(); // Return an empty container if index is out of range
-                                      },
-                                      separatorBuilder: (BuildContext context, int index) {
-                                        return SizedBox(width: 10); // Adjust the spacing between images
-                                      },
-                                    ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Lost item pictute :',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.normal),
                                   ),
                                 ),
-                              if (items.lostItemImgUrl != null && items.lostItemImgUrl!.isNotEmpty && items.lostItemImgUrl is String)
-                                Container(
-
+                              ),
+                              InkWell(
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.network(
-                                          items.lostItemImgUrl.toString().trim(),
-                                          fit: BoxFit.cover,
-                                          // Add any additional properties for the image widget
+                                      color: Color(0xFF036CB2),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.upload,color: Colors.white,),
+                                        Text(
+                                          'Gallery',
+                                          style: TextStyle(color: Colors.white),
                                         ),
-                                      )
-
-
-
-                                  ),
-                                ),
-                              if (items.lostItemImgUrl == null || items.lostItemImgUrl!.isEmpty)
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: pickedImagePaths.isEmpty
-                                        ? Text('No Image Selected')
-                                        : ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: pickedImagePaths.length,
-                                      itemBuilder: (context, index) {
-                                        return Image.file(File(pickedImagePaths[index]));
-                                      },
+                                      ],
                                     ),
                                   ),
                                 ),
+                                onTap: () {
+                                  getImage();
+                                },
+                              )
                             ],
                           ),
-
-
-
-
-
-
-
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                            //width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.20,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                              child: _image == null
+                                  ? Text('No Image Selected')
+                                  : Image.file(_image!),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.01,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 InkWell(
                   onTap: () {
@@ -509,9 +388,9 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                         Container(
                           child: Text(
                             "Found Details",
-                              style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.white
-                                // fontWeight: FontWeight.bold,
-                              ), )
+                            style: TextStyle(fontSize: 18, color: Colors.white
+                              // fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -536,7 +415,9 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                             preffixIcon: Icons.countertops,
                             controller: _foundByController,
                             suffixIcon: Icons.qr_code_2_outlined,
-                            onPressed: _scanQRCode,
+                            onPressed: () {
+                              _scanQRCode(1);
+                            },
                             labelText: 'Found by',
                             textInputType: TextInputType.number),
                         MyDateField(
@@ -562,217 +443,68 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                             controller: _foundLostLocationController,
                             labelText: 'Found Location',
                             textInputType: TextInputType.text),
-                        SizedBox(height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.007,),
                         if(widget.upload)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Upload image :',
-                                  style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15, color: Colors.black
-                                  // fontWeight: FontWeight.bold,
-                                ), ),
-                                ),
-                              ),
-                            ),
-
-                            InkWell(
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF036CB2),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.upload, color: Colors.white,
-                                        size: 18,),
-                                      Text(
-                                        'Gallery',
-                                          style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 15, color: Colors.white
-                                            // fontWeight: FontWeight.bold,
-                                          ), )
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                getImage();
-                              },
-                            )
-                          ],
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child:
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              if (items.foundByItemPic != null && items.foundByItemPic!.isNotEmpty && items.foundByItemPic is List<String> )
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Upload image :',
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.normal),
                                   ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: decodedList!.length,
-                                      itemBuilder: (context, index) {
-
-                                        if (index < imageUrls!.length) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Image.network(
-                                              imageUrls![index],
-                                              fit: BoxFit.cover,
-                                              // Add any additional properties for the image widget
-                                            ),
-                                          );
-                                        }
-                                        return Container(); // Return an empty container if index is out of range
-                                      },
-                                      separatorBuilder: (BuildContext context, int index) {
-                                        return SizedBox(width: 10); // Adjust the spacing between images
-                                      },
+                                ),
+                              ),
+                              InkWell(
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF036CB2),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.upload,color: Colors.white,),
+                                        Text(
+                                          'Gallery',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              if (items.foundByItemPic != null && items.foundByItemPic!.isNotEmpty && items.foundByItemPic is String)
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Image.network(
-                                            items.foundByItemPic.toString().trim(),
-                                              fit: BoxFit.cover,
-                                              // Add any additional properties for the image widget
-                                            ),
-                                          )
-
-
-
-                                  ),
-                                ),
-                              if (items.foundByItemPic == null || items.foundByItemPic!.isEmpty)
-                                Container(
-
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  height: MediaQuery.of(context).size.height * 0.20,
-                                  child: Center(
-                                    child: pickedImagePaths.isEmpty
-                                        ? Text('No Image Selected')
-                                        : ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: pickedImagePaths.length,
-                                      itemBuilder: (context, index) {
-                                        return Image.file(File(pickedImagePaths[index]));
-                                      },
-                                    ),
-                                  ),
-                                ),
+                                onTap: () {
+                                  getImage();
+                                },
+                              )
                             ],
                           ),
-
-
-                          // Column(
-                          //   children: [
-                          //     if(items.foundByItemPic != null || items.foundByItemPic!.isNotEmpty)
-                          //       Padding(
-                          //         padding: const EdgeInsets.all(12.0),
-                          //
-                          //         child:
-                          //         Container(
-                          //           //width: MediaQuery.of(context).size.width,
-                          //           height: MediaQuery.of(context).size.height * 0.20,
-                          //           decoration: BoxDecoration(
-                          //             border: Border.all(color: Colors.grey),
-                          //             borderRadius: BorderRadius.circular(5),
-                          //           ),
-                          //           child: Center(
-                          //             child: ListView.builder(
-                          //               scrollDirection: Axis.horizontal,
-                          //               // itemCount: image.length,
-                          //               itemBuilder: (context, index) {
-                          //                 List<dynamic> decodedList = jsonDecode(items.foundByItemPic ?? "[]");
-                          //                 List<String> imageUrls = decodedList.map((item) => item.toString()).toList();
-                          //                 if (index < imageUrls.length) {
-                          //                   return Container(
-                          //                     height: 100,
-                          //                     child: Image.network(
-                          //                       imageUrls[index],
-                          //                       fit: BoxFit.cover,
-                          //                       // Add any additional properties for the image widget
-                          //                     ),
-                          //                   );
-                          //                 }
-                          //                 return Container(); // Return an empty container if index is out of range
-                          //               },
-                          //             ),
-                          //           ),
-                          //         ),
-                          //
-                          //
-                          //
-                          //       ),
-                          //     if(items.foundByItemPic!.isEmpty)
-                          //     Container(
-                          //       height: MediaQuery.of(context).size.height * 0.20,
-                          //       decoration: BoxDecoration(
-                          //         border: Border.all(color: Colors.grey),
-                          //         borderRadius: BorderRadius.circular(5),
-                          //       ),
-                          //       child: Center(
-                          //         child: pickedImagePaths.isEmpty
-                          //             ? Text('No Image Selected')
-                          //             : ListView.builder(
-                          //           scrollDirection: Axis.horizontal,
-                          //           itemCount: pickedImagePaths.length,
-                          //           itemBuilder: (context, index) {
-                          //             return Image.file(File(pickedImagePaths[index]));
-                          //           },
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // )
-
-
-
-
-
-
-
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                            //width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.20,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                              child: _image == null
+                                  ? Text('No Image Selected')
+                                  : Image.file(_image!),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.01,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 Visibility(
                   visible: _isCollectionDetailsHeaderVisible,
@@ -794,9 +526,9 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                           Container(
                             child: Text(
                               "Collection Details",
-                                style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 18, color: Colors.white
-                                  // fontWeight: FontWeight.bold,
-                                ), )
+                              style: TextStyle(fontSize: 18, color: Colors.white
+                                // fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -822,7 +554,9 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                             preffixIcon: Icons.countertops_sharp,
                             controller: _collectedByController,
                             suffixIcon: Icons.qr_code_2_outlined,
-                            onPressed: _scanQRCode,
+                            onPressed: () {
+                              _scanQRCode(2);
+                            },
                             labelText: 'Collected by',
                             textInputType: TextInputType.number),
                         MyDateField(
@@ -839,10 +573,7 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                             labelText: 'Remarks',
                             textInputType: TextInputType.text),
                         SizedBox(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.01,
+                          height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -851,7 +582,7 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                             child: Text(
                               'Sign Here :',
                               style: TextStyle(
-                                  fontSize: fontSize,
+                                  fontSize: 18.0,
                                   fontWeight: FontWeight.normal),
                             ),
                           ),
@@ -859,10 +590,7 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                             ),
@@ -880,20 +608,14 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.02,
+                  height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.70,
+                  width: MediaQuery.of(context).size.width * 0.70,
                   child: PositiveButton(
                       text: 'Submit',
                       onPressed: () {
-                        _createFile( imagePaths,context);
+                        _createFile(context, imagePaths);
                       }),
                 )
               ],
@@ -923,21 +645,96 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
     }
   }
 
-  Future<void> _scanQRCode() async {
-    try {
-      final String qrCode = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', // Scanner color
-        'Cancel', // Cancel button text
-        true, // Show flash icon
-        ScanMode.QR, // Scan mode
-      );
-      setState(() {
-        _scanResult = qrCode;
-        _collectedByController.text = _scanResult;
-      });
-    } on Exception catch (e) {
-      print('Error: $e');
+  Map<String, String> _parseQRCodeData(String qrCode) {
+    Map<String, String> data = {};
+
+    // Split the QR code data by newlines to separate the lines
+    List<String> lines = qrCode.split('\n');
+
+    // Extract the key-value pairs from each line
+    for (String line in lines) {
+      List<String> keyValue = line.split(':');
+      if (keyValue.length == 2) {
+        String key = keyValue[0].trim();
+        String value = keyValue[1].trim();
+        data[key] = value;
+      }
     }
+
+    return data;
+  }
+
+  Future<void> _scanQRCode(int i) async {
+    try {
+      qrViewController?.resumeCamera();
+      if(i==1) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                height: 250,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: (controller) {
+                    _onQRViewCreated(controller);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      } else if(i==2) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                height: 250,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: (controller) {
+                    _onQRViewCreated1(controller);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    qrViewController = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrCode = scanData.code!;
+        qrData = _parseQRCodeData(qrCode);
+        qrViewController?.pauseCamera();
+
+        Navigator.pop(context);
+
+        _foundByController.text = qrData!['User Id']!;
+      });
+    });
+  }
+
+  void _onQRViewCreated1(QRViewController controller) {
+    qrViewController = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrCode = scanData.code!;
+        qrData = _parseQRCodeData(qrCode);
+        qrViewController?.pauseCamera();
+
+        Navigator.pop(context);
+
+        _collectedByController.text = qrData!['User Id']!;
+      });
+    });
   }
 
   Future<void> getImage() async {
@@ -988,25 +785,23 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
       }
     }
   }
-
   void createLostItems() async {
     String? formattedDateFound;
     String? formattedDateCollected;
-    String jsonString = jsonEncode(pickedImageUrls);
-    print(jsonString);
+    String pickedImageUrlsString = pickedImageUrls!.join(',');
     DateTime dateTime = DateFormat('yyyy-MM-dd hh:mm a')
         .parse(_dateLostController.text.toString());
     String formattedDateLost =
     DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
 
-    if (_dateFoundController.text.isNotEmpty) {
+    if(_dateFoundController.text.isNotEmpty){
       DateTime dateTime1 = DateFormat('yyyy-MM-dd hh:mm a')
           .parse(_dateFoundController.text.toString());
       formattedDateFound = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime1);
     }
 
 
-    if (_collectedDateController.text.isNotEmpty) {
+    if(_collectedDateController.text.isNotEmpty){
       DateTime dateTime2 = DateFormat('yyyy-MM-dd hh:mm a')
           .parse(_collectedDateController.text.toString());
       formattedDateCollected =
@@ -1018,7 +813,7 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
       Map<String, dynamic> data = {
         "lost_date_time": formattedDateLost,
         "lost_description": _descriptionController.text.toString(),
-        "lost_item_img_url": jsonString,
+        "lost_item_img_url": pickedImageUrlsString,
         "lost_item_name": _itemNameController.text.toString(),
         "lost_location": _lostLocationController.text.toString(),
         "lost_report_user_id": userDetails.id,
@@ -1038,10 +833,11 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
       Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
           .createUnclaimedData(data, context);
     } else {
+
       Map<String, dynamic> data = {
         "lost_date_time": formattedDateLost,
         "lost_description": _descriptionController.text.toString(),
-        "lost_item_img_url": jsonString,
+        "lost_item_img_url": pickedImageUrlsString,
         "lost_item_name": _itemNameController.text.toString(),
         "lost_location": _lostLocationController.text.toString(),
         "lost_report_user_id": userDetails.id,
@@ -1063,146 +859,88 @@ class _EditLostDetailsFormScreenState extends State<EditLostDetailsFormScreen> {
       };
 
       Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
-          .updateEditLostFoundDetails(items.id, data, context);
+          .updateEditLostFoundDetails(items.id, data, context );
+
     }
   }
-}
-  // void _uploadImage(var imagePath, String signatureImagePath) {
-  //   String? formattedDateFound;
-  //   String? formattedDateCollected;
-  //
-  //   DateTime dateTime = DateFormat('M/d/yyyy h:mm a')
-  //       .parse(_dateLostController.text.toString());
-  //   String formattedDateLost =
-  //       DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
-  //
-  //   if(_dateFoundController.text.isNotEmpty){
-  //     DateTime dateTime1 = DateFormat('M/d/yyyy h:mm a')
-  //         .parse(_dateFoundController.text.toString());
-  //     formattedDateFound = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime1);
-  //   }
-  //
-  //
-  //   if(_collectedDateController.text.isNotEmpty){
-  //     DateTime dateTime2 = DateFormat('M/d/yyyy h:mm a')
-  //         .parse(_collectedDateController.text.toString());
-  //     formattedDateCollected =
-  //         DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime2);
-  //   }
-  //
-  //
-  //   if (items.foundBy == 0 || items.foundBy == null) {
-  //     Map<String, dynamic> data = {
-  //       "lost_date_time": formattedDateLost,
-  //       "lost_description": _descriptionController.text.toString(),
-  //       "lost_item_img_url": "",
-  //       "lost_item_name": _itemNameController.text.toString(),
-  //       "lost_location": _lostLocationController.text.toString(),
-  //       "lost_report_user_id": userDetails.id,
-  //       "lost_unit_no": userDetails.unitNumber,
-  //       "found_by": userDetails.id,
-  //       "found_by_item_pic": "",
-  //       "found_date_time": formattedDateFound,
-  //       "found_description": _foundDescriptionController.text.toString(),
-  //       "found_item_name": _foundItemNameController.text.toString(),
-  //       "found_location": _foundLostLocationController.text.toString(),
-  //       "found_unit_no": userDetails.unitNumber,
-  //       "property_id": userDetails.propertyId,
-  //       "rec_status": userDetails.recStatus,
-  //       "updated_by": userDetails.id
-  //     };
-  //
-  //     Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
-  //         .getMediaUpload(imagePath, data, context, items.id);
-  //   } else {
-  //
-  //     Map<String, dynamic> data = {
-  //       "lost_date_time": formattedDateLost,
-  //       "lost_description": _descriptionController.text.toString(),
-  //       "lost_item_img_url": "",
-  //       "lost_item_name": _itemNameController.text.toString(),
-  //       "lost_location": _lostLocationController.text.toString(),
-  //       "lost_report_user_id": userDetails.id,
-  //       "lost_unit_no": userDetails.unitNumber,
-  //       "found_by": userDetails.id,
-  //       "found_by_item_pic": "",
-  //       "found_date_time": formattedDateFound,
-  //       "found_description": _foundDescriptionController.text.toString(),
-  //       "found_item_name": _foundItemNameController.text.toString(),
-  //       "found_location": _foundLostLocationController.text.toString(),
-  //       "found_unit_no": userDetails.unitNumber,
-  //       "property_id": userDetails.propertyId,
-  //       "rec_status": userDetails.recStatus,
-  //       "updated_by": userDetails.id,
-  //       "collected_by": _collectedByController.text.toString(),
-  //       "collected_date_time": formattedDateCollected,
-  //       "collected_remarks": _remarksController.text.toString(),
-  //       "received_by_sign": "",
-  //     };
-  //
-  //     Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
-  //         .getMediaUpload(imagePath, data, context, items.id);
-  //
-  //   }
-  //
-  // }
-
-// Future<void> _createFile1(BuildContext context, List<String> imagePaths) async {
-//   if (_signatureImagePath.isNotEmpty && pickedImagePaths.isEmpty) {
-//     imagePaths.add(_signatureImagePath);
-//   }  else if (_signatureImagePath.isEmpty && pickedImagePaths.isNotEmpty) {
-//     imagePaths.addAll(pickedImagePaths);
+// void _uploadImage(var imagePath, String signatureImagePath) {
+//   String? formattedDateFound;
+//   String? formattedDateCollected;
 //
-//   } else if (_signatureImagePath.isNotEmpty && pickedImagePaths.isNotEmpty) {
-//     imagePaths.add(_signatureImagePath);
-//     imagePaths.addAll(pickedImagePaths);
-//     // .map((file) => file.path)
+//   DateTime dateTime = DateFormat('M/d/yyyy h:mm a')
+//       .parse(_dateLostController.text.toString());
+//   String formattedDateLost =
+//       DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+//
+//   if(_dateFoundController.text.isNotEmpty){
+//     DateTime dateTime1 = DateFormat('M/d/yyyy h:mm a')
+//         .parse(_dateFoundController.text.toString());
+//     formattedDateFound = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime1);
+//   }
+//
+//
+//   if(_collectedDateController.text.isNotEmpty){
+//     DateTime dateTime2 = DateFormat('M/d/yyyy h:mm a')
+//         .parse(_collectedDateController.text.toString());
+//     formattedDateCollected =
+//         DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime2);
+//   }
+//
+//
+//   if (items.foundBy == 0 || items.foundBy == null) {
+//     Map<String, dynamic> data = {
+//       "lost_date_time": formattedDateLost,
+//       "lost_description": _descriptionController.text.toString(),
+//       "lost_item_img_url": "",
+//       "lost_item_name": _itemNameController.text.toString(),
+//       "lost_location": _lostLocationController.text.toString(),
+//       "lost_report_user_id": userDetails.id,
+//       "lost_unit_no": userDetails.unitNumber,
+//       "found_by": userDetails.id,
+//       "found_by_item_pic": "",
+//       "found_date_time": formattedDateFound,
+//       "found_description": _foundDescriptionController.text.toString(),
+//       "found_item_name": _foundItemNameController.text.toString(),
+//       "found_location": _foundLostLocationController.text.toString(),
+//       "found_unit_no": userDetails.unitNumber,
+//       "property_id": userDetails.propertyId,
+//       "rec_status": userDetails.recStatus,
+//       "updated_by": userDetails.id
+//     };
+//
+//     Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
+//         .getMediaUpload(imagePath, data, context, items.id);
 //   } else {
-//     return;
+//
+//     Map<String, dynamic> data = {
+//       "lost_date_time": formattedDateLost,
+//       "lost_description": _descriptionController.text.toString(),
+//       "lost_item_img_url": "",
+//       "lost_item_name": _itemNameController.text.toString(),
+//       "lost_location": _lostLocationController.text.toString(),
+//       "lost_report_user_id": userDetails.id,
+//       "lost_unit_no": userDetails.unitNumber,
+//       "found_by": userDetails.id,
+//       "found_by_item_pic": "",
+//       "found_date_time": formattedDateFound,
+//       "found_description": _foundDescriptionController.text.toString(),
+//       "found_item_name": _foundItemNameController.text.toString(),
+//       "found_location": _foundLostLocationController.text.toString(),
+//       "found_unit_no": userDetails.unitNumber,
+//       "property_id": userDetails.propertyId,
+//       "rec_status": userDetails.recStatus,
+//       "updated_by": userDetails.id,
+//       "collected_by": _collectedByController.text.toString(),
+//       "collected_date_time": formattedDateCollected,
+//       "collected_remarks": _remarksController.text.toString(),
+//       "received_by_sign": "",
+//     };
+//
+//     Provider.of<EditLostDetailsFormScreenViewModel>(context, listen: false)
+//         .getMediaUpload(imagePath, data, context, items.id);
+//
 //   }
 //
-//   try {
-//     if (imagePaths.isNotEmpty) {
-//       final qrcode = await fileStgVM.getMediaUpload(imagePaths, context);
-//       if (qrcode!.isNotEmpty) {
-//         List<String> _pickedImageUrls = []; // Initialize the list here
-//         String? _signatureUrl;
-//
-//         for (int i = 0; i < qrcode!.length; i += 2) {
-//           String originalName = qrcode![i].trim();
-//           String url = qrcode![i + 1].trim();
-//           String originalNameWithUrl = '$originalName:$url';
-//
-//           if (originalName != null) {
-//             if (originalName == 'signature.png') {
-//               _signatureUrl = originalNameWithUrl;
-//               signatureUrl = _signatureUrl.toString();
-//             } else {
-//               _pickedImageUrls?.add(jsonDecode(url.toString().trim()));
-//               pickedImageUrls = _pickedImageUrls;
-//             }
-//           }
-//         }
-//
-//         print('Signature URL: $_signatureUrl');
-//         print('Picked Image URLs: $_pickedImageUrls');
-//         print('Signature URL: $signatureUrl');
-//         print('Picked Image URLs: $pickedImageUrls');
-//         if ((_signatureUrl != null || _pickedImageUrls != null ) ||(_signatureUrl != null && _pickedImageUrls != null)) {
-//           createLostItems();
-//         }else{
-//           'error';
-//         }
-//       } else {
-//         throw Exception('Invalid QR code response');
-//       }
-//
-//
-//
-//     }
-//
-//   }catch (e) {
-//     print('Error occurred: $e');
-//     throw Exception('Failed to generate QR code');
-//   }
 // }
+
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/utils/PositiveButton.dart';
+import '/utils/PositiveButton.dart';
 import 'package:provider/provider.dart';
 import '../../data/respose/Status.dart';
 import '../../model/SignInModel.dart';
@@ -20,11 +20,13 @@ class BookFacilityScreen extends StatefulWidget {
 
   final String image;
   var permisssions;
+
   BookFacilityScreen(
       {Key? key,
       required this.facilityName,
       required this.facilityId,
-      required this.image,required this.permisssions})
+      required this.image,
+      required this.permisssions})
       : super(key: key);
 
   @override
@@ -50,6 +52,7 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
   List<FacilityItems> facilityItemsByDate = [];
   List<String> facilityNames = [];
   final DateFormat _monthNameFormat = DateFormat.MMMM();
+
   // int facilityId = 0;
   List<Permissions> permissions = [];
   bool iscreate = false;
@@ -57,6 +60,7 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
   bool isdelete = false;
   bool isview = false;
   bool isupload = false;
+
   @override
   void initState() {
     super.initState();
@@ -95,46 +99,37 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
       // appusagetypeId = appusagetypeid ?? 0;
       fetchFacilityBookings();
     });
-
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Facility Booking") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Facility Booking") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   String formatDateTime(String dateTimeString) {
     final dateTime = DateTime.parse(dateTimeString);
     final formatter = DateFormat('dd-MM-yyyy hh:mm:ss');
@@ -144,25 +139,22 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
   Future<void> fetchFacilityBookings() async {
     final facilityId = widget.facilityId;
     final response = await viewModel.fetchFacilityBookingList(
-      facilityId,
-      "ASC",
-      "id",
-      1,
-      500,
-      propertyId,"",""
-    );
+        facilityId, "ASC", "id", 1, 500, propertyId, "", "");
 
     if (response.data?.status == 200) {
       if (response.data?.result != null) {
         final data = response.data!.result!.items;
         if (data != null) {
-          if (data.isNotEmpty) { // Add a check for non-empty list
+          if (data.isNotEmpty) {
+            // Add a check for non-empty list
             setState(() {
               facilityBookings = data;
               // Sort bookings by date
-              facilityBookings.sort((a, b) => a.usageStarttime!.compareTo(b.usageStarttime!));
+              facilityBookings.sort(
+                  (a, b) => a.usageStarttime!.compareTo(b.usageStarttime!));
               for (final booking in facilityBookings) {
-                final bookingDate = DateTime.parse(booking.usageStarttime ?? "");
+                final bookingDate =
+                    DateTime.parse(booking.usageStarttime ?? "");
                 _getAppointmentsForDate(bookingDate);
               }
             });
@@ -173,7 +165,6 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
       Utils.flushBarErrorMessage("failed", context);
     }
   }
-
 
   List<Appointment> _getAppointmentsForDate(DateTime date) {
     final appointments = _appointmentsMap[date] ?? [];
@@ -196,7 +187,7 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
       final endTimeFormatted = formatDateTime(endTimeString);
       final name = booking.facilityKeyCodeHandoverBy ?? '';
       final unitNo = booking.createdBy.toString() ?? '';
-      final facility =  booking.facilityName ?? '';
+      final facility = booking.facilityName ?? '';
       final hours = booking.bookingHrsDay ?? '';
       final bookingstatus = booking.bookingStatusName ?? '';
       final appointment = Appointment(
@@ -204,9 +195,9 @@ class _BookFacilityScreenState extends State<BookFacilityScreen> {
         endTime: DateTime.parse(endTimeString),
         subject: name,
         id: unitNo,
-        recurrenceId  : facility,
-        recurrenceRule:hours,
-notes: bookingstatus,
+        recurrenceId: facility,
+        recurrenceRule: hours,
+        notes: bookingstatus,
       );
 
       // Add appointment only if it's on selected date or present date
@@ -251,228 +242,322 @@ notes: bookingstatus,
   void dispose() {
     super.dispose();
   }
- Future <void> appointmentDetailsPopup(BuildContext context, Appointment appointment) async{
 
+  Future<void> appointmentDetailsPopup(
+      BuildContext context, Appointment appointment) async {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-
               content: SingleChildScrollView(
                   child: Column(children: [
-
-
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10.0, left: 10, right: 10, bottom: 10),
-                      child:Container(
-
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, left: 10, right: 10, bottom: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      color: Color(0xFFD3D3D3FF),
+                    ),
+                    child: IntrinsicWidth(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text('Key Handover By :',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                    Expanded(
+                                        child: Text(
+                                            appointment.subject.split('/')[0],
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                          color: Color(0xFFD3D3D3FF),
-                        ),
-                        child: IntrinsicWidth(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('Key Handover By :',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-
-                                        Expanded(child: Text( appointment.subject.split('/')[0],style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                      ],
-                                    ),
-                                  ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text('Unit No :',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                    Expanded(
+                                        child: Text('${appointment.id ?? ''}',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                  ],
                                 ),
                               ),
-
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('Unit No :',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                        Expanded(child: Text('${appointment.id ?? ''}',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('Stat Time :',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-
-
-                                        Expanded(child: Text('${DateFormat('yyyy-MM-dd hh:mm a').format(appointment.startTime)}',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('End Time :',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                        Expanded(child: Text('${DateFormat('yyyy-MM-dd hh:mm a').format(appointment.endTime)}',
-                                            style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), )),)
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('Facility Name :',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                        Expanded(child: Text('${appointment.recurrenceId ?? ''}',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('Booking hours:',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ),)),
-                                        Text(' '),
-                                        Expanded(child: Text("${appointment.recurrenceRule ?? ''}",style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.05,
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 2.0,bottom: 2.0,left: 4,right: 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text('BookingStatus:',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                        Text(' '), // add a one-character space
-                                        Expanded(child: Text('${appointment.notes ?? ''}',style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,), ))),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-                              ),
-
-
-                            ],
+                            ),
                           ),
-                        ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text('Stat Time :',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                    Expanded(
+                                        child: Text(
+                                            '${DateFormat('yyyy-MM-dd hh:mm a').format(appointment.startTime)}',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text('End Time :',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                    Expanded(
+                                      child: Text(
+                                          '${DateFormat('yyyy-MM-dd hh:mm a').format(appointment.endTime)}',
+                                          style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text('Facility Name :',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                    Expanded(
+                                        child: Text(
+                                            '${appointment.recurrenceId ?? ''}',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                      'Booking hours:',
+                                      style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    )),
+                                    Text(' '),
+                                    Expanded(
+                                        child: Text(
+                                            "${appointment.recurrenceRule ?? ''}",
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 2.0, bottom: 2.0, left: 4, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text('BookingStatus:',
+                                            style: GoogleFonts.roboto(
+                                              textStyle: TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ))),
+                                    Text(' '),
+                                    // add a one-character space
+                                    Expanded(
+                                        child:
+                                            Text('${appointment.notes ?? ''}',
+                                                style: GoogleFonts.roboto(
+                                                  textStyle: TextStyle(
+                                                    fontSize: 12,
+                                                  ),
+                                                ))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.005
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.50,
-                      child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              primary: Color(0xFF036CB2),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40))),onPressed: (){
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.50,
+                  child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF036CB2),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40))),
+                      onPressed: () {
                         Navigator.pop(context);
-                      }, icon: Icon(Icons.close), label: Text('Close')),
-                    ),
-                  ])),
+                      },
+                      icon: Icon(Icons.close),
+                      label: Text('Close')),
+                ),
+              ])),
             );
           });
         });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 90,
-elevation: 0.0,
-        leading: Row(
-          children: [
-            SizedBox(
-              width: 20,
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-                iconSize: 20, // reduce the size of the icon
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 1.0),
-              child: SizedBox(
-                width: 60, // set a wider width for the text
-                child: TextButton(
+          leadingWidth: 90,
+          elevation: 0.0,
+          leading: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                child: IconButton(
                   onPressed: () {
                     setState(() {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
+                  iconSize: 20, // reduce the size of the icon
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        title: Text(
-          '${widget.facilityName}',
-          style: Theme.of(context).textTheme.headlineLarge,
-          // TextStyle(
-          //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xFF036CB2)
-      ),
+              Padding(
+                padding: EdgeInsets.only(left: 1.0),
+                child: SizedBox(
+                  width: 60, // set a wider width for the text
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text('Back',
+                        style: Theme.of(context).textTheme.headlineMedium),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          title: Text(
+            '${widget.facilityName}',
+            style: Theme.of(context).textTheme.headlineLarge,
+            // TextStyle(
+            //     fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color(0xFF036CB2)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -519,8 +604,8 @@ elevation: 0.0,
                   DateTime(_displayedMonth.year, _displayedMonth.month),
               todayHighlightColor: Color(0xFF036CB2),
               dataSource: AppointmentDataSource(_selectedAppointments),
-
-              monthCellBuilder: (BuildContext context, MonthCellDetails details) {
+              monthCellBuilder:
+                  (BuildContext context, MonthCellDetails details) {
                 final appointments = _getAppointmentsForDate(details.date);
                 final isToday = details.date.isAtSameMomentAs(DateTime(
                   _displayedMonth.year,
@@ -537,9 +622,7 @@ elevation: 0.0,
                         width: 25,
                         height: 25,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFF036CB2)
-                        ),
+                            shape: BoxShape.circle, color: Color(0xFF036CB2)),
                         child: Center(
                           child: Text(
                             details.date.day.toString(),
@@ -575,8 +658,6 @@ elevation: 0.0,
                       bottom: 5,
                       child: _getDots(appointments, unitNumber),
                     ),
-
-
                   );
                 }
 
@@ -589,22 +670,17 @@ elevation: 0.0,
                   ),
                 );
               },
-
               appointmentTextStyle: TextStyle(
                 color: Colors.white,
                 fontSize: 12,
               ),
               monthViewSettings: MonthViewSettings(
-                appointmentDisplayMode:
-                    MonthAppointmentDisplayMode.appointment,
+                appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
               ),
             ),
             (() {
               if (_selectedDate != null) {
-                return ListView.
-
-
-                builder(
+                return ListView.builder(
                   itemCount: _selectedAppointments.length,
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
@@ -612,49 +688,55 @@ elevation: 0.0,
                     final appointment = _selectedAppointments[index];
 
                     return InkWell(
-                      child: Card(
-                        color: Colors.indigoAccent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 4.0, left: 4.0, bottom: 4.0),
-                                    child: Text(
-                                      appointment.subject.split('/')[0],
-                                      style:GoogleFonts.roboto(textStyle: TextStyle(color: Colors.white)) ,
+                        child: Card(
+                          color: Colors.indigoAccent,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 4.0, left: 4.0, bottom: 4.0),
+                                      child: Text(
+                                        appointment.subject.split('/')[0],
+                                        style: GoogleFonts.roboto(
+                                            textStyle:
+                                                TextStyle(color: Colors.white)),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 4.0, left: 4.0),
-                                  child: Text(appointment.id.toString(),
-                                    style:GoogleFonts.roboto(textStyle: TextStyle(color: Colors.white)) ,
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 4.0, left: 4.0),
+                                    child: Text(
+                                      appointment.id.toString(),
+                                      style: GoogleFonts.roboto(
+                                          textStyle:
+                                              TextStyle(color: Colors.white)),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 4.0, bottom: 4.0),
-                              child: Text(
-                                '${ DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(appointment.startTime.toString() ?? ''))} - '
-                                    '${DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(appointment.endTime.toString() ?? ''))}',
-                                  style:GoogleFonts.roboto(textStyle: TextStyle(color: Colors.white)) ,
+                                ],
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 4.0, bottom: 4.0),
+                                child: Text(
+                                  '${DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(appointment.startTime.toString() ?? ''))} - '
+                                  '${DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(appointment.endTime.toString() ?? ''))}',
+                                  style: GoogleFonts.roboto(
+                                      textStyle:
+                                          TextStyle(color: Colors.white)),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                         onTap: () {
                           appointmentDetailsPopup(context, appointment);
-                        }
-                    );
+                        });
                   },
                 );
               } else if (_selectedDate == null) {
@@ -668,25 +750,25 @@ elevation: 0.0,
                 return Container();
               }
             }()),
-            if(iscreate)
-            SizedBox(
-              width: MediaQuery.of(context).size.width*0.70,
-              child: PositiveButton(
-                text: 'Book Facility',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FacilityBookingFormScreen(
-                        facilityName: widget.facilityName,
-                        image: widget.image,
-                        facilityId: widget.facilityId,
+            if (iscreate)
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.70,
+                child: PositiveButton(
+                  text: 'Book Facility',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FacilityBookingFormScreen(
+                          facilityName: widget.facilityName,
+                          image: widget.image,
+                          facilityId: widget.facilityId,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -727,6 +809,7 @@ elevation: 0.0,
       ],
     );
   }
+
   Widget _getDots(List<Appointment> appointments, String unitNumber) {
     final bool hasGreenDot = appointments.any((a) => a.id == unitNumber);
     final bool hasRedDot = appointments.any((a) => a.id != unitNumber);
@@ -761,8 +844,6 @@ elevation: 0.0,
       ],
     );
   }
-
-
 }
 
 class AppointmentDataSource extends CalendarDataSource<Appointment> {

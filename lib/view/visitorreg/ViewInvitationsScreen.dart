@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:poms_app/model/visitorreg/VisitorsStatusModel.dart';
-import 'package:poms_app/utils/CardData.dart';
-import 'package:poms_app/view/visitorreg/GreyListingScreen.dart';
+import '/model/visitorreg/VisitorsStatusModel.dart';
+import '/utils/CardData.dart';
+import '/view/visitorreg/GreyListingScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/SignInModel.dart';
@@ -21,8 +21,10 @@ import '../../data/respose/Status.dart';
 import '../../viewmodel/UserViewModel.dart';
 
 class ViewInvistationsScreen extends StatefulWidget {
- var permission;
-  ViewInvistationsScreen({Key? key,required this.permission}) : super(key: key);
+  var permission;
+
+  ViewInvistationsScreen({Key? key, required this.permission})
+      : super(key: key);
 
   @override
   State<ViewInvistationsScreen> createState() => _ViewInvistationsScreenState();
@@ -47,7 +49,7 @@ class _ViewInvistationsScreenState extends State<ViewInvistationsScreen> {
   List<VisitTypeItems> visitTypeItems = [];
   List<VisitorStatusItems> visitorStatusItems = [];
   bool showFullListView = false;
-String appusagetypeName = "";
+  String appusagetypeName = "";
   List<Permissions> permissions = [];
 
   bool iscreate = false;
@@ -57,6 +59,7 @@ String appusagetypeName = "";
   bool isupload = false;
   bool isprint = false;
   bool isdownload = false;
+
   @override
   void initState() {
     super.initState();
@@ -91,54 +94,43 @@ String appusagetypeName = "";
     //
     // });
   }
-  void actionPermissions () async {
 
+  void actionPermissions() async {
     setState(() {
-      for (var item in permissions){
-
-        if( (item.moduleDisplayNameMobile == "Visitor Registration ") && (item.action != null && item.action!.isNotEmpty)){
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Visitor Registration ") &&
+            (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
-          for (var act in actions){
-            if( act.actionName == "Add" || act.actionId == 1){
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
               iscreate = true;
               print("addbutton = $iscreate");
-
-            }
-            else if ( act.actionName == "Edit" || act.actionId == 2) {
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
               isupdate = true;
               print("edit = $isupdate");
-
-            }
-            else if ( act.actionName == "Delete" || act.actionId == 3) {
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
               isdelete = true;
               print("delete = $isdelete");
-
-            }
-            else if ( act.actionName == "View" || act.actionId == 4) {
+            } else if (act.actionName == "View" || act.actionId == 4) {
               isview = true;
               print("view = $isview");
-
-            }
-            else if ( act.actionName == "Print" || act.actionId == 5) {
+            } else if (act.actionName == "Print" || act.actionId == 5) {
               isprint = true;
               print("print = $isprint");
-
-            }
-            else if ( act.actionName == "Download files" || act.actionId == 6) {
+            } else if (act.actionName == "Download files" ||
+                act.actionId == 6) {
               isdownload = true;
               print("download = $isdownload");
-
-            }
-            else if ( act.actionName == "Upload files" || act.actionId == 7) {
+            } else if (act.actionName == "Upload files" || act.actionId == 7) {
               isupload = true;
               print("upload = $isupload");
-
             }
           }
         }
       }
     });
   }
+
   void fetchVisitType() async {
     viewModel.getVisitorType().then((response) {
       if (response.data?.status == 200) {
@@ -155,17 +147,15 @@ String appusagetypeName = "";
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   void fetchVisitorStatus() async {
-    viewModel.getVisitorsStatus("ASC", "id", 1, 25, "VMS", "VisitorStatus").then((response) {
+    viewModel
+        .getVisitorsStatus("ASC", "id", 1, 25, "VMS", "VisitorStatus")
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
           if (data != null) {
-
-
-
-
-
             setState(() {
               visitorStatusItems = data;
             });
@@ -176,6 +166,7 @@ String appusagetypeName = "";
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   void fetchVisitorStatus1() async {
     viewModel.getVisitorsStatus1("ASC", "id", 1, 25, "VMS", "VisitorStatus");
   }
@@ -239,15 +230,20 @@ String appusagetypeName = "";
 
     return filteredList;
   }
+
   List<VistorsListItems> filterListItems() {
     List<VistorsListItems> filteredList = List<VistorsListItems>.from(items);
 
     if (visitTypeId != 0) {
-      filteredList = filteredList.where((item) => item.visitTypeId == visitTypeId).toList();
+      filteredList = filteredList
+          .where((item) => item.visitTypeId == visitTypeId)
+          .toList();
     }
 
     if (visitorStatusId != 0) {
-      filteredList = filteredList.where((item) => item.visitorRegistrstionStatusId == visitorStatusId).toList();
+      filteredList = filteredList
+          .where((item) => item.visitorRegistrstionStatusId == visitorStatusId)
+          .toList();
     }
 
     return filteredList;
@@ -286,21 +282,20 @@ String appusagetypeName = "";
                             if (_isVisitStatusSelected) {
                               visitTypeId = 0; // Reset visit type filter
                             } else {
-                              visitorStatusId = 0; // Reset visitor status filter
+                              visitorStatusId =
+                                  0; // Reset visitor status filter
                             }
                             filteredList = filterListItems();
                           });
                         },
-
                       ),
                       if (_isVisitTypeVisible)
-
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.60,
                           child: MyDropDown(
                             value: finalvalue1 ??
                                 (visitorStatusItems != null &&
-                                    visitorStatusItems.isNotEmpty
+                                        visitorStatusItems.isNotEmpty
                                     ? visitorStatusItems[0].displayName
                                     : null),
                             labelText: 'Visitor Status',
@@ -308,21 +303,20 @@ String appusagetypeName = "";
                             items: visitorStatusItems
                                 .map((item) => item.displayName)
                                 .map((identityType) => DropdownMenuItem<String>(
-                              value: identityType,
-                              child: Text(identityType!),
-                            ))
+                                      value: identityType,
+                                      child: Text(identityType!),
+                                    ))
                                 .toList(),
                             onchanged: (value) {
                               setState(() {
                                 finalvalue1 = value.toString();
                                 visitorStatusId = 0;
                                 for (int i = 0;
-                                i < visitorStatusItems.length;
-                                i++) {
+                                    i < visitorStatusItems.length;
+                                    i++) {
                                   if (value ==
                                       visitorStatusItems[i].displayName) {
-                                    visitorStatusId =
-                                    visitorStatusItems[i].id!;
+                                    visitorStatusId = visitorStatusItems[i].id!;
                                     break;
                                   }
                                 }
@@ -331,48 +325,41 @@ String appusagetypeName = "";
                             },
                           ),
                         ),
-
-
                       if (!_isVisitTypeVisible)
-
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.60,
-                        child: MyDropDown(
-                          value: finalvalue ??
-                              (visitTypeItems != null &&
-                                  visitTypeItems.isNotEmpty
-                                  ? visitTypeItems[0].visitType
-                                  : null),
-                          labelText: 'Visit Type',
-                          hintText: 'Visit Type',
-                          items: visitTypeItems
-        .map((item) => item.visitType)
-        .map((identityType) => DropdownMenuItem<String>(
-    value: identityType,
-    child: Text(identityType!),
-    ))
-        .toList(),
-                          onchanged: (value) {
-                            setState(() {
-                              finalvalue = value.toString();
-                              visitTypeId = 0;
-                              for (int i = 0;
-                              i < visitTypeItems.length;
-                              i++) {
-                                if (value ==
-                                    visitTypeItems[i].visitType) {
-                                  visitTypeId =
-                                  visitTypeItems[i].id!;
-                                  break;
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.60,
+                          child: MyDropDown(
+                            value: finalvalue ??
+                                (visitTypeItems != null &&
+                                        visitTypeItems.isNotEmpty
+                                    ? visitTypeItems[0].visitType
+                                    : null),
+                            labelText: 'Visit Type',
+                            hintText: 'Visit Type',
+                            items: visitTypeItems
+                                .map((item) => item.visitType)
+                                .map((identityType) => DropdownMenuItem<String>(
+                                      value: identityType,
+                                      child: Text(identityType!),
+                                    ))
+                                .toList(),
+                            onchanged: (value) {
+                              setState(() {
+                                finalvalue = value.toString();
+                                visitTypeId = 0;
+                                for (int i = 0;
+                                    i < visitTypeItems.length;
+                                    i++) {
+                                  if (value == visitTypeItems[i].visitType) {
+                                    visitTypeId = visitTypeItems[i].id!;
+                                    break;
+                                  }
                                 }
-                              }
-                              filteredList = filterListItems();
-                            });
-                          },
+                                filteredList = filterListItems();
+                              });
+                            },
+                          ),
                         ),
-                      ),
-
-
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -447,109 +434,160 @@ String appusagetypeName = "";
                         );
                       }
 
-                        if (visitTypeId == 0 ||
-                            item.visitTypeId == visitTypeId) {
-
-                            return Dismissible(
-
-                              key: Key(item.id.toString()),
-                              direction: DismissDirection.startToEnd,
-                              background: Container(
-                                color: Colors.red,
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 16),
-                                  child: Icon(
-                                      Icons.delete, color: Colors.white),
-                                ),
+                      if (visitTypeId == 0 || item.visitTypeId == visitTypeId) {
+                        return Dismissible(
+                            key: Key(item.id.toString()),
+                            direction: DismissDirection.startToEnd,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: Icon(Icons.delete, color: Colors.white),
                               ),
+                            ),
+                            onDismissed: (direction) async {
+                              setState(() {
+                                filteredList.removeAt(index);
+                              });
 
-                              onDismissed: (direction) async {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (context) {
-                                      return Dialog(
-                                          shape:
-                                          RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(
-                                                  10)),
-                                          elevation: 16,
-                                          child: Popup(title: 'Intercom List',
-                                            message: ' Are you sure you want to delete this id?',
-                                            negativeButtonText: "No",
-                                            onNegativePressed: () {
+                              return showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (context) {
+                                    return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        elevation: 16,
+                                        child: Popup(
+                                          title: 'Invitations',
+                                          message:
+                                              ' Are you sure you want to delete this id?',
+                                          negativeButtonText: "No",
+                                          onNegativePressed: () {
+                                            fetchVisitorList();
+                                            Navigator.pop(context);
+                                          },
+                                          positiveButtonText: "Yes",
+                                          onPositivePressed: () async {
+                                            if (isdelete) {
+                                              final response = await viewModel
+                                                  .deletetVisitorDetails(
+                                                      item.id, context);
+
+                                              if (response.data!.status ==
+                                                  200) {
+                                                setState(() {
+                                                  fetchVisitorList();
+                                                  Utils.toastMessage(response
+                                                      .data!.mobMessage
+                                                      .toString());
+
+                                                  Navigator.pop(context);
+                                                });
+                                              } else if (response
+                                                      .data!.result ==
+                                                  Status.error) {
+                                                setState(() {
+                                                  filteredList.insert(
+                                                      index, item);
+                                                  Utils.flushBarErrorMessage(
+                                                      response.data!.mobMessage
+                                                          .toString(),
+                                                      context);
+                                                });
+                                              }
+                                            } else {
+                                              fetchVisitorList();
                                               Navigator.pop(context);
-                                            },
-                                            positiveButtonText: "Yes",
-                                            onPositivePressed: () async {
-    if (isdelete) {
-      final response = await viewModel
-          .deletetVisitorDetails(
-          item.id, context);
+                                              Utils.toastMessage(
+                                                  'Do not have access to delete');
+                                            }
+                                          },
+                                        ));
+                                  });
+                            },
+                            child: buildNewCard(context, item));
+                      }
+                      if (visitorStatusId == 0 ||
+                          item.visitorRegistrstionStatusId == visitorStatusId) {
+                        return Dismissible(
+                            key: Key(item.id.toString()),
+                            direction: DismissDirection.startToEnd,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: Icon(Icons.delete, color: Colors.white),
+                              ),
+                            ),
+                            onDismissed: (direction) async {
+                              setState(() {
+                                filteredList.removeAt(index);
+                              });
 
-      if (response.data!.status ==
-          200) {
-        // Update local state of widget
-        setState(() {
-          items.removeAt(index);
-          Navigator.pop(context);
-        });
-      } else if (response.data!.result ==
-          Status.error) {
-        // Show error message to user
-        Utils.flushBarErrorMessage(
-            response.message!, context);
-      }
-    }
+                              return showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (context) {
+                                    return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        elevation: 16,
+                                        child: Popup(
+                                          title: 'Invitations',
+                                          message:
+                                          ' Are you sure you want to delete this id?',
+                                          negativeButtonText: "No",
+                                          onNegativePressed: () {
+                                            fetchVisitorList();
+                                            Navigator.pop(context);
+                                          },
+                                          positiveButtonText: "Yes",
+                                          onPositivePressed: () async {
+                                            if (isdelete) {
+                                              final response = await viewModel
+                                                  .deletetVisitorDetails(
+                                                  item.id, context);
 
-                                            },)
-                                      );
-                                    }
-                                );
-                              },
-                              child: buildNewCard(context, item),
-                            );
+                                              if (response.data!.status ==
+                                                  200) {
+                                                setState(() {
+                                                  fetchVisitorList();
+                                                  Utils.toastMessage(response
+                                                      .data!.mobMessage
+                                                      .toString());
 
-                        }
-                        if (visitorStatusId == 0 ||
-                            item.visitorRegistrstionStatusId ==
-                                visitorStatusId) {
-
-      return Dismissible(
-        key: Key(item.id.toString()),
-        direction: DismissDirection.startToEnd,
-        background: Container(
-          color: Colors.red,
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Icon(Icons.delete, color: Colors.white),
-          ),
-        ),
-        onDismissed: (direction) async {
-    if (isdelete) {
-      final response = await viewModel
-          .deletetVisitorDetails(item.id, context);
-
-      if (response.data!.status == 200) {
-        // Update local state of widget
-        setState(() {
-          items.removeAt(index);
-        });
-      } else if (response.data!.result == Status.error) {
-        // Show error message to user
-        Utils.flushBarErrorMessage(
-            response.message!, context);
-      }
-    }
-        },
-        child: buildNewCard(context, item),
-      );
-
-                        } else {
-                          return SizedBox.shrink();
+                                                  Navigator.pop(context);
+                                                });
+                                              } else if (response
+                                                  .data!.result ==
+                                                  Status.error) {
+                                                setState(() {
+                                                  filteredList.insert(
+                                                      index, item);
+                                                  Utils.flushBarErrorMessage(
+                                                      response.data!.mobMessage
+                                                          .toString(),
+                                                      context);
+                                                });
+                                              }
+                                            } else {
+                                              fetchVisitorList();
+                                              Navigator.pop(context);
+                                              Utils.toastMessage(
+                                                  'Do not have access to delete');
+                                            }
+                                          },
+                                        ));
+                                  });
+                            },
+                            child: buildNewCard(context, item));
+                      } else {
+                        return SizedBox.shrink();
                         // }
                       }
                     },
@@ -619,16 +657,13 @@ String appusagetypeName = "";
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 IconButton(
                     onPressed: () {
-                      if(isview) {
-
+                      if (isview) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    VisitorsDetailsScreen(
+                                builder: (context) => VisitorsDetailsScreen(
                                       item: item,
                                     )));
                       }
@@ -637,23 +672,24 @@ String appusagetypeName = "";
                       Icons.arrow_forward_ios_sharp,
                       color: Color(0xFF036CB2),
                     )),
-                if(appusagetypeName != "Guard House")
-                Visibility(
-                  visible: true,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ShareVisitorDetailsScreen(
-                                      item: item,
-                                    )));
-                      },
-                      icon: Icon(
-                        Icons.share,
-                        color: Color(0xFF036CB2),
-                      )),
-                ),
+                if (appusagetypeName != "Guard House")
+                  Visibility(
+                    visible: true,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ShareVisitorDetailsScreen(
+                                        item: item,
+                                      )));
+                        },
+                        icon: Icon(
+                          Icons.share,
+                          color: Color(0xFF036CB2),
+                        )),
+                  ),
               ],
             ),
           ),
@@ -662,42 +698,42 @@ String appusagetypeName = "";
     );
   }
 
-  // Container containerValue({
-  //   required var text,
-  //   required String value,
-  // }) {
-  //   return Container(
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(2.0),
-  //       child: Row(
-  //         children: [
-  //           SizedBox(
-  //             width: MediaQuery.of(context).size.width / 3,
-  //             child: Text(
-  //               text,
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //                 // fontSize: 14,
-  //
-  //               )
-  //             ),
-  //           ),
-  //           //VerticalDivider(width: 1,),
-  //           Expanded(
-  //             child: Text(
-  //               value,
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //                 // fontSize: 14,
-  //
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+// Container containerValue({
+//   required var text,
+//   required String value,
+// }) {
+//   return Container(
+//     child: Padding(
+//       padding: const EdgeInsets.all(2.0),
+//       child: Row(
+//         children: [
+//           SizedBox(
+//             width: MediaQuery.of(context).size.width / 3,
+//             child: Text(
+//               text,
+//               style: TextStyle(
+//                 color: Colors.black,
+//                 // fontSize: 14,
+//
+//               )
+//             ),
+//           ),
+//           //VerticalDivider(width: 1,),
+//           Expanded(
+//             child: Text(
+//               value,
+//               style: TextStyle(
+//                 color: Colors.black,
+//                 // fontSize: 14,
+//
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }
 }
 /*
 Visit TYpe  ChangeNotifierProvider.value(

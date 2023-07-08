@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:poms_app/model/CountryModel.dart';
+import '/model/CountryModel.dart';
 import '../../repository/SignUpRepo.dart';
 import '../../data/respose/ApiResponse.dart';
 import '../../utils/utils.dart';
@@ -10,7 +10,8 @@ import '../model/ServiceType.dart';
 class SignUpViewModel extends ChangeNotifier {
   final _myRepo = SignUpRepo();
 
-  Future<ApiResponse<PostApiResponse>> submitSignUpDetails(var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> submitSignUpDetails(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     try {
@@ -44,12 +45,18 @@ class SignUpViewModel extends ChangeNotifier {
 
     return serviceListResponse;
   }
-  Future<ApiResponse<CountryModel>> fetchCountry(String orderBy,
-      String orderByPropertyName, int pageNumber, int pageSize,) async {
+
+  Future<ApiResponse<CountryModel>> fetchCountry(
+    String orderBy,
+    String orderByPropertyName,
+    int pageNumber,
+    int pageSize,
+  ) async {
     ApiResponse<CountryModel> serviceListResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getCoutry(orderBy, orderByPropertyName, pageNumber, pageSize);
+      final value = await _myRepo.getCoutry(
+          orderBy, orderByPropertyName, pageNumber, pageSize);
       serviceListResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -61,5 +68,4 @@ class SignUpViewModel extends ChangeNotifier {
 
     return serviceListResponse;
   }
-
 }

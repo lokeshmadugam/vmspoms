@@ -12,8 +12,7 @@ class SettingsScreenViewModel with ChangeNotifier {
     ApiResponse<CompanyPolicies> companyPolicyResponse = ApiResponse.loading();
 
     try {
-      final value =
-          await _myRepo.getCompanyPolicyList(propertyId);
+      final value = await _myRepo.getCompanyPolicyList(propertyId);
       companyPolicyResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {

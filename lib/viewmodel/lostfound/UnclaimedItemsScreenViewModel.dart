@@ -9,11 +9,9 @@ import '../../data/respose/ApiResponse.dart';
 import '../../utils/Utils.dart';
 
 class UnclaimedItemsScreenViewModel extends ChangeNotifier {
-
   final _myRepo = UnclaimedItemsRepository();
 
   ApiResponse<UnclaimedItems> unclaimedItems = ApiResponse.loading();
-
 
   void _setUnclaimedItemsList(ApiResponse<UnclaimedItems> response) {
     if (response.data != null) {
@@ -22,16 +20,18 @@ class UnclaimedItemsScreenViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchUnclaimedItemsList(var propertyId ,var id) async {
+  Future<void> fetchUnclaimedItemsList(var propertyId, var id) async {
     _setUnclaimedItemsList(ApiResponse.loading());
     _myRepo
-        .getUnclaimedItemsList(propertyId,id)
+        .getUnclaimedItemsList(propertyId, id)
         .then((value) => _setUnclaimedItemsList(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setUnclaimedItemsList(ApiResponse.error(error.toString())));
+            _setUnclaimedItemsList(ApiResponse.error(error.toString())));
   }
+
   // Delete Unclaimed Item Data
-  Future<ApiResponse<DeleteResponse>> deletetUnclaimedItemsDetails(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deletetUnclaimedItemsDetails(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
     // PostApiResponse postListResult;
@@ -39,9 +39,8 @@ class UnclaimedItemsScreenViewModel extends ChangeNotifier {
       DeleteResponse value = await _myRepo.deleteUnclaimedDetails(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);

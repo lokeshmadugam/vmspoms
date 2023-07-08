@@ -9,7 +9,6 @@ import '../../model/packages/BlockUnitNumber.dart';
 import '../../utils/Utils.dart';
 
 class PackageExpectedFormScreenViewModel extends ChangeNotifier {
-
   final _myRepo = PackageExpectedFormRepository();
 
   ApiResponse<DeliveryServiceModel> deliveryService = ApiResponse.loading();
@@ -30,7 +29,7 @@ class PackageExpectedFormScreenViewModel extends ChangeNotifier {
         .getDeliveryServiceList(countryCode)
         .then((value) => _setDeliveryServiceList(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setDeliveryServiceList(ApiResponse.error(error.toString())));
+            _setDeliveryServiceList(ApiResponse.error(error.toString())));
   }
 
   void _setPackageTypeList(ApiResponse<PackageType> response) {
@@ -46,10 +45,11 @@ class PackageExpectedFormScreenViewModel extends ChangeNotifier {
         .getPackageTypeList()
         .then((value) => _setPackageTypeList(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setPackageTypeList(ApiResponse.error(error.toString())));
+            _setPackageTypeList(ApiResponse.error(error.toString())));
   }
 
-  void _setCreatePackage(ApiResponse<PostApiResponse> response, BuildContext context) {
+  void _setCreatePackage(
+      ApiResponse<PostApiResponse> response, BuildContext context) {
     if (response.data != null) {
       postApiResponse = response;
       Utils.toastMessage(postApiResponse.data!.mobMessage.toString());
@@ -64,16 +64,17 @@ class PackageExpectedFormScreenViewModel extends ChangeNotifier {
         .createExpectedPackage(data)
         .then((value) => _setCreatePackage(ApiResponse.success(value), context))
         .onError((error, stackTrace) =>
-        _setCreatePackage(ApiResponse.error(error.toString()), context));
+            _setCreatePackage(ApiResponse.error(error.toString()), context));
   }
 
-  Future<void> updateExpectedPackage(var data, var packageId, BuildContext context) async {
+  Future<void> updateExpectedPackage(
+      var data, var packageId, BuildContext context) async {
     _setCreatePackage(ApiResponse.loading(), context);
     _myRepo
         .updateExpectedPackage(data, packageId)
         .then((value) => _setCreatePackage(ApiResponse.success(value), context))
         .onError((error, stackTrace) =>
-        _setCreatePackage(ApiResponse.error(error.toString()), context));
+            _setCreatePackage(ApiResponse.error(error.toString()), context));
   }
 
   void _setBlockUnitNoList(ApiResponse<BlockUnitNumber> response) {
@@ -83,12 +84,13 @@ class PackageExpectedFormScreenViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchBlockUnitNoList(var blockName, var propertyId, var unitNo) async {
+  Future<void> fetchBlockUnitNoList(
+      var blockName, var propertyId, var unitNo) async {
     _setBlockUnitNoList(ApiResponse.loading());
     _myRepo
         .getBlockUnitNoList(blockName, propertyId, unitNo)
         .then((value) => _setBlockUnitNoList(ApiResponse.success(value)))
         .onError((error, stackTrace) =>
-        _setBlockUnitNoList(ApiResponse.error(error.toString())));
+            _setBlockUnitNoList(ApiResponse.error(error.toString())));
   }
 }

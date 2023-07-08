@@ -124,7 +124,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       aboutmeController.text = value.userDetails!.remarks.toString();
 
-      mailingAddressController.text = "${value.userDetails!.blockName} ${value.userDetails!.unitNumber} | ${value.userDetails!.propertyAddressLine1}, ${value.userDetails!.propertyAddressLine2}, ${value.userDetails!.propertyCity}, ${value.userDetails!.propertyState}.";
+      mailingAddressController.text =
+          "${value.userDetails!.blockName} ${value.userDetails!.unitNumber} | ${value.userDetails!.propertyAddressLine1}, ${value.userDetails!.propertyAddressLine2}, ${value.userDetails!.propertyCity}, ${value.userDetails!.propertyState}.";
       addressLine1 = value.userDetails!.propertyAddressLine1.toString();
       addressLine2 = value.userDetails!.propertyAddressLine2.toString();
       city = value.userDetails!.propertyCity.toString();
@@ -207,12 +208,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     double? fontSize;
     double? fontSize1;
     double? fontSize2;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 11;
       fontSize1 = 14;
       fontSize2 = 21;
-
-    }else {
+    } else {
       fontSize = 14;
       fontSize1 = 16;
       fontSize2 = 24;
@@ -300,7 +300,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: Icon(
-                        Icons.copy, color: Colors.grey,
+                        Icons.copy,
+                        color: Colors.grey,
                       ),
                     ),
                     onTap: _copyToClipboard,
@@ -327,15 +328,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.info_outline, color: Colors.red, size: 18,
+                      Icons.info_outline,
+                      color: Colors.red,
+                      size: 18,
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,
                     ),
                     Expanded(
                       child: Text(
-                          'Kindly contact the management office if you wish to change your mobile number, email address or mailing address. This is because a proof of property ownership is required for verification.',
-                        softWrap: true, style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: fontSize, color: Colors.red) ),
+                        'Kindly contact the management office if you wish to change your mobile number, email address or mailing address. This is because a proof of property ownership is required for verification.',
+                        softWrap: true,
+                        style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                fontSize: fontSize, color: Colors.red)),
                         textAlign: TextAlign.justify,
                       ),
                     ),
@@ -357,10 +363,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(25))),
                         icon: Icon(Icons.change_circle_outlined),
                         label: Text("Password",
-                            style: GoogleFonts.roboto(textStyle:TextStyle(
-                                fontSize: fontSize1,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500))),
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize1,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500))),
                         onPressed: () {},
                       ),
                       PositiveButton(
@@ -375,10 +382,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(25))),
                         icon: Icon(Icons.logout),
                         label: Text('Log Out',
-                            style: GoogleFonts.roboto(textStyle: TextStyle(
-                                fontSize: fontSize1,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500))),
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize1,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500))),
                         onPressed: () async {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
@@ -515,8 +523,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _copyToClipboard() async {
-    String address = firstName+" "+lastName+'\n'+blockName+" "
-        +unitNumber+'\n'+addressLine1+'\n'+addressLine2+'\n'+city+'\n'+state;
+    String address = firstName +
+        " " +
+        lastName +
+        '\n' +
+        blockName +
+        " " +
+        unitNumber +
+        '\n' +
+        addressLine1 +
+        '\n' +
+        addressLine2 +
+        '\n' +
+        city +
+        '\n' +
+        state;
     Clipboard.setData(ClipboardData(text: address));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Text copied to clipboard!')),

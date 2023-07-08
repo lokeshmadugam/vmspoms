@@ -7,10 +7,10 @@ class EFormUserData {
 
   EFormUserData(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   EFormUserData.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class EFormUserData {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,13 +46,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -112,27 +112,27 @@ class UserDataItems {
 
   UserDataItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.userId,
-        this.unitNo,
-        this.admModuleId,
-        this.eformsId,
-        this.hideForAll,
-        this.eformcatGroupId,
-        this.fiedData,
-        this.attachmentId,
-        this.eformsStatus,
-        this.approvedBy,
-        this.approvedOn,
-        this.remark,
-        this.recStatus,
-        this.moduleName,
-        this.eformName,
-        this.eformsStatusInt,
-        this.recStatusname,
-        this.remarks});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.userId,
+      this.unitNo,
+      this.admModuleId,
+      this.eformsId,
+      this.hideForAll,
+      this.eformcatGroupId,
+      this.fiedData,
+      this.attachmentId,
+      this.eformsStatus,
+      this.approvedBy,
+      this.approvedOn,
+      this.remark,
+      this.recStatus,
+      this.moduleName,
+      this.eformName,
+      this.eformsStatusInt,
+      this.recStatusname,
+      this.remarks});
 
   UserDataItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];

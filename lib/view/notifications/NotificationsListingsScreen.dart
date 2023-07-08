@@ -10,8 +10,8 @@ class NotificationsListingsScreen extends StatefulWidget {
       _NotificationsListingsScreenState();
 }
 
-class _NotificationsListingsScreenState extends State<NotificationsListingsScreen> {
-
+class _NotificationsListingsScreenState
+    extends State<NotificationsListingsScreen> {
   final List<Color> colors = [
     Colors.pink.shade300,
     Colors.indigo.shade300,
@@ -25,7 +25,8 @@ class _NotificationsListingsScreenState extends State<NotificationsListingsScree
     super.initState();
     SampleDataForNow data = SampleDataForNow();
     data.header = 'Train Crash';
-    data.body = "<h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p><h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p><h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p><h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p>";
+    data.body =
+        "<h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p><h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p><h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p><h2>About Me</h2><p>Hello! My name is John and I'm a passionate software engineer. I have been coding for over 10 years and love every minute of it. My expertise lies in web development, particularly in front-end technologies like HTML, CSS, and JavaScript. I have worked on numerous projects, ranging from small personal websites to large-scale e-commerce platforms.</p><p>In addition to web development, I also have experience in mobile app development using frameworks like React Native. I enjoy creating user-friendly interfaces and optimizing performance to deliver exceptional user experiences.</p><p>When I'm not coding, you can find me exploring the outdoors, playing guitar, or reading up on the latest tech trends. I believe in continuous learning and staying up-to-date with the ever-evolving world of technology.</p>";
     data.date = '3rd June 2023';
     data.time = '4:30 pm';
     _list.add(data);
@@ -107,20 +108,26 @@ class _NotificationsListingsScreenState extends State<NotificationsListingsScree
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      _list[index].header.toString(),
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    _list[index].header.toString(),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.01,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
-                                  _list[index].body.toString(), maxLines: 3,
+                                  _list[index].body.toString(),
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 14,),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
                               Divider(
@@ -129,21 +136,27 @@ class _NotificationsListingsScreenState extends State<NotificationsListingsScree
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       _list[index].date.toString(),
-                                      style: TextStyle(fontSize: 14,),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
                                     ),
                                     Text(
                                       _list[index].time.toString(),
-                                      style: TextStyle(fontSize: 14,),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.01,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                             ],
                           ),
@@ -153,8 +166,8 @@ class _NotificationsListingsScreenState extends State<NotificationsListingsScree
                             context,
                             MaterialPageRoute(
                                 builder: (context) => NotificationViewScreen(
-                                  data: _list[index],
-                                )),
+                                      data: _list[index],
+                                    )),
                           );
                         },
                       );
@@ -171,6 +184,4 @@ class _NotificationsListingsScreenState extends State<NotificationsListingsScree
       ),
     );
   }
-
-
 }

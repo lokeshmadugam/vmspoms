@@ -10,7 +10,6 @@ import '../../viewmodel/UserViewModel.dart';
 import '../../viewmodel/newsBulletin&announcement/NewsBulletinViewModel.dart';
 import 'ReadAnnouncementsScreen.dart';
 
-
 class AnnouncementsScreen extends StatefulWidget {
   const AnnouncementsScreen({Key? key}) : super(key: key);
 
@@ -23,7 +22,7 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
   var viewModel = NewsButtelinViewModel();
 
   int propertyId = 0;
-  int userId = 0 ;
+  int userId = 0;
 
   String unitNumber = " ";
   int newsId = 0;
@@ -42,10 +41,10 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
     Color(0xFF91DE7C),
     Color(0xFF2F7EC2),
   ];
+
   void initState() {
     super.initState();
     getUserDetails();
-
   }
 
   void dispose() {
@@ -55,29 +54,30 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
   Future<void> getUserDetails() async {
     userVM.getUserDetails().then((value) {
       final userid = value.userDetails?.id;
-      userId =userid ?? 0;
+      userId = userid ?? 0;
 
       final propertyid = value.userDetails?.propertyId;
       propertyId = propertyid ?? 0;
       final unitnmb = value.userDetails?.unitNumber;
       unitNumber = unitnmb ?? " ";
       fetchNewsandAnnouncements();
-
     });
   }
 
-
   void fetchNewsandAnnouncements() async {
-    viewModel.getNewsandAnnouncements("ASC", "id", 1, 25, "VMS", "AnnounceNewBulletin").then((response) {
+    viewModel
+        .getNewsandAnnouncements(
+            "ASC", "id", 1, 25, "VMS", "AnnounceNewBulletin")
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
           if (data != null) {
             setState(() {
               visitorStatusItems = data;
-              for(var item in data){
+              for (var item in data) {
                 final id = item.id ?? 0;
-                if (id == 296){
+                if (id == 296) {
                   newsId = id;
                   fetchNewsBulletin();
                 }
@@ -90,9 +90,10 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   Future<void> fetchNewsBulletin() async {
     viewModel
-        .getNewsList( "ASC", "id", 1, 500, propertyId.toString(),newsId)
+        .getNewsList("ASC", "id", 1, 500, propertyId.toString(), newsId)
         .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
@@ -102,7 +103,8 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
               _newsItems = data;
 
               for (var item in data) {
-                DateTime announcementDate = DateTime.parse(item.announcementDate.toString());
+                DateTime announcementDate =
+                    DateTime.parse(item.announcementDate.toString());
                 DateTime today = DateTime.now();
                 DateTime oneWeekAgo = today.subtract(Duration(days: 7));
                 DateTime oneMonthAgo = today.subtract(Duration(days: 30));
@@ -112,8 +114,8 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
                 } else if (announcementDate.isAfter(oneWeekAgo)) {
                   lastWeekNewsItems.add(item);
                 } else if (announcementDate.isAfter(oneMonthAgo)) {
-                  latstOnemonth.add(item);}
-                else if (announcementDate.isAfter(moreMonthAgo)) {
+                  latstOnemonth.add(item);
+                } else if (announcementDate.isAfter(moreMonthAgo)) {
                   olderNewsItems.add(item);
                 }
               }
@@ -122,7 +124,6 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
               filteredNewsItems.addAll(latstOnemonth);
               filteredNewsItems.addAll(olderNewsItems);
             });
-
           }
         }
       }
@@ -130,6 +131,7 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,13 +197,17 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
                       Color itemColor;
                       if (index < todayNewsItems.length) {
                         itemColor = colors[0]; // Today's news color
-                      } else if (index < (todayNewsItems.length + lastWeekNewsItems.length)) {
+                      } else if (index <
+                          (todayNewsItems.length + lastWeekNewsItems.length)) {
                         itemColor = colors[1]; // Last week's news color
-                      } else if (index < (todayNewsItems.length + lastWeekNewsItems.length + latstOnemonth.length)) {
+                      } else if (index <
+                          (todayNewsItems.length +
+                              lastWeekNewsItems.length +
+                              latstOnemonth.length)) {
                         itemColor = colors[2]; // One month old news color
-                      }
-                        else {
-                        itemColor = colors[3]; // More than one month old news color
+                      } else {
+                        itemColor =
+                            colors[3]; // More than one month old news color
                       }
                       return InkWell(
                         child: Card(
@@ -212,7 +218,6 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
@@ -220,21 +225,24 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
                                     topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5),
                                   ),
-
                                   color: itemColor,
                                 ),
                                 padding: EdgeInsets.all(10),
                                 child: Container(
                                   child: Text(
                                     item.newsBulletinName!.toString(),
-                                    style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 16, color: Colors.white,
-                                      fontWeight: FontWeight.w500, )
-                                    ),
+                                    style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    )),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.01,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Padding(
                                   padding: const EdgeInsets.all(4.0),
@@ -242,41 +250,43 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
                                     height: 60,
                                     child: SingleChildScrollView(
                                       child: HtmlWidget(
-
-                                        item.picDocument ?? " ".trim().substring(1,3),
-                                        textStyle: GoogleFonts.roboto(textStyle:TextStyle(
-                                          color: Colors.black,fontSize: 13
-                                          // maxLines: 2, // Specify the maximum number of lines to display
-                                        ), )
-
-                                      ),
+                                          item.picDocument ??
+                                              " ".trim().substring(1, 3),
+                                          textStyle: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 13
+                                                // maxLines: 2, // Specify the maximum number of lines to display
+                                                ),
+                                          )),
                                     ),
-                                  )
-
-                              ),
+                                  )),
                               Divider(
                                 color: Colors.grey,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-
-                                    Text("${item.announcementDate != null
-                                        ? DateFormat('yyyy-MM-dd hh:mm a')
-                                        .format(DateTime.parse(item.announcementDate
-                                        .toString()))
-                                        : ''}",style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,color: Color(
-                                        0xFF1B248D)))),
-
-                                    Text("Click here...",style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 12,color: Color(
-                                        0xFF1B248D))))
+                                    Text(
+                                        "${item.announcementDate != null ? DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(item.announcementDate.toString())) : ''}",
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFF1B248D)))),
+                                    Text("Click here...",
+                                        style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFF1B248D))))
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.01,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                             ],
                           ),
@@ -285,10 +295,9 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ReadAnnouncementsScreen(data: item,
-
-
-                                )),
+                                builder: (context) => ReadAnnouncementsScreen(
+                                      data: item,
+                                    )),
                           );
                         },
                       );

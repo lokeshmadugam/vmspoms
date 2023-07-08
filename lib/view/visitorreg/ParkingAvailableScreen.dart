@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:poms_app/utils/CardData.dart';
+import '/utils/CardData.dart';
 
 import '../../model/visitorreg/ParkingModel.dart';
-
 
 class ParkingAvailableScreen extends StatefulWidget {
   var data;
@@ -57,19 +56,15 @@ class _ParkingAvailableScreenState extends State<ParkingAvailableScreen> {
                       Navigator.pop(context);
                     });
                   },
-                  child: Text(
-                    'Back',
-                    style: Theme.of(context).textTheme.headlineMedium
-                  ),
+                  child: Text('Back',
+                      style: Theme.of(context).textTheme.headlineMedium),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          'Parking Available',
-      style: Theme.of(context).textTheme.headlineLarge
-        ),
+        title: Text('Parking Available',
+            style: Theme.of(context).textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: Color(0xFF036CB2),
       ),
@@ -136,7 +131,6 @@ class _ParkingAvailableScreenState extends State<ParkingAvailableScreen> {
                                 //   text: "Status",
                                 //   value: ": Available ",
                                 // )
-
                               ],
                             ),
                             value: isSelected,
@@ -169,6 +163,4 @@ class _ParkingAvailableScreenState extends State<ParkingAvailableScreen> {
       ),
     );
   }
-
-
 }

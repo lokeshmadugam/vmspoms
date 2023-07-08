@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'PositiveButton.dart';
 
-
 class Popup extends StatelessWidget {
   Popup({
     Key? key,
     required this.title,
     required this.message,
-     this.negativeButtonText,
-   this.positiveButtonText,
+    this.negativeButtonText,
+    this.positiveButtonText,
     this.onNegativePressed,
-   this.onPositivePressed,
+    this.onPositivePressed,
   }) : super(key: key);
 
   final String title;

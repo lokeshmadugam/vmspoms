@@ -10,7 +10,6 @@ import '../../utils/MyTextField.dart';
 import '../../utils/Utils.dart';
 
 class ManagementOfficeListingsScreen extends StatefulWidget {
-
   ManagementOfficeListingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -18,7 +17,8 @@ class ManagementOfficeListingsScreen extends StatefulWidget {
       _ManagementOfficeListingsScreenState();
 }
 
-class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListingsScreen> {
+class _ManagementOfficeListingsScreenState
+    extends State<ManagementOfficeListingsScreen> {
   UserDetails userDetails = UserDetails();
   var viewmodel = ManagementSecurityViewModel();
 
@@ -27,7 +27,6 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
 
   final _searchController = TextEditingController();
   var serviceTypeId;
-
 
   @override
   void initState() {
@@ -52,13 +51,14 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
           var data = response.data!.result!.items;
           if (data != null) {
             setState(() {
-              for(int i=0;i<data.length;i++){
-                if(data[i].keyValue == 'ManagementOffice'){
+              for (int i = 0; i < data.length; i++) {
+                if (data[i].keyValue == 'ManagementOffice') {
                   serviceTypeId = data[i].id;
                   break;
                 }
               }
-              fetchManagementContactItems(serviceTypeId, userDetails.propertyId);
+              fetchManagementContactItems(
+                  serviceTypeId, userDetails.propertyId);
             });
           }
         }
@@ -68,9 +68,11 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
     });
   }
 
-  Future<void> fetchManagementContactItems(var managementInHouseId,
-      var propertyId) async {
-    viewmodel.fetchManagementContactList(managementInHouseId, propertyId).then((response) {
+  Future<void> fetchManagementContactItems(
+      var managementInHouseId, var propertyId) async {
+    viewmodel
+        .fetchManagementContactList(managementInHouseId, propertyId)
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
@@ -135,16 +137,25 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.01,
                             ),
-                            containerValue(icon: Icons.person, value: _managementContactsList[index].contactName.toString()),
+                            containerValue(
+                                icon: Icons.person,
+                                value: _managementContactsList[index]
+                                    .contactName
+                                    .toString()),
                             Divider(
                               color: Colors.grey,
                             ),
                             InkWell(
                               child: containerValue(
                                   icon: Icons.phone,
-                                  value: _managementContactsList[index].phoneNo.toString()),
+                                  value: _managementContactsList[index]
+                                      .phoneNo
+                                      .toString()),
                               onTap: () {
-                                _launchPhoneDialer(_managementContactsList[index].phoneNo.toString());
+                                _launchPhoneDialer(
+                                    _managementContactsList[index]
+                                        .phoneNo
+                                        .toString());
                               },
                             ),
                             Divider(
@@ -152,7 +163,9 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
                             ),
                             containerValue(
                                 icon: Icons.ac_unit,
-                                value: _managementContactsList[index].serviceTypeName.toString()),
+                                value: _managementContactsList[index]
+                                    .serviceTypeName
+                                    .toString()),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.01,
                             ),
@@ -176,10 +189,10 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
   void _runSearch(String searchTerm) {
     List<MgmtSecurityItems> results = [];
     for (var item in _items!) {
-      if (item.serviceTypeName!.toLowerCase().contains(searchTerm.toLowerCase()) ||
-          item.contactName!
+      if (item.serviceTypeName!
               .toLowerCase()
-              .contains(searchTerm.toLowerCase())) {
+              .contains(searchTerm.toLowerCase()) ||
+          item.contactName!.toLowerCase().contains(searchTerm.toLowerCase())) {
         results.add(item);
       }
     }
@@ -197,9 +210,7 @@ class _ManagementOfficeListingsScreenState extends State<ManagementOfficeListing
         padding: const EdgeInsets.all(2.0),
         child: Row(
           children: [
-            Icon(
-              icon, color: Color(0xFF036CB2)
-            ),
+            Icon(icon, color: Color(0xFF036CB2)),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.03,
             ),

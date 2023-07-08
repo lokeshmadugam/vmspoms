@@ -7,10 +7,10 @@ class DynamicList {
 
   DynamicList(
       {this.status,
-        this.megCategory,
-        this.webMessage,
-        this.mobMessage,
-        this.result});
+      this.megCategory,
+      this.webMessage,
+      this.mobMessage,
+      this.result});
 
   DynamicList.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -18,7 +18,7 @@ class DynamicList {
     webMessage = json['webMessage'];
     mobMessage = json['mobMessage'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -49,16 +49,16 @@ class Result {
 
   Result(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.eformCategoryName,
-        this.description,
-        this.iconUrl,
-        this.isDefault,
-        this.recStatus,
-        this.recStatusname,
-        this.propertyEformsRest});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.eformCategoryName,
+      this.description,
+      this.iconUrl,
+      this.isDefault,
+      this.recStatus,
+      this.recStatusname,
+      this.propertyEformsRest});
 
   Result.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -119,21 +119,21 @@ class PropertyEformsRest {
 
   PropertyEformsRest(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.admModuleId,
-        this.eformName,
-        this.eformDispName,
-        this.eformCategoryId,
-        this.displaySeqno,
-        this.iconUrl,
-        this.isDefault,
-        this.recStatus,
-        this.moduleName,
-        this.recStatusname,
-        this.propertyEformsCategoryFieldsRest,
-        this.eformsCategoryName});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.admModuleId,
+      this.eformName,
+      this.eformDispName,
+      this.eformCategoryId,
+      this.displaySeqno,
+      this.iconUrl,
+      this.isDefault,
+      this.recStatus,
+      this.moduleName,
+      this.recStatusname,
+      this.propertyEformsCategoryFieldsRest,
+      this.eformsCategoryName});
 
   PropertyEformsRest.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -212,26 +212,26 @@ class PropertyEformsCategoryFieldsRest {
 
   PropertyEformsCategoryFieldsRest(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.eformcatGroupId,
-        this.admModuleId,
-        this.eformsId,
-        this.fieldId,
-        this.fieldDispName,
-        this.isMandatory,
-        this.displaySeqno,
-        this.isList,
-        this.isDefault,
-        this.recStatus,
-        this.categoryName,
-        this.moduleName,
-        this.eformName,
-        this.fieldKeyValue,
-        this.fieldTypeName,
-        this.recStatusname,
-        this.propertyEformsDropdownFieldsRest});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.eformcatGroupId,
+      this.admModuleId,
+      this.eformsId,
+      this.fieldId,
+      this.fieldDispName,
+      this.isMandatory,
+      this.displaySeqno,
+      this.isList,
+      this.isDefault,
+      this.recStatus,
+      this.categoryName,
+      this.moduleName,
+      this.eformName,
+      this.fieldKeyValue,
+      this.fieldTypeName,
+      this.recStatusname,
+      this.propertyEformsDropdownFieldsRest});
 
   PropertyEformsCategoryFieldsRest.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -313,18 +313,18 @@ class PropertyEformsDropdownFieldsRest {
 
   PropertyEformsDropdownFieldsRest(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.eformsCatfieldId,
-        this.fieldType,
-        this.fieldDispName,
-        this.displaySeqno,
-        this.isDefault,
-        this.recStatus,
-        this.fieldTypeName,
-        this.fieldTypeNameconfigKeyValue,
-        this.dropdownMenufieldName,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.eformsCatfieldId,
+      this.fieldType,
+      this.fieldDispName,
+      this.displaySeqno,
+      this.isDefault,
+      this.recStatus,
+      this.fieldTypeName,
+      this.fieldTypeNameconfigKeyValue,
+      this.dropdownMenufieldName,
+      this.recStatusname});
 
   PropertyEformsDropdownFieldsRest.fromJson(Map<String, dynamic> json) {
     id = json['id'];

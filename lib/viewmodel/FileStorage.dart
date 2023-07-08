@@ -1,7 +1,3 @@
-
-
-
-
 //
 // import 'package:flutter/cupertino.dart';
 // import '../repository/FileStorageRepo.dart';
@@ -76,7 +72,6 @@ import '../data/respose/ApiResponse.dart';
 import '../model/MediaUpload.dart';
 
 class FileStorageViewModel extends ChangeNotifier {
-
   var request;
   MediaUpload? mediaUpload;
 

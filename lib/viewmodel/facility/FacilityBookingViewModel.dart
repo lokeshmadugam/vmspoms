@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import '../../data/respose/ApiResponse.dart';
@@ -12,14 +10,30 @@ import '../../repository/facility/FacilityBookingRepo.dart';
 import '../../utils/utils.dart';
 
 class FacilityBookingViewModel with ChangeNotifier {
-
   final _myRepo = FacilityBookingRepository();
-  Future<ApiResponse<FacilityBookingModel>> fetchFacilityBookingList(int facilityId,String orderBy, String orderByPropertyName, int pageNumber, int pageSize,
-      int propertyId,String fromdate,String todate) async {
-    ApiResponse<FacilityBookingModel> visitorListResponse = ApiResponse.loading();
+
+  Future<ApiResponse<FacilityBookingModel>> fetchFacilityBookingList(
+      int facilityId,
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      int propertyId,
+      String fromdate,
+      String todate) async {
+    ApiResponse<FacilityBookingModel> visitorListResponse =
+        ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getFacilityBookings(facilityId,orderBy, orderByPropertyName, pageNumber, pageSize, propertyId,fromdate,todate);
+      final value = await _myRepo.getFacilityBookings(
+          facilityId,
+          orderBy,
+          orderByPropertyName,
+          pageNumber,
+          pageSize,
+          propertyId,
+          fromdate,
+          todate);
       visitorListResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -31,12 +45,20 @@ class FacilityBookingViewModel with ChangeNotifier {
 
     return visitorListResponse;
   }
+
   // Get Facility Types
-  Future<ApiResponse<FacilityTypeModel>> getFacilityType(String orderBy, String orderByPropertyName, int pageNumber, int pageSize, int propertyId,) async {
+  Future<ApiResponse<FacilityTypeModel>> getFacilityType(
+    String orderBy,
+    String orderByPropertyName,
+    int pageNumber,
+    int pageSize,
+    int propertyId,
+  ) async {
     ApiResponse<FacilityTypeModel> facilityTypeResponse = ApiResponse.loading();
 
     try {
-      final value = await _myRepo.getFacilityTypes(orderBy, orderByPropertyName, pageNumber, pageSize, propertyId);
+      final value = await _myRepo.getFacilityTypes(
+          orderBy, orderByPropertyName, pageNumber, pageSize, propertyId);
       facilityTypeResponse = ApiResponse.success(value);
       print("response = $value");
     } catch (error) {
@@ -50,7 +72,8 @@ class FacilityBookingViewModel with ChangeNotifier {
   }
 
   //Create FacilityBookings
-  Future<ApiResponse<PostApiResponse>> createFacilityBookings(var data, BuildContext context) async {
+  Future<ApiResponse<PostApiResponse>> createFacilityBookings(
+      var data, BuildContext context) async {
     ApiResponse<PostApiResponse> response = ApiResponse.loading();
     notifyListeners();
     PostApiResponse postListResult;
@@ -58,12 +81,10 @@ class FacilityBookingViewModel with ChangeNotifier {
       PostApiResponse value = await _myRepo.createFacilityBookings(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 201){
-      print('response = ${value.mobMessage}');
-      Utils.flushBarErrorMessage("${value.mobMessage}", context);
-      final result = value.result;
-
-
+      if (value.status == 201) {
+        print('response = ${value.mobMessage}');
+        Utils.flushBarErrorMessage("${value.mobMessage}", context);
+        final result = value.result;
       } else {
         Utils.flushBarErrorMessage(" Registration Failed".toString(), context);
       }
@@ -80,7 +101,8 @@ class FacilityBookingViewModel with ChangeNotifier {
   }
 
   // Delete Facility Bookings Data
-  Future<ApiResponse<DeleteResponse>> deleteFacilityBookingsData(var data, BuildContext context) async {
+  Future<ApiResponse<DeleteResponse>> deleteFacilityBookingsData(
+      var data, BuildContext context) async {
     ApiResponse<DeleteResponse> response = ApiResponse.loading();
     notifyListeners();
 
@@ -88,9 +110,8 @@ class FacilityBookingViewModel with ChangeNotifier {
       DeleteResponse value = await _myRepo.deleteFacilityBookings(data);
       response = ApiResponse.success(value);
 
-      if (value.status == 200){
+      if (value.status == 200) {
         print('response = ${value.mobMessage}');
-
       }
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
@@ -103,12 +124,16 @@ class FacilityBookingViewModel with ChangeNotifier {
 
     return response;
   }
+
   // Fee Paid Status
-  Future<ApiResponse<VisitorsStatusModel>> getFeePaidStatus(String orderBy, String orderByPropertyName,
-      int pageNumber, int pageSize, String appUseage ,String configKey
-      ) async {
-    ApiResponse<VisitorsStatusModel> listResponse = ApiResponse
-        .loading();
+  Future<ApiResponse<VisitorsStatusModel>> getFeePaidStatus(
+      String orderBy,
+      String orderByPropertyName,
+      int pageNumber,
+      int pageSize,
+      String appUseage,
+      String configKey) async {
+    ApiResponse<VisitorsStatusModel> listResponse = ApiResponse.loading();
 
     try {
       final value = await _myRepo.getFeePaidStatus(
@@ -118,7 +143,8 @@ class FacilityBookingViewModel with ChangeNotifier {
         pageSize,
         appUseage,
         configKey,
-      );;
+      );
+      ;
       listResponse = ApiResponse.success(value);
       print("response = $listResponse");
     } catch (error) {

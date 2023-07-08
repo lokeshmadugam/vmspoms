@@ -9,7 +9,7 @@ class IntercomListModel {
     status = json['status'];
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,13 +35,13 @@ class Result {
 
   Result(
       {this.pageNumber,
-        this.pageSize,
-        this.totalPage,
-        this.itemCounts,
-        this.totalItemCounts,
-        this.orderBy,
-        this.orderByPropertyName,
-        this.items});
+      this.pageSize,
+      this.totalPage,
+      this.itemCounts,
+      this.totalItemCounts,
+      this.orderBy,
+      this.orderByPropertyName,
+      this.items});
 
   Result.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -91,17 +91,17 @@ class IntercomItems {
 
   IntercomItems(
       {this.id,
-        this.createdBy,
-        this.createdOn,
-        this.propertyId,
-        this.userId,
-        this.firstName,
-        this.lastName,
-        this.countryCode,
-        this.phoneNumber,
-        this.priority,
-        this.recStatus,
-        this.recStatusname});
+      this.createdBy,
+      this.createdOn,
+      this.propertyId,
+      this.userId,
+      this.firstName,
+      this.lastName,
+      this.countryCode,
+      this.phoneNumber,
+      this.priority,
+      this.recStatus,
+      this.recStatusname});
 
   IntercomItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -135,4 +135,3 @@ class IntercomItems {
     return data;
   }
 }
-

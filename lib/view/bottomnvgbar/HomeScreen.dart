@@ -22,6 +22,7 @@ import '../../view/clockinclockout/AttendanceTabsScreen.dart';
 import '../../view/facility/FacilityBookingTabsScreen.dart';
 import '../../view/greylist/GreyListingsScreen.dart';
 import '../../view/lostfound/LostFoundTabsScreen.dart';
+
 // import '../../view/managementservices/ManagementServicesTabScreen.dart';
 // import '../../view/packages/PackageTabsScreen.dart';
 import '../../view/securityrounds/SecurityTabsScreen.dart';
@@ -33,7 +34,6 @@ import '../notifications/NotificationsTabScreen.dart';
 import '../packages/PackageTabsScreen.dart';
 import '../visitorreg/ContactsScreen.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -42,8 +42,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   UserDetails userDetails = UserDetails();
   List<PermissionModel> _permissionsList = [];
   var viewModel = AddsViewModel();
@@ -66,19 +64,19 @@ class _HomeScreenState extends State<HomeScreen> {
   bool edocument = false;
   bool complaints = false;
   bool contacts = false;
-  List<AddItems> _addItems =[];
-  List<AddItems> filteredItems =[];
+  List<AddItems> _addItems = [];
+  List<AddItems> filteredItems = [];
   List<dynamic> list = [];
-String profileImg = '';
+  String profileImg = '';
   int activeIndex = 0;
- var data;
+  var data;
   PermissionModel model = PermissionModel();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getUserDetails();
-
   }
 
   void _getUserDetails() async {
@@ -87,79 +85,99 @@ String profileImg = '';
     Map<String, dynamic> jsonData = jsonDecode(details!);
     userDetails = SignInModel.fromJson(jsonData).userDetails!;
     fetchAddsType();
-    if(userDetails.permissions!=null){
-       data = userDetails.permissions;
-      for(int i=0;i<data!.length;i++){
-        if(data[i].menuDisplayNameMobile.toString().trim() == 'Visitor Registration'){
+    if (userDetails.permissions != null) {
+      data = userDetails.permissions;
+      for (int i = 0; i < data!.length; i++) {
+        if (data[i].menuDisplayNameMobile.toString().trim() ==
+            'Visitor Registration') {
           visitor = true;
           greylisted = true;
 
           // model.name = data[i].menuDisplayNameMobile.toString();
           // model.image = data[i].menuIconMobile.toString();
           // _permissionsList.add(model);
-        } else if((data[i].moduleDisplayNameMobile.toString().trim() == 'Package Receipts') ||
-            (data[i].moduleDisplayNameMobile.toString().trim() == 'Package Received')){
+        } else if ((data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Package Receipts') ||
+            (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Package Received')) {
           packages = true;
         }
         // else if(data[i].moduleDisplayName.toString().trim() == 'Package Receipts'){
         //   packages = true;
         // }
-        else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Security & patrols' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Security Logs' || data[i].moduleDisplayNameMobile.toString().trim() == 'Security Rounds'){
+        else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Security & patrols' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Security Logs' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Security Rounds') {
           security = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Attendance' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Attendance Details' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Clock-in/Clock Out'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Attendance' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Attendance Details' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Clock-in/Clock Out') {
           attendance = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Grey List' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Visitors'){
-
-            greylisted = true;
-
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Facility Booking' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Facility Booking' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Facility Booking'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() == 'Grey List' ||
+            data[i].moduleDisplayNameMobile.toString().trim() == 'Visitors') {
+          greylisted = true;
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Facility Booking' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Facility Booking' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Facility Booking') {
           facility = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Lost & Found'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Lost & Found') {
           lostfound = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Intercom'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Intercom') {
           intercom = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Announcements & Notifications' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Notification' ||
-            data[i].moduleDisplayNameMobile.toString().trim() == 'Notifications'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Announcements & Notifications' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Notification' ||
+            data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Notifications') {
           announcements = true;
           notifications = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'News Bulletin'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'News Bulletin') {
           newsbulletin = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'House Rules'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'House Rules') {
           houserules = true;
-        } else if((data[i].moduleDisplayNameMobile.toString().trim() == 'Payment and Invoices') ||
-            (data[i].moduleDisplayNameMobile.toString().trim() == 'Invoice')){
+        } else if ((data[i].moduleDisplayNameMobile.toString().trim() ==
+                'Payment and Invoices') ||
+            (data[i].moduleDisplayNameMobile.toString().trim() == 'Invoice')) {
           billinginvoice = true;
-        } else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Configuration'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Configuration') {
           settings = true;
-        }
-        else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Trusted Neighbour'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Trusted Neighbour') {
           trustedNeighbour = true;
-        }
-        else if((data[i].moduleDisplayNameMobile.toString().trim() == 'My Billing') ||(data[i].moduleDisplayNameMobile.toString().trim() == 'Billing')){
+        } else if ((data[i].moduleDisplayNameMobile.toString().trim() ==
+                'My Billing') ||
+            (data[i].moduleDisplayNameMobile.toString().trim() == 'Billing')) {
           billing = true;
-        }
-        else if((data[i].moduleDisplayNameMobile.toString().trim() == 'e-Document')){
+        } else if ((data[i].moduleDisplayNameMobile.toString().trim() ==
+            'e-Document')) {
           edocument = true;
-        }
-        else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Complaints'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Complaints') {
           complaints = true;
-        }
-        else if(data[i].moduleDisplayNameMobile.toString().trim() == 'Important Contacts'){
+        } else if (data[i].moduleDisplayNameMobile.toString().trim() ==
+            'Important Contacts') {
           contacts = true;
         }
-
       }
     }
 
     setState(() {
-      if(visitor){
+      if (visitor) {
         PermissionModel model = PermissionModel();
         model.name = 'Visitor Registration';
         model.image = 'assets/images/visitors.png';
@@ -167,7 +185,7 @@ String profileImg = '';
         _permissionsList.add(model);
       }
 
-      if(packages){
+      if (packages) {
         PermissionModel model = PermissionModel();
         model.name = 'Packages';
         model.image = 'assets/images/Home4package.png';
@@ -175,29 +193,29 @@ String profileImg = '';
         _permissionsList.add(model);
       }
 
-      if(security){
+      if (security) {
         PermissionModel model = PermissionModel();
         model.name = 'Security Rounds';
         model.image = 'assets/images/security.png';
         _permissionsList.add(model);
       }
 
-      if(attendance){
+      if (attendance) {
         PermissionModel model = PermissionModel();
         model.name = 'Attendance';
         model.image = 'assets/images/newattendance.png';
         _permissionsList.add(model);
         // package_blue.png
       }
-      if(userDetails.roleName != "Resident User" && greylisted) {
+      if (userDetails.roleName != "Resident User" && greylisted) {
         // if (greylisted) {
-          PermissionModel model = PermissionModel();
-          model.name = 'Grey List';
-          model.image = 'assets/images/ban-user.png';
-          _permissionsList.add(model);
+        PermissionModel model = PermissionModel();
+        model.name = 'Grey List';
+        model.image = 'assets/images/ban-user.png';
+        _permissionsList.add(model);
         // }
       }
-      if(facility){
+      if (facility) {
         PermissionModel model = PermissionModel();
         model.name = 'Facility Bookings';
         model.image = 'assets/images/booking.png';
@@ -205,14 +223,14 @@ String profileImg = '';
         // package_10.png
       }
 
-      if(lostfound){
+      if (lostfound) {
         PermissionModel model = PermissionModel();
         model.name = 'Lost & Found';
         model.image = 'assets/images/lost-and-found.png';
         _permissionsList.add(model);
       }
 
-      if(intercom){
+      if (intercom) {
         PermissionModel model = PermissionModel();
         model.name = 'Intercom';
         model.image = 'assets/images/intercomnew.png';
@@ -233,27 +251,27 @@ String profileImg = '';
       //   _permissionsList.add(model);
       // }
 
-      if(newsbulletin){
+      if (newsbulletin) {
         PermissionModel model = PermissionModel();
         model.name = 'News Bulletin';
         model.image = 'assets/images/folders.png';
         _permissionsList.add(model);
       }
 
-      if(houserules){
+      if (houserules) {
         PermissionModel model = PermissionModel();
         model.name = 'House Rules';
         model.image = 'assets/images/regulation.png';
         _permissionsList.add(model);
       }
 
-      if(billinginvoice){
+      if (billinginvoice) {
         PermissionModel model = PermissionModel();
         model.name = 'Invoice';
         model.image = 'assets/images/invoice.png';
         _permissionsList.add(model);
       }
-      if(billing){
+      if (billing) {
         PermissionModel model = PermissionModel();
         model.name = 'My Billing';
         model.image = 'assets/images/invoice.png';
@@ -268,13 +286,13 @@ String profileImg = '';
       // }
       // userDetails.appUsageTypeName == 'VMS Management modules ' ||
       //     userDetails.appUsageTypeName == 'Unit users'
-      if(trustedNeighbour){
+      if (trustedNeighbour) {
         PermissionModel model = PermissionModel();
         model.name = 'Trusted Neighbour';
         model.image = 'assets/images/neighborhood.png';
         _permissionsList.add(model);
       }
-      if(edocument){
+      if (edocument) {
         PermissionModel model = PermissionModel();
         model.name = 'e-Document';
         model.image = 'assets/images/folder-1.png';
@@ -290,37 +308,33 @@ String profileImg = '';
       // model1.image = 'assets/images/book.png';
       // _permissionsList.add(model1);
 
-      if(complaints){
+      if (complaints) {
         PermissionModel model = PermissionModel();
         model.name = 'Complaints';
         // complaint.png
         model.image = 'assets/images/businessman.png';
         _permissionsList.add(model);
       }
-        // profileImg = userDetails.profileImg ?? '';
-
+      // profileImg = userDetails.profileImg ?? '';
     });
-
-
   }
+
   void fetchAddsType() async {
-    viewModel.getAdds("ASC", "id", 1, 100, userDetails.propertyId ?? 0).then((response) {
+    viewModel
+        .getAdds("ASC", "id", 1, 100, userDetails.propertyId ?? 0)
+        .then((response) {
       if (response.data?.status == 200) {
         if (response.data?.result != null) {
           var data = response.data!.result!.items;
           if (data != null) {
-
             setState(() {
-
               _addItems = data;
-            filteredItems = _addItems.where((item) {
+              filteredItems = _addItems.where((item) {
                 final sliderimage = item.sliderImg?.toString();
                 final slidertext = item.sliderText?.toString();
-                return (sliderimage != null && sliderimage.isNotEmpty) || (slidertext != null && slidertext.isNotEmpty);
+                return (sliderimage != null && sliderimage.isNotEmpty) ||
+                    (slidertext != null && slidertext.isNotEmpty);
               }).toList();
-
-
-
             });
           }
         }
@@ -329,6 +343,7 @@ String profileImg = '';
       Utils.flushBarErrorMessage("failed", context);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -337,12 +352,11 @@ String profileImg = '';
     double? fontSize;
     double? fontSize1;
     double? fontSize2;
-    if(width < 411 || height < 707){
+    if (width < 411 || height < 707) {
       fontSize = 11;
       fontSize1 = 14;
       fontSize2 = 18;
-
-    }else {
+    } else {
       fontSize = 14;
       fontSize1 = 16;
       fontSize2 = 20;
@@ -350,7 +364,6 @@ String profileImg = '';
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -371,22 +384,21 @@ String profileImg = '';
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.01,
                         ),
-                        if(userDetails.propertyDispName != null)
-                          Text(
-                            userDetails.propertyDispName.toString(),
-                            style:GoogleFonts.roboto(textStyle: TextStyle(
-
-                                fontSize: fontSize2,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),)
-                          ),
+                        if (userDetails.propertyDispName != null)
+                          Text(userDetails.propertyDispName.toString(),
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                    fontSize: fontSize2,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.01,
                         ),
                       ],
                     )),
               ),
-              if(userDetails.propertyImg!=null)
+              if (userDetails.propertyImg != null)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                   child: Container(
@@ -397,7 +409,6 @@ String profileImg = '';
                         bottomRight: Radius.circular(10),
                       ),
                     ),
-
                     child: Image.network(
                       userDetails.propertyImg.toString().trim(),
                       fit: BoxFit.contain,
@@ -410,10 +421,8 @@ String profileImg = '';
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Container(
                     decoration: BoxDecoration(
-                        color:Color(0xFF036CB2),
-                        border:
-                        Border.all(color: Color(0xFF036CB2), width: 1),
-
+                        color: Color(0xFF036CB2),
+                        border: Border.all(color: Color(0xFF036CB2), width: 1),
                         borderRadius: BorderRadius.circular(10)),
                     width: MediaQuery.of(context).size.width,
                     child: Padding(
@@ -426,18 +435,19 @@ String profileImg = '';
                             children: [
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               Text(
-                                "${userDetails.unitNumber} | ${userDetails.firstName} ${userDetails.lastName}",
-                                style: GoogleFonts.roboto(textStyle:TextStyle(
-                                    fontSize: fontSize1,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700), )
-                              ),
+                                  "${userDetails.unitNumber} | ${userDetails.firstName} ${userDetails.lastName}",
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: fontSize1,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700),
+                                  )),
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               // const Text(
                               //   'Payment due on 15th June', softWrap: true,
@@ -449,28 +459,30 @@ String profileImg = '';
                               // ),
                               SizedBox(
                                 height:
-                                MediaQuery.of(context).size.height * 0.01,
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                             ],
                           ),
                           const Spacer(),
-                          if(userDetails.profileImg  != null)
+                          if (userDetails.profileImg != null)
                             Expanded(
                               child: InkWell(
                                 child: Container(
                                   height:
-                                  MediaQuery.of(context).size.height * 0.08,
-                                  width: MediaQuery.of(context).size.width * 0.18,
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.18,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: Colors.white,
                                       width: 1.0,
                                     ),
-                                    image:  DecorationImage(
+                                    image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          userDetails.profileImg.toString().trim()),
+                                      image: NetworkImage(userDetails.profileImg
+                                          .toString()
+                                          .trim()),
                                     ),
                                   ),
                                 ),
@@ -481,35 +493,35 @@ String profileImg = '';
                       ),
                     )),
               ),
-              if(_permissionsList.isNotEmpty)
+              if (_permissionsList.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(left: 6.0,right: 6.0,top: 15.0),
+                  padding:
+                      const EdgeInsets.only(left: 6.0, right: 6.0, top: 15.0),
                   child: Container(
                     decoration: BoxDecoration(
                         border:
-                        // Border.all(color: Colors.white, width: 3),
-                        Border.all(color:Colors.white, width: 1),
+                            // Border.all(color: Colors.white, width: 3),
+                            Border.all(color: Colors.white, width: 1),
                         // Color(0xFF036CB2)
                         // color: Color(0xFF3F9AE5),
                         color: Colors.white,
                         // color: Color(0xFF6EB8FA),
                         borderRadius: BorderRadius.circular(20)),
                     child: GridView.builder(
-                        padding: const EdgeInsets.only(top: 5.0,bottom: 0.0),
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 0.0),
                         scrollDirection: Axis.vertical,
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: _permissionsList.length,
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 5,
-                            childAspectRatio:1,
-                            mainAxisExtent:100
-                          // mainAxisSpacing: 0
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 5,
+                                childAspectRatio: 1,
+                                mainAxisExtent: 100
+                                // mainAxisSpacing: 0
 
-
-                        ),
+                                ),
                         itemBuilder: (context, index) {
                           return Container(
                             child: InkWell(
@@ -519,21 +531,25 @@ String profileImg = '';
                                     borderRadius: BorderRadius.circular(10.0),
                                     child: Image.asset(
                                       _permissionsList[index].image.toString(),
-                                      height: MediaQuery.of(context).size.height *
-                                          0.05,
-                                      width:
-                                      MediaQuery.of(context).size.width * 0.11,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.05,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.11,
                                       fit: BoxFit.contain,
-
                                     ),
                                   ),
                                   const SizedBox(height: 5),
                                   Center(
                                     child: Text(
-                                      _permissionsList[index].name.toString(), softWrap: true, textAlign: TextAlign.center,
-                                      style: Theme.of(context).textTheme.bodySmall
-                                      // TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.w500),
-                                    ),
+                                        _permissionsList[index].name.toString(),
+                                        softWrap: true,
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                        // TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.w500),
+                                        ),
                                   ),
                                 ],
                               ),
@@ -544,65 +560,80 @@ String profileImg = '';
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              InvitationsScreen(contact: null, data: data,)));
+                                              InvitationsScreen(
+                                                contact: null,
+                                                data: data,
+                                              )));
                                 } else if (module == 'Packages') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              PackageTabsScreen(data: data,)));
+                                              PackageTabsScreen(
+                                                data: data,
+                                              )));
                                 } else if (module == 'Security Rounds') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              SecurityTabsScreen(data: data,)));
+                                              SecurityTabsScreen(
+                                                data: data,
+                                              )));
                                 } else if (module == 'Attendance') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              AttendanceTabsScreen(data: data,)));
+                                              AttendanceTabsScreen(
+                                                data: data,
+                                              )));
                                 } else if (module == 'Grey List') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              GreyListingsScreen(data: data,)));
+                                              GreyListingsScreen(
+                                                data: data,
+                                              )));
                                 } else if (module == 'Lost & Found') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              LostFoundTabsScreen(data: data,)));
+                                              LostFoundTabsScreen(
+                                                data: data,
+                                              )));
                                 } else if (module == 'Facility Bookings') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              FacilityBookingTabsScreen(data: data,)));
-                                }  else if (module == 'Intercom') {
+                                              FacilityBookingTabsScreen(
+                                                data: data,
+                                              )));
+                                } else if (module == 'Intercom') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              IntercomListingScreen(data: data,)));
-
-                                }
-                                else if (module == 'Notifications') {
+                                              IntercomListingScreen(
+                                                data: data,
+                                              )));
+                                } else if (module == 'Notifications') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               NotificationsTabScreen()));
-                                }
-                                else if (module == 'Trusted Neighbour') {
+                                } else if (module == 'Trusted Neighbour') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              TrustedNeighnourScreen(data: data,)));
-
+                                              TrustedNeighnourScreen(
+                                                data: data,
+                                              )));
                                 }
                                 // else if (module == 'Announcement) {
                                 //   Navigator.push(
@@ -617,24 +648,25 @@ String profileImg = '';
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              NewsBulletinScreen(data: data,)));
-
-                                }
-                                else if (module == 'House Rules') {
+                                              NewsBulletinScreen(
+                                                data: data,
+                                              )));
+                                } else if (module == 'House Rules') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              HouseRulesScreen(data: data,)));
-
-                                }
-                                else if (module == 'e-Document') {
+                                              HouseRulesScreen(
+                                                data: data,
+                                              )));
+                                } else if (module == 'e-Document') {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              EDocumentTabsScreen(data: data,)));
-
+                                              EDocumentTabsScreen(
+                                                data: data,
+                                              )));
                                 }
                                 // else if (module == 'Mgmt-Security') {
                                 //   Navigator.push(
@@ -655,7 +687,9 @@ String profileImg = '';
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              ComplaintsListingScreen(data: data,)));
+                                              ComplaintsListingScreen(
+                                                data: data,
+                                              )));
                                 }
                               },
                             ),
@@ -664,7 +698,7 @@ String profileImg = '';
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xFF036CB2), width: 3),
@@ -689,8 +723,10 @@ String profileImg = '';
                         var slidertext = items.sliderText?.toString();
 
                         // Check if both sliderImg and sliderText are empty
-                        if ((sliderimage == null || sliderimage.isEmpty) && (slidertext == null || slidertext.isEmpty)) {
-                          return SizedBox.shrink(); // Return a zero-sized SizedBox to skip displaying empty items
+                        if ((sliderimage == null || sliderimage.isEmpty) &&
+                            (slidertext == null || slidertext.isEmpty)) {
+                          return SizedBox
+                              .shrink(); // Return a zero-sized SizedBox to skip displaying empty items
                         }
 
                         return InkWell(
@@ -699,7 +735,8 @@ String profileImg = '';
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SliderFullText(data: slidertext),
+                                  builder: (context) =>
+                                      SliderFullText(data: slidertext),
                                 ),
                               );
                             }
@@ -710,7 +747,8 @@ String profileImg = '';
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  if (sliderimage != null && sliderimage.isNotEmpty)
+                                  if (sliderimage != null &&
+                                      sliderimage.isNotEmpty)
                                     SizedBox(
                                       height: 150,
                                       width: MediaQuery.of(context).size.width,
@@ -719,10 +757,13 @@ String profileImg = '';
                                         fit: BoxFit.cover,
                                       ),
                                     ),
-                                  if (slidertext != null && slidertext.isNotEmpty)
+                                  if (slidertext != null &&
+                                      slidertext.isNotEmpty)
                                     HtmlWidget(
                                       slidertext,
-                                      textStyle: GoogleFonts.roboto(textStyle: TextStyle(color: Colors.black)),
+                                      textStyle: GoogleFonts.roboto(
+                                          textStyle:
+                                              TextStyle(color: Colors.black)),
                                     ),
                                 ],
                               ),
@@ -731,8 +772,6 @@ String profileImg = '';
                         );
                       },
                     ),
-
-
                   ),
                 ),
               ),
