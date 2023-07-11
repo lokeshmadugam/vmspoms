@@ -8,11 +8,11 @@ class SignInModel {
 
   SignInModel(
       {this.status,
-      this.megCategory,
-      this.webMessage,
-      this.mobMessage,
-      this.accessToken,
-      this.userDetails});
+        this.megCategory,
+        this.webMessage,
+        this.mobMessage,
+        this.accessToken,
+        this.userDetails});
 
   SignInModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -45,6 +45,8 @@ class UserDetails {
   int? propertyId;
   int? appUserTypeId;
   int? appUsageTypeId;
+  String? appUserTypeKeyValue;
+  String? appUsageTypeKeyValue;
   int? userType;
   String? firstName;
   String? lastName;
@@ -94,56 +96,58 @@ class UserDetails {
 
   UserDetails(
       {this.id,
-      this.admPropertyId,
-      this.propertyId,
-      this.appUserTypeId,
-      this.appUsageTypeId,
-      this.userType,
-      this.firstName,
-      this.lastName,
-      this.phoneNo,
-      this.emailAddress,
-      this.employeeId,
-      this.username,
-      this.roleId,
-      this.mobileNo,
-      this.blockName,
-      this.unitDeviceCnt,
-      this.otpCommId,
-      this.otpValidationStatus,
-      this.remarks,
-      this.lastLoginDatetime,
-      this.isOnline,
-      this.recStatus,
-      this.userQrcodeImg,
-      this.userQrcode,
-      this.unitNumber,
-      this.signupRequestDate,
-      this.recStatusname,
-      this.appUserTypeName,
-      this.appUsageTypeName,
-      this.roleName,
-      this.userTypeName,
-      this.propertyDispName,
-      this.logoImgUrl,
-      this.propertyImg,
-      this.profileImg,
-      this.propertyAddressLine1,
-      this.propertyAddressLine2,
-      this.propertyCity,
-      this.propertyPostalCode,
-      this.propertyCountryCode,
-      this.propertyCountryName,
-      this.propertyState,
-      this.countryCode,
-      this.countryName,
-      this.callingCode,
-      this.timezone,
-      this.propertyTimezoneName,
-      this.dispDateFormat,
-      this.isShowStreetName,
-      this.isShowBlockName,
-      this.permissions});
+        this.admPropertyId,
+        this.propertyId,
+        this.appUserTypeId,
+        this.appUsageTypeId,
+        this.appUserTypeKeyValue,
+        this.appUsageTypeKeyValue,
+        this.userType,
+        this.firstName,
+        this.lastName,
+        this.phoneNo,
+        this.emailAddress,
+        this.employeeId,
+        this.username,
+        this.roleId,
+        this.mobileNo,
+        this.blockName,
+        this.unitDeviceCnt,
+        this.otpCommId,
+        this.otpValidationStatus,
+        this.remarks,
+        this.lastLoginDatetime,
+        this.isOnline,
+        this.recStatus,
+        this.userQrcodeImg,
+        this.userQrcode,
+        this.unitNumber,
+        this.signupRequestDate,
+        this.recStatusname,
+        this.appUserTypeName,
+        this.appUsageTypeName,
+        this.roleName,
+        this.userTypeName,
+        this.propertyDispName,
+        this.logoImgUrl,
+        this.propertyImg,
+        this.profileImg,
+        this.propertyAddressLine1,
+        this.propertyAddressLine2,
+        this.propertyCity,
+        this.propertyPostalCode,
+        this.propertyCountryCode,
+        this.propertyCountryName,
+        this.propertyState,
+        this.countryCode,
+        this.countryName,
+        this.callingCode,
+        this.timezone,
+        this.propertyTimezoneName,
+        this.dispDateFormat,
+        this.isShowStreetName,
+        this.isShowBlockName,
+        this.permissions});
 
   UserDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -151,6 +155,8 @@ class UserDetails {
     propertyId = json['property_id'];
     appUserTypeId = json['app_user_type_id'];
     appUsageTypeId = json['app_usage_type_id'];
+    appUserTypeKeyValue = json['app_user_type_key_value'];
+    appUsageTypeKeyValue = json['app_usage_type_key_value'];
     userType = json['user_type'];
     firstName = json['first_name'];
     lastName = json['last_name'];
@@ -211,6 +217,8 @@ class UserDetails {
     data['property_id'] = this.propertyId;
     data['app_user_type_id'] = this.appUserTypeId;
     data['app_usage_type_id'] = this.appUsageTypeId;
+    data['app_user_type_key_value'] = this.appUserTypeKeyValue;
+    data['app_usage_type_key_value'] = this.appUsageTypeKeyValue;
     data['user_type'] = this.userType;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
@@ -265,7 +273,6 @@ class UserDetails {
 
 class Permissions {
   int? moduleId;
-  int? moduleAssignId;
   String? menuDisplayNameWeb;
   String? menuDisplayNameMobile;
   String? moduleDisplayNameWeb;
@@ -281,23 +288,21 @@ class Permissions {
 
   Permissions(
       {this.moduleId,
-      this.moduleAssignId,
-      this.menuDisplayNameWeb,
-      this.menuDisplayNameMobile,
-      this.moduleDisplayNameWeb,
-      this.moduleDisplayNameMobile,
-      this.parentMenuId,
-      this.menuIconWeb,
-      this.menuIconMobile,
-      this.modulePath,
-      this.roleId,
-      this.action,
-      this.functionName,
-      this.parentSubMenu});
+        this.menuDisplayNameWeb,
+        this.menuDisplayNameMobile,
+        this.moduleDisplayNameWeb,
+        this.moduleDisplayNameMobile,
+        this.parentMenuId,
+        this.menuIconWeb,
+        this.menuIconMobile,
+        this.modulePath,
+        this.roleId,
+        this.action,
+        this.functionName,
+        this.parentSubMenu});
 
   Permissions.fromJson(Map<String, dynamic> json) {
     moduleId = json['module_id'];
-    moduleAssignId = json['module_assign_id'];
     menuDisplayNameWeb = json['menu_display_name_web'];
     menuDisplayNameMobile = json['menu_display_name_mobile'];
     moduleDisplayNameWeb = json['module_display_name_web'];
@@ -330,7 +335,6 @@ class Permissions {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['module_id'] = this.moduleId;
-    data['module_assign_id'] = this.moduleAssignId;
     data['menu_display_name_web'] = this.menuDisplayNameWeb;
     data['menu_display_name_mobile'] = this.menuDisplayNameMobile;
     data['module_display_name_web'] = this.moduleDisplayNameWeb;
@@ -387,15 +391,15 @@ class FunctionName {
 
   FunctionName(
       {this.menuDisplayNameWeb,
-      this.menuDisplayNameMobile,
-      this.moduleDisplayNameWeb,
-      this.moduleDisplayNameMobile,
-      this.functionDisplayNameWeb,
-      this.functionDisplayNameMobile,
-      this.functionDescription,
-      this.moduleDescription,
-      this.modulePath,
-      this.functionPath});
+        this.menuDisplayNameMobile,
+        this.moduleDisplayNameWeb,
+        this.moduleDisplayNameMobile,
+        this.functionDisplayNameWeb,
+        this.functionDisplayNameMobile,
+        this.functionDescription,
+        this.moduleDescription,
+        this.modulePath,
+        this.functionPath});
 
   FunctionName.fromJson(Map<String, dynamic> json) {
     menuDisplayNameWeb = json['menu_display_name_web'];
@@ -428,7 +432,6 @@ class FunctionName {
 
 class ParentSubMenu {
   int? moduleId;
-  int? moduleAssignId;
   String? menuDisplayNameWeb;
   String? menuDisplayNameMobile;
   String? moduleDisplayNameWeb;
@@ -444,23 +447,21 @@ class ParentSubMenu {
 
   ParentSubMenu(
       {this.moduleId,
-      this.moduleAssignId,
-      this.menuDisplayNameWeb,
-      this.menuDisplayNameMobile,
-      this.moduleDisplayNameWeb,
-      this.moduleDisplayNameMobile,
-      this.modulePath,
-      this.parentMenuId,
-      this.menuIconWeb,
-      this.menuIconMobile,
-      this.roleId,
-      this.action,
-      this.functionName,
-      this.parentChildSubMenu});
+        this.menuDisplayNameWeb,
+        this.menuDisplayNameMobile,
+        this.moduleDisplayNameWeb,
+        this.moduleDisplayNameMobile,
+        this.modulePath,
+        this.parentMenuId,
+        this.menuIconWeb,
+        this.menuIconMobile,
+        this.roleId,
+        this.action,
+        this.functionName,
+        this.parentChildSubMenu});
 
   ParentSubMenu.fromJson(Map<String, dynamic> json) {
     moduleId = json['module_id'];
-    moduleAssignId = json['module_assign_id'];
     menuDisplayNameWeb = json['menu_display_name_web'];
     menuDisplayNameMobile = json['menu_display_name_mobile'];
     moduleDisplayNameWeb = json['module_display_name_web'];
@@ -488,7 +489,6 @@ class ParentSubMenu {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['module_id'] = this.moduleId;
-    data['module_assign_id'] = this.moduleAssignId;
     data['menu_display_name_web'] = this.menuDisplayNameWeb;
     data['menu_display_name_mobile'] = this.menuDisplayNameMobile;
     data['module_display_name_web'] = this.moduleDisplayNameWeb;
@@ -508,3 +508,5 @@ class ParentSubMenu {
     return data;
   }
 }
+
+

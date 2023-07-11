@@ -17,26 +17,47 @@ class _PackageTabsScreenState extends State<PackageTabsScreen>
     with SingleTickerProviderStateMixin {
   String _selectedButton = 'Expected';
   List<Permissions> permissions = [];
-
+  bool package = false;
+  bool packageReceived = false;
+  var submenu;
   @override
   void initState() {
     super.initState();
 
     permissions = widget.data;
-    // for (var item in permissions){
-    //   print(item.moduleDisplayNameMobile);
-    // }
+    actionPermissions();
   }
-
+  void actionPermissions() async {
+    setState(() {
+      for (var item in permissions) {
+        if ((item.moduleDisplayNameMobile == "Package Receipts") &&
+            (item.parentSubMenu != null && item.parentSubMenu!.isNotEmpty)) {
+          submenu = item.parentSubMenu ?? [];
+          for (var item in submenu) {
+            if (item.moduleDisplayNameMobile == "Package" ||
+                item.moduleId == 133) {
+              package = true;
+              // if(item.moduleDisplayNameMobile == "EForms" || item.moduleId == 126 )
+              print("Package = $package");
+            } else if (item.moduleDisplayNameMobile == "Package Received" ||
+                item.moduleId == 134) {
+              packageReceived = true;
+              print("packageReceived = $packageReceived");
+            }
+          }
+        }
+      }
+    });
+  }
   Widget _getSelectedScreen() {
     switch (_selectedButton) {
       case 'Expected':
         return PackageExpectedScreen(
-          permisssions: widget.data,
+          permissions: submenu,
         );
       case 'Received':
         return PackageReceivedScreen(
-          permisssions: widget.data,
+          permissions: submenu,
         );
 
       default:

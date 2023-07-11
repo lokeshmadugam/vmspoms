@@ -58,7 +58,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController carPlateNumberController = TextEditingController();
   TextEditingController drivingLicenceNumberController =
-      TextEditingController();
+  TextEditingController();
   TextEditingController visitReasonController = TextEditingController();
   TextEditingController numberofvistorsController = TextEditingController();
   TextEditingController arrivalDateController = TextEditingController();
@@ -170,7 +170,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
       final usertypeId = value.userDetails?.userType;
       userTypeId = usertypeId ?? 0;
       final appusagetypeid = value.userDetails?.appUsageTypeId;
-      appusagetypeId = appusagetypeid ?? 0;
+      print(appusagetypeid);
       final name = value.userDetails?.firstName;
       final userType = value.userDetails?.roleName;
       firstName = name ?? '';
@@ -184,6 +184,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
         lastName = lastname ?? '';
         print(lastName);
         userTypeName = userType ?? '';
+        appusagetypeId = appusagetypeid ?? 0;
       });
     });
   }
@@ -397,7 +398,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
 
     try {
       final boundary = _globalKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      as RenderRepaintBoundary?;
 
       if (boundary != null) {
         final image = await boundary.toImage(pixelRatio: 1.0);
@@ -448,13 +449,14 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
     // }
     else {
       int numberofvistors =
-          int.parse(numberofvistorsController.text.toString());
+      int.parse(numberofvistorsController.text.toString());
       // int duration = int.parse(durationController.text.toString());
-      var registeredid = 0;
+      // var registeredid = 0;
+      int? ispreregistered;
       if (appusagetypeId == 21) {
-        registeredid == 0;
+        ispreregistered = 0;
       } else {
-        registeredid == 1;
+        ispreregistered = 1;
       }
       String formattedDate = '';
       if (arrivalDateController.text.isNotEmpty) {
@@ -466,13 +468,13 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
       String? endDate;
       if (startDateController.text.isNotEmpty) {
         DateTime date1 = DateFormat.yMd().parse(startDateController.text);
-        DateFormat formatter = DateFormat('yyyy-MM-dd');
+        DateFormat formatter = DateFormat("yyyy-MM-ddTHH:mm:ss");
 
         startDate = formatter.format(date1);
       }
       if (endDateController.text.isNotEmpty) {
         DateTime date2 = DateFormat.yMd().parse(endDateController.text);
-        DateFormat formatter = DateFormat('yyyy-MM-dd');
+        DateFormat formatter = DateFormat("yyyy-MM-ddTHH:mm:ss");
 
         endDate = formatter.format(date2);
       }
@@ -494,7 +496,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
         "created_by": userId,
         "id_driving_license_no": drivingLicenceNumberController.text,
         "is_parking_required": isParkingRequired ? 1 : 0,
-        "is_preregistered": registeredid,
+        "is_preregistered": ispreregistered,
         "no_of_visitor": numberofvistors,
         "parkingLotUsageRest": {
           "bay_status": 0,
@@ -505,11 +507,12 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
           "rec_status": 8,
           "unit_shop_id": 0,
           "usage_date":
-              DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
-          "usage_fr_time": "2023-06-03T05:08:46.446Z",
-          "usage_to_time": "2023-06-03T05:08:46.446Z",
+          DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
+          "usage_fr_time": null,
+          "usage_to_time": null,
           "visitor_id": 0
         },
+
         "prereg_end_date": endDate,
         "prereg_reqdate_mgmt_approve_status": "string",
         "prereg_start_date": startDate,
@@ -529,27 +532,30 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
         "visitor_arrival_time": arrivalTimeController.text,
         "visitor_mobile_no": mobilenumberController.text,
         "visitor_name": nameController.text,
-        "visitor_registr_date": "2023-06-03T05:08:46.446Z",
+        "visitor_registr_date": DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now()),
         "visitor_registrstion_status_id": 228,
         "visitor_stay_duration_hours": 0,
-        "visitor_stay_enddate": "2023-06-03T05:08:46.446Z",
-        "visitor_stay_startdate": "2023-06-03T05:08:46.446Z",
+        "visitor_stay_enddate": null,
+        "visitor_stay_startdate": null,
         "visitor_transport_mode": vehicleTypeId
       };
 
       viewModel.visitorRegistration(data, context).then((value) {
+        print('succes');
         if (value.data!.status == 201) {
           print('msg = ${value.data!.mobMessage}');
           Utils.flushBarErrorMessage("${value.data!.mobMessage}", context);
 
           final id = value.data!.result;
-          visitorId = id!;
-          print(visitorId);
 
-          // Call fetchVisitorDetails() directly from your view
-          fetchVisitorDetails();
-          // viewModel.getVisitorDetails(visitorId);
-        } else {
+          print(visitorId);
+          setState(() {
+            visitorId = id;
+            fetchVisitorDetails();
+          });
+
+        }
+        else {
           Utils.flushBarErrorMessage(
               " Registration Failed".toString(), context);
         }
@@ -570,10 +576,8 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
         setState(() {
           _generateQRData();
         });
-        vistorDetailsPopup(context);
-        // WidgetsBinding.instance!.addPostFrameCallback((_) {
-        //   vistorDetailsPopup(context);
-        // });
+        vistorDetailsPopup();
+
         print(visitorData?.name);
       });
     } else {
@@ -581,223 +585,221 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
     }
   }
 
-  Future<void> vistorDetailsPopup(BuildContext context) async {
+  Future<void> vistorDetailsPopup() async {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-            return Dialog(
-              child: SingleChildScrollView(
-                  child: Column(children: [
-                SizedBox(
-                    // height: MediaQuery.of(context).size.height * 0.03,
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/VMS-POMS_Logo1.png',
-                      height: MediaQuery.of(context).size.height * 0.03,
-                    ),
-                  ),
-                )),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 20),
-                  child: Text('E - Residences',
-                      style: GoogleFonts.roboto(
-                          textStyle: TextStyle(fontSize: 15))),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0, bottom: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            firstName,
-                            style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF002449))),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text("-",
+                return Dialog(
+                  child: SingleChildScrollView(
+                      child: Column(children: [
+                        SizedBox(
+                          // height: MediaQuery.of(context).size.height * 0.03,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/images/VMS-POMS_Logo1.png',
+                                  height: MediaQuery.of(context).size.height * 0.03,
+                                ),
+                              ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 20),
+                          child: Text('E - Residences',
                               style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF002449)),
-                              )),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            blockName ?? '',
-                            style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF002449))),
-                          ),
+                                  textStyle: TextStyle(fontSize: 15))),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5.0, bottom: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    firstName,
+                                    style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF002449))),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("-",
+                                      style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF002449)),
+                                      )),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    blockName ?? '',
+                                    style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF002449))),
+                                  ),
 
-                          SizedBox(
-                            width: 10,
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    unitNumber ?? '',
+                                    style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF002449))),
+                                  ),
+                                  // Text(lastName,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                                ],
+                              ),
+                            ],
                           ),
-                          Text(
-                            unitNumber ?? '',
-                            style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF002449))),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            // height: MediaQuery.of(context).size.height * 0.11,
+                            // width: MediaQuery.of(context).size.width * 0.50,
+                            child: RepaintBoundary(
+                              key: _globalKey,
+                              child: Column(
+                                children: [
+                                  QrImageView(
+                                    data: _qrData ?? '',
+                                    version: QrVersions.auto,
+                                    size: MediaQuery.of(context).size.height * 0.20,
+                                    gapless: false,
+                                    foregroundColor: Colors.black,
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          // Text(lastName,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    // height: MediaQuery.of(context).size.height * 0.11,
-                    // width: MediaQuery.of(context).size.width * 0.50,
-                    child: RepaintBoundary(
-                      key: _globalKey,
-                      child: Column(
-                        children: [
-                          QrImageView(
-                            data: _qrData ?? '',
-                            version: QrVersions.auto,
-                            size: MediaQuery.of(context).size.height * 0.20,
-                            gapless: false,
-                            foregroundColor: Colors.black,
-                            backgroundColor: Colors.white,
+                        ),
+                        Center(
+                          child: Text(visitorData?.registrationQrcode ?? " ",
+                              style: TextStyle(fontSize: 20)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10.0, left: 5, right: 5, bottom: 10),
+                          child: Container(
+                            // height: MediaQuery.of(context).size.height * 0.37,
+                            // width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              color: Color(0xFFD3D3D3FF),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.01,
+                                ),
+                                ContainerValue(
+                                  text: "Visitor Name",
+                                  value: ": ${visitorData?.visitorName ?? ''}",
+                                ),
+                                Divider(
+                                  color: Colors.grey.shade400,
+                                ),
+                                ContainerValue(
+                                  text: "Mobile No.",
+                                  value: ": ${visitorData?.visitorMobileNo ?? ''}",
+                                ),
+                                Divider(
+                                  color: Colors.grey.shade400,
+                                ),
+                                ContainerValue(
+                                  text: "Visit Type",
+                                  value: ": ${visitorData?.visitTypeName ?? ''}",
+                                ),
+                                Divider(
+                                  color: Colors.grey.shade400,
+                                ),
+                                ContainerValue(
+                                  text: "Vehicle Number",
+                                  value: ": ${visitorData?.vehiclePlateNo ?? ''}",
+                                  // value: ": ${visitorData?.visitorRegistrDate != null ? DateFormat('yyyy-MM-dd').format(DateTime.parse(visitorData?.visitorRegistrDate.toString())) : ''} ${item.visitorArrivalTime}",
+                                ),
+                                Divider(
+                                  color: Colors.grey.shade400,
+                                ),
+                                ContainerValue(
+                                  text: "Purpose of Visit",
+                                  value: ": ${visitorData?.vistReason ?? ''}",
+                                ),
+                                Divider(
+                                  color: Colors.grey.shade400,
+                                ),
+                                ContainerValue(
+                                  text: "ID/Driver\'s License",
+                                  value: ": ${visitorData?.idDrivingLicenseNo ?? ''}",
+                                ),
+                                Divider(
+                                  color: Colors.grey.shade400,
+                                ),
+                                ContainerValue(
+                                  text: "No. of Visitor",
+                                  value:
+                                  ": ${visitorData?.noOfVisitor.toString() ?? ''}",
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.01,
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(visitorData?.registrationQrcode ?? " ",
-                      style: TextStyle(fontSize: 20)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10.0, left: 5, right: 5, bottom: 10),
-                  child: Container(
-                    // height: MediaQuery.of(context).size.height * 0.37,
-                    // width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      color: Color(0xFFD3D3D3FF),
-                    ),
-                    child: IntrinsicWidth(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          ContainerValue(
-                            text: "Visitor Name",
-                            value: ": ${visitorData?.visitorName ?? ''}",
-                          ),
-                          Divider(
-                            color: Colors.grey.shade400,
-                          ),
-                          ContainerValue(
-                            text: "Mobile No.",
-                            value: ": ${visitorData?.visitorMobileNo ?? ''}",
-                          ),
-                          Divider(
-                            color: Colors.grey.shade400,
-                          ),
-                          ContainerValue(
-                            text: "Visit Type",
-                            value: ": ${visitorData?.visitTypeName ?? ''}",
-                          ),
-                          Divider(
-                            color: Colors.grey.shade400,
-                          ),
-                          ContainerValue(
-                            text: "Vehicle Number",
-                            value: ": ${visitorData?.vehiclePlateNo ?? ''}",
-                            // value: ": ${visitorData?.visitorRegistrDate != null ? DateFormat('yyyy-MM-dd').format(DateTime.parse(visitorData?.visitorRegistrDate.toString())) : ''} ${item.visitorArrivalTime}",
-                          ),
-                          Divider(
-                            color: Colors.grey.shade400,
-                          ),
-                          ContainerValue(
-                            text: "Purpose of Visit",
-                            value: ": ${visitorData?.vistReason ?? ''}",
-                          ),
-                          Divider(
-                            color: Colors.grey.shade400,
-                          ),
-                          ContainerValue(
-                            text: "ID/Driver\'s License",
-                            value: ": ${visitorData?.idDrivingLicenseNo ?? ''}",
-                          ),
-                          Divider(
-                            color: Colors.grey.shade400,
-                          ),
-                          ContainerValue(
-                            text: "No. of Visitor",
-                            value:
-                                ": ${visitorData?.noOfVisitor.toString() ?? ''}",
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.indigo.shade900,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40))),
-                        onPressed: () {
-                          _shareQRCode();
-                        },
-                        icon: Icon(Icons.share),
-                        label: Text(
-                          'Share',
-                        )),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.10),
-                    ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.indigo.shade900,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close),
-                        label: Text('Close')),
-                  ],
-                )
-              ])),
-            );
-          });
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.indigo.shade900,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(40))),
+                                onPressed: () {
+                                  _shareQRCode();
+                                },
+                                icon: Icon(Icons.share),
+                                label: Text(
+                                  'Share',
+                                )),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.10),
+                            ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.indigo.shade900,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(40))),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.close),
+                                label: Text('Close')),
+                          ],
+                        )
+                      ])),
+                );
+              });
         });
   }
 
@@ -808,7 +810,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-              const EdgeInsets.only(top: 8.0, left: 8, right: 8, bottom: 8),
+          const EdgeInsets.only(top: 8.0, left: 8, right: 8, bottom: 8),
           child: Column(
             children: [
               SizedBox(
@@ -865,12 +867,13 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
                       value: finalvalue,
                       labelText: 'Entry Type',
                       hintText: 'Select Entry Type',
+
                       items: visitTypeItems
                           .map((item) => item.visitType)
                           .map((identityType) => DropdownMenuItem<String>(
-                                value: identityType,
-                                child: Text(identityType!),
-                              ))
+                        value: identityType,
+                        child: Text(identityType!,style: Theme.of(context).textTheme.bodySmall,),
+                      ))
                           .toList(),
                       onchanged: (value) {
                         for (int i = 0; i < visitTypeItems.length; i++) {
@@ -907,9 +910,9 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
                   items: visitReasonsItems
                       .map((item) => item.visitReason)
                       .map((identityType) => DropdownMenuItem<String>(
-                            value: identityType,
-                            child: Text(identityType!),
-                          ))
+                    value: identityType,
+                    child: Text(identityType!,style: Theme.of(context).textTheme.bodySmall,),
+                  ))
                       .toList(),
                   onchanged: (value) {
                     finalvalue1 = value.toString();
@@ -925,37 +928,35 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
                 children: [
                   Expanded(
                       child: MyDropDown(
-                    hintText: 'Vehicle Type',
-                    value: finalvalue2,
-                    labelText: 'Vehicle Type',
-                    items: vehicleTypeItems
-                        .map((item) => item.vehicleType)
-                        .map((identityType) => DropdownMenuItem<String>(
-                              value: identityType,
-                              child: Text(identityType!),
-                            ))
-                        .toList(),
-                    onchanged: (value) {
-                      setState(() {
-                        finalvalue2 = value.toString();
-                        for (int i = 0; i < vehicleTypeItems.length; i++) {
-                          if (value == vehicleTypeItems[i].vehicleType) {
-                            vehicleTypeId = vehicleTypeItems[i].id!;
-                            break;
-                          }
-                        }
-                      });
-                    },
-                  )),
+                        hintText: 'Vehicle Type',
+                        value: finalvalue2,
+                        labelText: 'Vehicle Type',
+                        items: vehicleTypeItems
+                            .map((item) => item.vehicleType)
+                            .map((identityType) => DropdownMenuItem<String>(
+                          value: identityType,
+                          child: Text(identityType!,style: Theme.of(context).textTheme.bodySmall,),
+                        ))
+                            .toList(),
+                        onchanged: (value) {
+                          setState(() {
+                            finalvalue2 = value.toString();
+                            for (int i = 0; i < vehicleTypeItems.length; i++) {
+                              if (value == vehicleTypeItems[i].vehicleType) {
+                                vehicleTypeId = vehicleTypeItems[i].id!;
+                                break;
+                              }
+                            }
+                          });
+                        },
+                      )),
                   SizedBox(
                     child: Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text('Parking',
-                              style: TextStyle(
-                                fontSize: 14,
-                              )),
+                              style: Theme.of(context).textTheme.bodySmall),
                         ),
                         Checkbox(
                           activeColor: Colors.orange.shade900,
@@ -968,7 +969,7 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
                             setState(() {
                               isParkingRequired = value ?? false;
                               if (isParkingRequired) {
-                                if (userTypeName != "Resident / Unit users") {
+                                if (userTypeName != "Resident User") {
                                   if (unitNumberController.text.isNotEmpty) {
                                     fetchParkingData();
                                   } else {
@@ -1237,8 +1238,8 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
                   child: PositiveButton(
                     onPressed: () async {
                       setState(() {
-                        vistorDetailsPopup(context);
-                        // submitRegisterDetails();
+                        // vistorDetailsPopup(context);
+                        submitRegisterDetails();
                       });
                       nameController.clear();
                       carPlateNumberController.clear();
@@ -1276,85 +1277,9 @@ class _InviteGuestScreenState extends State<InviteGuestScreen> {
     );
   }
 
-  Container containerValue({
-    required var text,
-    required String value,
-  }) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Row(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 3,
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            //VerticalDivider(width: 1,),
-            Expanded(
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Padding buildTextFormField({
-    required String hintText,
-    required TextEditingController controller,
-    required TextInputType textInputType,
-    required IconData preffixIcon,
-    String? initialValue,
-    String? labelText,
-    bool? enabled,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: textInputType,
-        enabled: enabled,
-        style: TextStyle(
-          color: Colors.black, // Set the text color
-        ),
-        decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey, width: 0.5),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.grey, width: 0.5),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            prefixText: ' ',
-            hintText: hintText,
-            labelText: labelText,
-            hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 13),
-            prefixIcon: Icon(
-              preffixIcon,
-              color: Colors.grey,
-            )),
-        initialValue: initialValue,
-      ),
-    );
-  }
+
+
 }
 // visitTypeDropdown
 // if (userTypeName == "Resident / Unit users")

@@ -17,9 +17,9 @@ import '../../viewmodel/packages/PackageReceivedScreenViewModel.dart';
 import 'PackageExpectedFormScreen.dart';
 
 class PackageExpectedScreen extends StatefulWidget {
-  var permisssions;
+  var permissions;
 
-  PackageExpectedScreen({Key? key, required this.permisssions})
+  PackageExpectedScreen({Key? key, required this.permissions})
       : super(key: key);
 
   @override
@@ -33,42 +33,42 @@ class _PackageExpectedScreenState extends State<PackageExpectedScreen> {
   var viewModel = PackageExpectedScreenViewModel();
   List<Items>? _items = [];
   List<Items>? _searchResults = [];
-  List<Permissions> permissions = [];
+  List<ParentSubMenu> subMenuPermissions = [];
   bool isManagement = false;
   bool isResident = false;
   bool isGuard = false;
-  bool createExp = false;
-  bool updateExp = false;
-  bool deleteExp = false;
-  bool viewExp = false;
+  bool iscreate = false;
+  bool isupdate = false;
+  bool isdelete = false;
+  bool isview = false;
 
   @override
   void initState() {
     super.initState();
     _getUserDetails();
-    permissions = widget.permisssions;
+    subMenuPermissions = widget.permissions;
     actionPermissions();
   }
 
   void actionPermissions() async {
     setState(() {
-      for (var item in permissions) {
-        if ((item.moduleDisplayNameMobile == "Package Receipts") &&
+      for (var item in subMenuPermissions) {
+        if ((item.moduleDisplayNameMobile?.trim() == "Package") &&
             (item.action != null && item.action!.isNotEmpty)) {
           var actions = item.action ?? [];
           for (var act in actions) {
             if (act.actionName == "Add" || act.actionId == 1) {
-              createExp = true;
-              print("addbutton = $createExp");
+              iscreate = true;
+              print("addbutton = $iscreate");
             } else if (act.actionName == "Edit" || act.actionId == 2) {
-              updateExp = true;
-              print("edit = $createExp");
+              isupdate = true;
+              print("edit = $isupdate");
             } else if (act.actionName == "Delete" || act.actionId == 3) {
-              deleteExp = true;
-              print("delete = $deleteExp");
+              isdelete = true;
+              print("delete = $isdelete");
             } else if (act.actionName == "View" || act.actionId == 4) {
-              viewExp = true;
-              print("view = $viewExp");
+              isview = true;
+              print("view = $isview");
             }
           }
         }
@@ -83,16 +83,16 @@ class _PackageExpectedScreenState extends State<PackageExpectedScreen> {
     userDetails = SignInModel.fromJson(jsonData).userDetails!;
     token = SignInModel.fromJson(jsonData).accessToken!;
 
-    setState(() {
-      if (userDetails.appUsageTypeName.toString().trim() ==
-              'VMS Management modules' ||
-          userDetails.appUsageTypeName.toString().trim() == 'Unit users') {
-        isManagement = true;
-        isResident = true;
-      } else {
-        isGuard = true;
-      }
-    });
+    // setState(() {
+    //   if (userDetails.appUsageTypeName.toString().trim() ==
+    //           'VMS Management modules' ||
+    //       userDetails.appUsageTypeName.toString().trim() == 'Unit users') {
+    //     isManagement = true;
+    //     isResident = true;
+    //   } else {
+    //     isGuard = true;
+    //   }
+    // });
 
     Provider.of<PackageExpectedScreenViewModel>(context, listen: false)
         .fetchPackageExpectedList(userDetails.propertyId);
@@ -123,8 +123,8 @@ class _PackageExpectedScreenState extends State<PackageExpectedScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  if (isManagement)
-                    if (createExp)
+                  // if (isManagement)
+                    if (iscreate)
                       InkWell(
                         child: Container(
                           decoration: BoxDecoration(
@@ -213,32 +213,37 @@ class _PackageExpectedScreenState extends State<PackageExpectedScreen> {
                                         },
                                         positiveButtonText: "Yes",
                                         onPositivePressed: () async {
-                                          final response = await viewModel
-                                              .deleteExpectedDetails(
-                                              item.id, context);
+    if (isdelete) {
+      final response = await viewModel
+          .deleteExpectedDetails(
+          item.id, context);
 
-                                          if (response.data!.status == 200) {
+      if (response.data!.status == 200) {
+        setState(() {
+          Provider.of<PackageExpectedScreenViewModel>(context, listen: false)
+              .fetchPackageExpectedList(userDetails.propertyId);
+          Utils.toastMessage(response
+              .data!.mobMessage
+              .toString());
 
-                                            setState(() {
-                                              Provider.of<PackageExpectedScreenViewModel>(context, listen: false)
-                                                  .fetchPackageExpectedList(userDetails.propertyId);
-                                              Utils.toastMessage(response
-                                                  .data!.mobMessage
-                                                  .toString());
+          Navigator.pop(context);
+        });
+      } else if (response.data!.result ==
+          Status.error) {
+        setState(() {
+          _searchResults!.insert(index, item);
+          Utils.flushBarErrorMessage(
+              response.data!.mobMessage
+                  .toString(),
+              context);
+        });
+      }
+    }else {
 
-                                              Navigator.pop(context);
-                                            });
-                                          } else if (response.data!.result ==
-                                              Status.error) {
-                                            setState(() {
-                                              _searchResults!.insert(index, item);
-                                              Utils.flushBarErrorMessage(
-                                                  response.data!.mobMessage
-                                                      .toString(),
-                                                  context);
-                                            });
-
-                                          }
+      Navigator.pop(context);
+      Utils.toastMessage(
+          'Do not have access to delete');
+    }
                                         },
                                       ));
                                 });
@@ -324,13 +329,13 @@ class _PackageExpectedScreenState extends State<PackageExpectedScreen> {
         ),
       ),
       onTap: () {
-        if (updateExp == true || viewExp == true) {
+        if (isupdate == true || isview == true) {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => PackageExpectedFormScreen(
                       data: item,
-                      update: updateExp,
+                      update: isupdate,
                     )),
           );
         }

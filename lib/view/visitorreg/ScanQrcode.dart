@@ -45,7 +45,7 @@ class _ScanQrcodeScreenState extends State<ScanQrcodeScreen> {
   TextEditingController notesController = TextEditingController();
   TextEditingController unitNumberController = TextEditingController();
   TextEditingController checkinDateController = TextEditingController();
-  TextEditingController checkoutDateController = TextEditingController();
+final checkoutDateController = TextEditingController();
   List<bool> isSelected = [true, false];
   var finalvalue;
   var finalvalue1;
@@ -423,7 +423,7 @@ String? checkout = visitorData?.visitorStayEnddate;
 
                       checkoutDateController.text =
                           DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
-                    // }
+
                   }
                     else if   (checkinDate != null && checkinDate.isNotEmpty && checkout != null && checkout.isNotEmpty){
                       Utils.flushBarErrorMessage(
@@ -491,74 +491,25 @@ String? checkout = visitorData?.visitorStayEnddate;
                       }
                     }
                   }
-                  // else if ((visitorData?.visitTypeName == "Multiple Entry" ||
-                  //     visitorData?.visitTypeId == 2) &&
-                  //     visitorData?.visitorStayStartdate != null) {
-                  //
-                  //   String? checkinDate = visitorData?.visitorStayStartdate;
-                  //   String? checkout = visitorData?.visitorStayEnddate;
-                  //   if ((date != null &&
-                  //       date1 != null &&
-                  //       currentDateTime.isAfter(date) &&
-                  //       currentDateTime.isBefore(date1)) || (date == currentDateTime)) {
-                  //     if (checkinDate == checkinDate && checkinDate!.isNotEmpty) {
-                  //
-                  //       ischeckindate = true;
-                  //       ischeckoutDate = true;
-                  //       checkinbbutton = false;
-                  //       nameController.text = visitorData?.visitorName ?? " ";
-                  //       mobilenumberController.text =
-                  //           visitorData?.visitorMobileNo ?? "";
-                  //       carPlateNumberController.text =
-                  //           visitorData?.vehiclePlateNo ?? '';
-                  //       drivingLicenceNumberController.text =
-                  //           visitorData?.idDrivingLicenseNo ?? '';
-                  //       numberofvistorsController.text =
-                  //           visitorData?.noOfVisitor.toString() ?? '';
-                  //       unitNumberController.text = visitorData?.unitNumber ?? '';
-                  //       notesController.text = visitorData?.remarks ?? " ";
-                  //       checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(checkinDate ?? ''));
-                  //
-                  //       finalvalue = visitorData?.visitTypeName ?? '';
-                  //       finalvalue1 = visitorData?.vistReason ?? "";
-                  //       finalvalue2 = visitorData?.vehicleType ?? '';
-                  //       visitTypeId = visitorData?.visitTypeId ?? 0;
-                  //       visitReasonId = visitorData?.visitReasonId ?? 0 ;
-                  //       vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
-                  //       if()
-                  //       checkoutDateController.text =
-                  //           DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
-                  //       if (visitorData?.parkingRequired.toString() == 'Yes' ||
-                  //           visitorData?.isParkingRequired == 1) {
-                  //         isParkingRequired = true;
-                  //       }
-                  //     }
-                  //   }else {
-                  //     // Show error messages
-                  //     if (date != null && currentDateTime.isBefore(date)) {
-                  //       Utils.flushBarErrorMessage(
-                  //           "Arrival date is tomorrow. Please come tomorrow.",
-                  //           context);
-                  //     } else if (date1 != null && currentDateTime.isAfter(date1)) {
-                  //       Utils.flushBarErrorMessage(
-                  //           "QR code is expired.", context);
-                  //     }
-                  //   }
-                  // }
                   else if ((visitorData?.visitTypeName == "Multiple Entry" ||
                       visitorData?.visitTypeId == 2) &&
-                      visitorData?.visitorStayStartdate != null) {
-
+                      visitorData?.visitorStayStartdate != null && visitorData?.visitorStayEnddate == null ) {
+                    // List<VisitorCheckInOutDate>? visitorCheckInOutDates = visitorData?.visitorCheckInOutDate;
+                    // // String? checkinDate;
                     String? checkinDate = visitorData?.visitorStayStartdate;
                     String? checkout = visitorData?.visitorStayEnddate;
+
                     if ((date != null &&
                         date1 != null &&
                         currentDateTime.isAfter(date) &&
                         currentDateTime.isBefore(date1)) || (date == currentDateTime)) {
-                      if (checkinDate != null && checkinDate.isNotEmpty) {
-
-                      ischeckindate = true;
-                      ischeckoutDate = true;
+                      if (checkinDate != null && checkinDate.isNotEmpty && checkout!.isEmpty) {
+                        // if (visitorCheckInOutDates != null && visitorCheckInOutDates.isNotEmpty) {
+                        //   checkinDate =
+                        //       visitorCheckInOutDates.last.visitorCheckinDate
+                        //           .toString();
+                        ischeckindate = true;
+                        ischeckoutDate = true;
 
                         nameController.text = visitorData?.visitorName ?? " ";
                         mobilenumberController.text =
@@ -570,26 +521,21 @@ String? checkout = visitorData?.visitorStayEnddate;
                         numberofvistorsController.text =
                             visitorData?.noOfVisitor.toString() ?? '';
                         unitNumberController.text = visitorData?.unitNumber ?? '';
-                      notesController.text = visitorData?.remarks ?? " ";
-                      checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(checkinDate ?? ''));
+                        notesController.text = visitorData?.remarks ?? " ";
+                        checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(checkinDate ?? ''));
 
-                      finalvalue = visitorData?.visitTypeName ?? '';
-                      finalvalue1 = visitorData?.vistReason ?? "";
-                      finalvalue2 = visitorData?.vehicleType ?? '';
-                      visitTypeId = visitorData?.visitTypeId ?? 0;
-                      visitReasonId = visitorData?.visitReasonId ?? 0 ;
-                      vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
-                      if(checkinDate == checkinDate){
-                        checkoutDateController.text = "null";
-                        checkoutbbutton = false;
-                        checkinbbutton = true;
-                      }else {
+                        finalvalue = visitorData?.visitTypeName ?? '';
+                        finalvalue1 = visitorData?.vistReason ?? "";
+                        finalvalue2 = visitorData?.vehicleType ?? '';
+                        visitTypeId = visitorData?.visitTypeId ?? 0;
+                        visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                        vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+
                         checkoutDateController.text =
                             DateFormat('yyyy-MM-dd hh:mm a').format(
                                 DateTime.now());
                         checkoutbbutton = true;
-                        checkinbbutton = false;
-                      }
+
                         if (visitorData?.parkingRequired.toString() == 'Yes' ||
                             visitorData?.isParkingRequired == 1) {
                           isParkingRequired = true;
@@ -607,6 +553,61 @@ String? checkout = visitorData?.visitorStayEnddate;
                       }
                     }
                   }
+                  else if ((visitorData?.visitTypeName == "Multiple Entry" ||
+                      visitorData?.visitTypeId == 2) &&
+                      visitorData?.visitorStayStartdate != null && visitorData?.visitorStayEnddate != null) {
+
+                    String? checkinDate = visitorData?.visitorStayStartdate;
+                    String? checkout = visitorData?.visitorStayEnddate;
+                    if ((date != null &&
+                        date1 != null &&
+                        currentDateTime.isAfter(date) &&
+                        currentDateTime.isBefore(date1)) || (date == currentDateTime)) {
+                      if (checkinDate == checkinDate && checkinDate!.isNotEmpty) {
+
+                        ischeckindate = true;
+                        // ischeckoutDate = true;
+                        checkinbbutton = true;
+                        nameController.text = visitorData?.visitorName ?? " ";
+                        mobilenumberController.text =
+                            visitorData?.visitorMobileNo ?? "";
+                        carPlateNumberController.text =
+                            visitorData?.vehiclePlateNo ?? '';
+                        drivingLicenceNumberController.text =
+                            visitorData?.idDrivingLicenseNo ?? '';
+                        numberofvistorsController.text =
+                            visitorData?.noOfVisitor.toString() ?? '';
+                        unitNumberController.text = visitorData?.unitNumber ?? '';
+                        notesController.text = visitorData?.remarks ?? " ";
+                        checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(checkinDate ?? ''));
+
+                        finalvalue = visitorData?.visitTypeName ?? '';
+                        finalvalue1 = visitorData?.vistReason ?? "";
+                        finalvalue2 = visitorData?.vehicleType ?? '';
+                        visitTypeId = visitorData?.visitTypeId ?? 0;
+                        visitReasonId = visitorData?.visitReasonId ?? 0 ;
+                        vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
+
+                        checkoutDateController.text = "";
+
+                        if (visitorData?.parkingRequired.toString() == 'Yes' ||
+                            visitorData?.isParkingRequired == 1) {
+                          isParkingRequired = true;
+                        }
+                      }
+                    }else {
+                      // Show error messages
+                      if (date != null && currentDateTime.isBefore(date)) {
+                        Utils.flushBarErrorMessage(
+                            "Arrival date is tomorrow. Please come tomorrow.",
+                            context);
+                      } else if (date1 != null && currentDateTime.isAfter(date1)) {
+                        Utils.flushBarErrorMessage(
+                            "QR code is expired.", context);
+                      }
+                    }
+                  }
+
 
                   else if ((visitorData?.visitTypeName == "Overnight Stay" ||
                           visitorData?.visitTypeId == 7) &&
@@ -681,9 +682,17 @@ String? checkout = visitorData?.visitorStayEnddate;
                       visitReasonId = visitorData?.visitReasonId ?? 0 ;
                       vehicleTypeId = visitorData?.visitorTransportMode ??  0 ;
                       checkinDateController.text = DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.parse(checkinDate ?? ''));
-
-                      checkoutDateController.text =
-                            DateFormat('yyyy-MM-dd hh:mm a').format(DateTime.now());
+                      if(checkinDate == checkinDate){
+                        checkoutDateController.text = "null";
+                        checkoutbbutton = false;
+                        checkinbbutton = true;
+                      }else {
+                        checkoutDateController.text =
+                            DateFormat('yyyy-MM-dd hh:mm a').format(
+                                DateTime.now());
+                        checkoutbbutton = true;
+                        checkinbbutton = false;
+                      }
                         if (visitorData?.parkingRequired.toString() == 'Yes' ||
                             visitorData?.isParkingRequired == 1) {
                           isParkingRequired = true;

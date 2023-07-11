@@ -15,9 +15,9 @@ import '../../utils/MyTextfield.dart';
 import '../../viewmodel/packages/PackageReceivedScreenViewModel.dart';
 
 class PackageReceivedScreen extends StatefulWidget {
-  var permisssions;
+  var permissions;
 
-  PackageReceivedScreen({Key? key, required this.permisssions})
+  PackageReceivedScreen({Key? key, required this.permissions})
       : super(key: key);
 
   @override
@@ -31,48 +31,24 @@ class _PackageReceivedScreenState extends State<PackageReceivedScreen> {
   var viewModel = PackageReceivedScreenViewModel();
   List<Items>? _items = [];
   List<Items>? _searchResults = [];
-  List<Permissions> permissions = [];
+  List<ParentSubMenu> subMenuPermissions = [];
   bool isManagement = false;
   bool isResident = false;
   bool isGuard = false;
-  bool createExp = false;
-  bool updateExp = false;
-  bool deleteExp = false;
-  bool viewExp = false;
+  bool iscreate = false;
+  bool isupdate = false;
+  bool isdelete = false;
+  bool isview = false;
 
   @override
   void initState() {
     super.initState();
     _getUserDetails();
-    permissions = widget.permisssions;
+    subMenuPermissions = widget.permissions;
     actionPermissions();
   }
 
-  void actionPermissions() async {
-    setState(() {
-      for (var item in permissions) {
-        if ((item.moduleDisplayNameMobile == "Package Receipts") &&
-            (item.action != null && item.action!.isNotEmpty)) {
-          var actions = item.action ?? [];
-          for (var act in actions) {
-            if (act.actionName == "Add" || act.actionId == 1) {
-              createExp = true;
-              print("addbutton = $createExp");
-            } else if (act.actionName == "Edit" || act.actionId == 2) {
-              updateExp = true;
-              print("edit = $createExp");
-            } else if (act.actionName == "Delete" || act.actionId == 3) {
-              deleteExp = true;
-              print("delete = $deleteExp");
-            } else if (act.actionName == "View" || act.actionId == 4) {
-              viewExp = true;
-              print("view = $viewExp");
-            }
-          }
-        }
-      }
-    });
-  }
+
 
   void _getUserDetails() async {
     final prefs = await SharedPreferences.getInstance();
@@ -82,22 +58,46 @@ class _PackageReceivedScreenState extends State<PackageReceivedScreen> {
     token = SignInModel.fromJson(jsonData).accessToken!;
 
     setState(() {
-      if (userDetails.appUsageTypeName.toString().trim() ==
-              'VMS Management modules' ||
-          userDetails.appUsageTypeName.toString().trim() == 'Guard House') {
-        isManagement = true;
-        isGuard = true;
+      // if (userDetails.appUsageTypeName.toString().trim() ==
+      //         'VMS Management modules' ||
+      //     userDetails.appUsageTypeName.toString().trim() == 'Guard House') {
+      //   // isManagement = true;
+        // isGuard = true;
         Provider.of<PackageReceivedScreenViewModel>(context, listen: false)
             .fetchPackageReceiptsList(userDetails.propertyId, '');
-      } else {
-        isResident = true;
+      // } else {
+        // isResident = true;
         Provider.of<PackageReceivedScreenViewModel>(context, listen: false)
             .fetchPackageReceiptsList(
                 userDetails.propertyId, userDetails.unitNumber);
+      // }
+    });
+  }
+  void actionPermissions() async {
+    setState(() {
+      for (var item in subMenuPermissions) {
+        if ((item.moduleDisplayNameMobile == "Package Received") &&
+            (item.action != null && item.action!.isNotEmpty)) {
+          var actions = item.action ?? [];
+          for (var act in actions) {
+            if (act.actionName == "Add" || act.actionId == 1) {
+              iscreate = true;
+              print("addbutton = $iscreate");
+            } else if (act.actionName == "Edit" || act.actionId == 2) {
+              isupdate = true;
+              print("edit = $isupdate");
+            } else if (act.actionName == "Delete" || act.actionId == 3) {
+              isdelete = true;
+              print("delete = $isdelete");
+            } else if (act.actionName == "View" || act.actionId == 4) {
+              isview = true;
+              print("view = $isview");
+            }
+          }
+        }
       }
     });
   }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -130,8 +130,8 @@ class _PackageReceivedScreenState extends State<PackageReceivedScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  if (isManagement)
-                    if (createExp)
+                  // if (isManagement)
+                    if (iscreate)
                       InkWell(
                         child: Container(
                           decoration: BoxDecoration(
@@ -223,36 +223,36 @@ class _PackageReceivedScreenState extends State<PackageReceivedScreen> {
                                             ' Are you sure you want to delete this id?',
                                         negativeButtonText: "No",
                                         onNegativePressed: () {
-                                          if(isManagement || isGuard){
+                                          // if(isManagement || isGuard){
                                             Provider.of<PackageReceivedScreenViewModel>(context, listen: false)
                                                 .fetchPackageReceiptsList(
                                                 userDetails.propertyId, '');
-                                          } else {
+                                          // } else {
                                             Provider.of<PackageReceivedScreenViewModel>(context, listen: false)
                                                 .fetchPackageReceiptsList(
                                                 userDetails.propertyId, userDetails.unitNumber);
-                                          }
+                                          // }
 
                                           Navigator.pop(context);
                                         },
                                         positiveButtonText: "Yes",
                                         onPositivePressed: () async {
-                                          if (deleteExp) {
+                                          if (isdelete) {
                                             final response = await viewModel
                                                 .deletetReceivedDetails(
                                                     item.id, context);
 
                                             if (response.data!.status == 200) {
                                               setState(() {
-                                                if(isManagement || isGuard){
+                                                // if(isManagement || isGuard){
                                                   Provider.of<PackageReceivedScreenViewModel>(context, listen: false)
                                                       .fetchPackageReceiptsList(
                                                       userDetails.propertyId, '');
-                                                } else {
+                                                // } else {
                                                   Provider.of<PackageReceivedScreenViewModel>(context, listen: false)
                                                       .fetchPackageReceiptsList(
                                                       userDetails.propertyId, userDetails.unitNumber);
-                                                }
+                                                // }
                                                 Utils.toastMessage(response
                                                     .data!.mobMessage
                                                     .toString());
@@ -349,7 +349,7 @@ class _PackageReceivedScreenState extends State<PackageReceivedScreen> {
                 children: [
                   IconButton(
                       onPressed: () {
-                        if (isResident && updateExp || viewExp) {
+                        if (isResident && isupdate || isview) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -358,7 +358,7 @@ class _PackageReceivedScreenState extends State<PackageReceivedScreen> {
                                     )),
                           );
                         } else {
-                          if (updateExp || viewExp) {
+                          if (isupdate || isview) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
